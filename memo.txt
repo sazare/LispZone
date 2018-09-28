@@ -1,0 +1,4 @@
+1. property 
+(get 'Ishikawa 'capital)
+(setf (get 'Ishikawa 'capital) 'Kanazawe)
+
