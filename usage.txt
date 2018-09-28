@@ -1,0 +1,12 @@
+1. add the line to .bash_profile or .bashrc
+
+alias sbcl='/usr/local/bin/sbcl --userinit ~/init.lisp'
+
+2. make ~/init.lisp has code for you want to initially do
+
+I define functions that read and eval it
+
+
+
+
+
