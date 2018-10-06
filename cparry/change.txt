@@ -1,0 +1,5 @@
+1. from BEL, INF, remove '~ ...' to bel0, inf0 respectively
+   also remove '^$', '^L'
+2. change ^Hnnnn to @@nnnn (lambda name)
+3. make files like readdb.lisp instead of pmem4.lisp from PMEM4 and other mlisp files. I may changed the file structure in my future.
+

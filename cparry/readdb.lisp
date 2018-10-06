@@ -1,4 +1,7 @@
 ;; read s-exp from a file
+(load "diaapp.lisp")
+(load "pmem.lisp")
+
 
 (defun read-file(fname)
     (with-open-file (in fname :direction :input)
@@ -30,7 +33,6 @@
 (defun make-bel (bel)
   (let (B)
     (progn 
-(print bel)
       (setf (get (car bel) 'NTRUTH) (cadr bel))
       (if (eq (caddr bel) 'INN) 
         (setf (get (car bel) 'CLASS) (caddr bel)))
@@ -40,17 +42,26 @@
 	        (setf (get (car B) 'OPPOS) (car bel))
 	        (setf (get (car bel) 'OPPOS) (car B))
 	      ))    
+     (car bel)
     )
-   (car bel)
   )
 )
 
 (defun make-bels (bels)
-  (loop for b in bels 
-    collect (push (make-bel b) *INTLIST*)
+  (let (pre)
+    (loop for b in bels 
+      collect 
+        (progn 
+          (setq pre (make-bel b))
+          (push pre *INTLIST*)
+	)
+    )
+    (setf *INTLIST* (reverse *INTLIST*))
+    (terpri t)
+    (format t "BELIEF file read, last belief: ~a" pre)
   )
-  (setf *INTLIST* (reverse *INTLIST*))
-)
+ )
+
 (defun read-bel ()
   (let (bel)
     (setf bel (read-file *belfile*))
@@ -58,11 +69,34 @@
     )
   )
 
-(defun read-inf ()
-  (let (inf)
-    (setf inf (read-file *inffile*))
-    inf
-    )
-  )
-
-
+;;(defun read-inf ()
+;;  (let (inf)
+;;    (setf inf (read-file *inffile*))
+;;    inf
+;;    )
+;;  )
+;;
+;;(defun make-infs (infs)
+;;  (let (b)
+;;    (loop for a in infs
+;;      collect 
+;;	(if (atom a) (return))
+;;        (if (member (car a) '(TH2 EMOTE))
+;;	  (loop for i in (cddr a) do (setf (get i (car a)) (cons (cadr a) (get i (car a)))))
+;;	  (setq b a)
+;;	  (if (get (car a 'THEOREM) (format t "duplicate inf: ~a" (car a))))
+;;	  (setf (get (car a) 'THEOREM) (cons (cadr a) (caddr a)))
+;;	  (if (not (get (carn (cadr a)) 'ntruth) (format t "NO BEL: ~a" (cadr a))))
+;;	  (loop for i in (caddr a) do
+;;		(if (atom i) 
+;;		  (progn
+;;		    (setf (get i 'TH) (cons (car a) (get i 'th))))
+;;		    (if (and (not (lambdaname i) (not (get i 'NTRUTH))))
+;;		      (format t "no BEL: ~a" i))))
+;;	  )
+;;	)
+;;    (format t "INF file read, last inf: ~a"  (car b))
+;;    )
+;;)
+;;
+;;
