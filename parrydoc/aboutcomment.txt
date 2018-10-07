@@ -1,0 +1,5 @@
+READ()は、コメントをみつけると'COMMENTを返すような使われ方をしている。READINC()で
+READ()はLISPの関数ではないのか?
+
+FRONT.LAPに定義があったが、COMMENTをつけているのだろうか
+

@@ -1,0 +1,48 @@
+CHOOSE XXX は次のアクションを決める何からしい。
+CHOOSEの定義はOPAR3にある。これはmlisp
+でもコーディングスタイルが他と違ってEXPRの定義がインデントされている。
+
+コメント
+        %
+ CHOOSE   SELECTS THE NEXT REPLY FROM THE RELEVANT GROUP
+           INPUT SHOULD BE THE NAME OF A GROUP OF REPLIES
+           OUTPUT WILL BE A LAMBDA NUMBER  %
+         EXPR  CHOOSE(REPLIES);
+処理
+　GET(REPLIES, 'IND)がNULLなら
+　　その値が'EXHAUSTのとき、ENDE<-Tにして、CHOOSE 'BYEFEDUP
+　　そぅでなければCHOOSE 'EXHAUST
+    NULLでなければRESPONSE(=GET(REPLIES, 'IND))をかえす
+ 
+ REPLIESがグループというのは、リストということでなくグループ名ということだろうか
+ その名前のプロパティ　'INDにREPLYがはいっているということか。それはリストのようなかんじ
+ その場合、'BYEFEDUPやEXHAUSTをCHOOSEするが、EXHAUSTでなかったらEXHAUSTにするということか??
+  EXHAUSTならENDEがTになるので、激昂してインタビュー終了という感じかな。
+  
+BYFEDUPはPDATBでdefpropされていてINDに4446を設定している。
+4446はTOPICSで
+(BYE)                   ^H0043 (MAD EXIT)
+(BYE)                   ^H4443 (FEAR EXIT)
+(BYE)                   ^H0044 (EXIT)
+(BYE)                   ^H0045 (BYE)
+(BYE)                   ^H0046 (BYE)
+(BYE)                   ^H4446 (BYE)
+(BYE)                   ^H4447 (INT MUST GO)
+
+と対応している。
+
+
+{4}
+ APOLOGY => SORRY, ACCUSE
+ HELPER, => CAUTION
+ KNOWER => HOSTILEREPLIES, ?*DHONEST, DDHELP, DEXCITED, DBAD
+ LEADIN => SET, UPSET
+ ALOOF => ALOOF
+ ALOOF2 => ALOOF2
+ NAMECHECK => DONTREMEMBER
+ OPINION => HOSTILEREPLIES, ?*DHONEST, DSOCIABLE, (EVAL I)
+ SELFFEELING => ANGRY, FEARFUL, GOOD
+ INTERVIEW => INTBAD, PRAISE
+ ほかにもいろいろ
+ 
+ 

@@ -1,0 +1,7 @@
+BELのCLASSは以下のみ
+
+DOC
+HUM
+HUM2
+INN
+INT

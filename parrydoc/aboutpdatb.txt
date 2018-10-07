@@ -1,0 +1,27 @@
+PDATB
+
+defpropでアトムに値を設定している。
+lambdanameのUNITとかINDとか
+
+このアトムは何なのだろうか
+
+OPAR3では、'HELLOや'NOと比較するコードがある
+
+SPATS.SELには文章のパターンがあるようだ
+
+((BE MAFIA FRIEN) ^H5141)
+((BE MAFIA KILL YOU) ^H1020)
+((BE MAFIA WANT) ^H1020)
+
+FRIENとあるのは、FRIEND全体でなく一部が一致すればいいということか
+
+CHANGEにはLAMBDANAMEのペアがならんでいる。
+コメントでは
+changes for temporary convenience
+とあるが、意味不明
+
+H5141 . H0840
+H1020はどのファイルにもない
+また H0840はどのファイルにもない
+
+
