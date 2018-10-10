@@ -69,34 +69,39 @@
     )
   )
 
-;;(defun read-inf ()
-;;  (let (inf)
-;;    (setf inf (read-file *inffile*))
-;;    inf
-;;    )
-;;  )
-;;
-;;(defun make-infs (infs)
-;;  (let (b)
-;;    (loop for a in infs
-;;      collect 
-;;	(if (atom a) (return))
-;;        (if (member (car a) '(TH2 EMOTE))
-;;	  (loop for i in (cddr a) do (setf (get i (car a)) (cons (cadr a) (get i (car a)))))
-;;	  (setq b a)
-;;	  (if (get (car a 'THEOREM) (format t "duplicate inf: ~a" (car a))))
-;;	  (setf (get (car a) 'THEOREM) (cons (cadr a) (caddr a)))
-;;	  (if (not (get (carn (cadr a)) 'ntruth) (format t "NO BEL: ~a" (cadr a))))
-;;	  (loop for i in (caddr a) do
-;;		(if (atom i) 
-;;		  (progn
-;;		    (setf (get i 'TH) (cons (car a) (get i 'th))))
-;;		    (if (and (not (lambdaname i) (not (get i 'NTRUTH))))
-;;		      (format t "no BEL: ~a" i))))
-;;	  )
-;;	)
-;;    (format t "INF file read, last inf: ~a"  (car b))
-;;    )
-;;)
-;;
-;;
+(defun read-inf ()
+  (let (inf)
+    (setf inf (read-file *inffile*))
+    inf
+    )
+  )
+
+(defun make-infs (infs)
+  (let (b)
+    (loop for a in infs
+      do
+        (progn
+	  (if (atom a) (return))
+          (if (member (car a) '(TH2 EMOTE))
+	    (progn 
+	      (loop for i in (cddr a) do (setf (get i (car a)) (cons (cadr a) (get i (car a)))))
+	      (setq b a)
+	      (if (get (car a) 'theorem) (format t "duplicate inf: ~a" (car a)))
+	      (setf (get (car a) 'theorem) (cons (cadr a) (caddr a)))
+	      (if (not (get (carn (cadr a)) 'ntruth)) (format t "NO BEL: ~a" (cadr a)))
+	      (loop for i in (caddr a) do
+		(if (atom i) 
+		  (progn
+		    (setf (get i 'TH) (cons (car a) (get i 'th))))
+		    (if (and (not (lambdaname i)) 
+			     (null (get i 'ntruth)))
+		      (format t "no BEL: ~a" i))))
+	    )
+	  )
+	)
+    )
+    (format t "INF file read, last inf: ~a"  (car b))
+    )
+)
+
+
