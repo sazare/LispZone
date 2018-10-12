@@ -7,7 +7,7 @@
 (defmacro deftest (name param desc &body body)
   `(defun ,name ,param
      (let ((*test-name* (append *test-name* (list ',name))))
-       (format t "test: ~a~%" ,desc)
+       (format t "~%test: ~a~%" ,desc)
        ,@body)))
 
 (defmacro test (desc expv form)
@@ -20,7 +20,7 @@
 (defmacro test-case (desc &body forms)
   (let  ((result (gensym)))
   	`(let ((,result t))
-	   ,(format t "testcase: ~a ~%" desc)
+	   ,(format t "~%testcase: ~a ~%" desc)
        	   ,@(loop for f in forms collect `(unless ,f (setf ,result nil)))
 	   ,result)
 	)
