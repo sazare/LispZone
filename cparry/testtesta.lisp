@@ -18,7 +18,7 @@
 	 )
 
 (deftest test-all ()
-	 (test-case "testset"
+	 (test-set  "testset"
 	   (test-a)
 	   (test-b)
 	   (test-car '(abc ss))

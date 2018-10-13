@@ -1,7 +1,7 @@
 (load "test.lisp")
 (load "pmem.lisp")
 
-(deftest test-lambdaname ()
+(test-set 
 	 "lambdaname"
 	 (test "lambdaname is @@<atom>" t (lambdaname '@@abc)) 
 	 (test "lambdaname is @@<atom>" t (lambdaname '@@ab)) 
@@ -13,5 +13,4 @@
 ;	 (test "not lambdaname " nil (lambdaname '@@))
 	 )
 
-(test-lambdaname)
 

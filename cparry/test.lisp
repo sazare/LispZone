@@ -8,6 +8,7 @@
   `(defun ,name ,param
      (let ((*test-name* (append *test-name* (list ',name))))
        (format t "~%test: ~a~%" ,desc)
+       (force-output t)
        ,@body)))
 
 (defmacro test (desc expv form)
@@ -17,10 +18,11 @@
      )
   )
 
-(defmacro test-case (desc &body forms)
+(defmacro test-set (desc &body forms)
   (let  ((result (gensym)))
   	`(let ((,result t))
 	   ,(format t "~%testcase: ~a ~%" desc)
+           ,(force-output t)
        	   ,@(loop for f in forms collect `(unless ,f (setf ,result nil)))
 	   ,result)
 	)
@@ -28,11 +30,12 @@
 
 (defun report-result (desc result expv form value)
   (if  result 
-    (format t ".")
+    (progn (format t ".")(force-output t))
     (progn
       (format t "~% ~a: Test Failed at ~a" desc *test-name*)
       (format t "~%   Expression: ~a" form)
       (format t "~%    Expected ~a: Evaluated: ~a~%" expv value)
+      (force-output t)
     )
   )
   result
