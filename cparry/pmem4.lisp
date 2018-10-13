@@ -68,6 +68,10 @@
     )
   )
 
+(defun readbel ()
+  (make-bels (read-bel))
+  )
+
 (defun read-inf ()
   (let (inf)
     (setf inf (read-file *inffile*))
@@ -78,12 +82,17 @@
 (defun make-infs (infs)
   (let (b )
     (loop for a in infs
+;;; I may missunderstand READDATA in
+;;;  WHILE not ATOM(A ⇦  ERRSET(READDATA()) ) AND A ⇦  car A DO
       do
         (progn
 	  (if (atom a) (return))
           (if (member (car a) '(TH2 EMOTE))
 	      (loop for i in (cddr a) do 
-		    (when (atom i) ;; this when is needed for putprop... maybe
+		    (when (atom i) ;; this when is needed for 
+;;;  error at (setf (list) 'TH2) corr. (putprop (list) 'TH)
+;;; at (TH2 (DDHARM 3) ((MEASURE FEAR 14) DDOMINATING) )
+;;; if ignore the measure form, when evaluate where it comes from???
 		      (setf (get i (car a)) (cons (cadr a) (get i (car a)))))
 		    )
 	      (progn 
@@ -112,4 +121,19 @@
     )
 )
 
+(defun readinf ()
+  (make-infs (read-inf))
+  )
 
+
+(defun bl (b)
+  (if (not (atom b)) 
+    (progn (format t "BL not ATOM ~a" b) NIL)
+    (if (eq (get b 'class) 'INN) 
+      (>= (get b 'ntruth) 5)
+      (get b 'truth)
+      )
+    )
+  )
+
+			    

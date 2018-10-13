@@ -51,15 +51,25 @@
 (test-set
   "test for make-infs" 
   (test-set 
-    "case TH2 or EMOTE"
+    "case TH2" 
     (make-infs '((TH2 (ABC 2) I1 I2) (TH2 (DDD 3) I1 I3) 
 		  (EMOTE (FJUMP 0.9) L1)(EMOTE (FJUMP 0.4) L1 L2 L3)(EMOTE (AJUMP 0.9) L3)))
     (test "th2-i1" '((DDD 3) (ABC 2)) (get 'I1 'TH2))
     (test "th2-i2" '((ABC 2)) (get 'I2 'TH2))
     (test "th2-i3" '((DDD 3)) (get 'I3 'TH2))
+
+    (make-infs '((TH2(BCD 2) ((MEASURE 1 2) KKK) FFF)))
+    (test "th2-form" nil (get 'KKK 'TH2)) ;; not ((BCD 2)). When TH2, a list of form of cddr should ignored.
+    (test "th2-form" '((BCD 2)) (get 'FFF 'TH2)) ;; this is usual
+  )
+  (test-set 
+    "case EMOTE"
+
     (test "emo-L1" '((FJUMP 0.4)(FJUMP 0.9)) (get 'L1 'EMOTE))
     (test "emo-L2" '((FJUMP 0.4)) (get 'L2 'EMOTE))
     (test "emo-L3" '((AJUMP 0.9)(FJUMP 0.4)) (get 'L3 'EMOTE))
+
+
   )
   (test-set
     "case THEOREM"
@@ -79,7 +89,7 @@
     (test "theorem list th2" '(IF112 ) (get 'EEE 'TH))
     (test "theorem list th3" '(IF112 IF111 IF110) (get 'CCC 'TH))
 
-
+    
     (test-set
       "theorem message"
       (setf (get 'AAA 'THEOREM) 'XXX)
