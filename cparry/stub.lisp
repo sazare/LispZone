@@ -1,0 +1,12 @@
+(defun choose (x) x)
+(defun experiment ())
+(defun modifyvar ())
+(defun react (a) a)
+(defun readlambda (x) x)
+(defun window (x y z) x y z)
+(defun winxit ())
+(defun q (a b) a b)
+(defun savejob (a b) a b)
+(defun swapp ())
+(defun testm ())
+

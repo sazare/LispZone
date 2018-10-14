@@ -1,6 +1,61 @@
 ;; read s-exp from a file
+(load "stub.lisp")
 (load "diaapp.lisp")
 (load "pmem.lisp")
+
+(defun parry2 (ind)
+  (let (a b)
+    (if *save_dump* (savejob *save_dump* 'sav))
+      ;; Program will start here again if system clashes
+
+    (format t "~a~%" ind) (force-output t)
+    (format t "> ~0%") (force-output t)
+    (experiment)
+    (setf a (testm)) 
+    (if (atom a) 
+      (format t "Pattern match error")
+      )
+    (setf a (car a))
+    (setf *pm2input* *pminput*)
+    (setf *pminput* a)
+    (if (= (length *ssent*) 1)
+      (setf a (choose 'silence)))
+    ;; (analyze t)
+    (if (not (lambdaname a)) (setf a nil))
+    (if (and a (atom a) (setf b (get a 'meqv)))
+      (setf a b))
+    (setf *reactinput* a)
+    (window 9 t a)
+    (readlambda a) (window 9 nil (get a 'bondvalue))
+    (if (not (react (list a (q *ssent*) *ssent*)))
+      (format t "error in react ~a" *ssent*)
+      )
+    (if *ende* 
+      (progn 
+	(setf *tracev* (not *tracev*))
+        (modifyvar)
+	(winxit)
+	(swapp)
+	(exit)
+	))
+    )
+)
+
+(defun parry ()
+  (progn
+    (format t "READY:~%")
+    (loop 
+      (let ((ind nil))
+	(format t "> ~0%") (force-output t)
+	(setf ind (read-line))
+	(if (equal ind "bye") (return))
+	(parry2 ind)
+      )
+    )
+  (format t "Good bye")
+  )
+)
+
 
 (defun read-file(fname)
     (with-open-file (in fname :direction :input)
