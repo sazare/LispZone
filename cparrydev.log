@@ -1,4 +1,26 @@
-20181014
+20181016(Thu)
+1. All.docによると、mlispのコードはlisp1.6に変換されるらしい
+2. ERR(), SETERR()はLISP1.6で定義されていた
+3. READDATA(はREADINC()の値が'COMMENTでない場合に、処理をしている。
+INFには、左端にS式があり、~から右側がコメントになっているようにみえる。
+ほかのデータでも、~がコメントになっているものがあった。
+INFを読み込むのはREADINF()で、
+READDATA()は、READINF()から呼ばれる。
+SELECTINPUT()のあとREADDATA()を呼んでいるが、selectinput()が関係しているとは思えない。
+
+READINC()の中では
+ INC(INCHAN,NIL)
+ I:=READ()
+ INC(NIL,NIL)
+ RETURN I
+しかゃっていない。READが'COMMENTを返すのだろうか。
+lisp1.6にもmlispでもREAD()はそんなことはしていない。
+たんにS式を返すだけだ。
+
+わからない。
+
+
+20181014()
 - READINFのやっていることがわからなくなってきた
 INFにはTH2で、第三要素にformのある行があるが、readinfではそこは単にそのformに対してputpropしている。
 lisp1.5ではlistに対するputpropができたのだろうか
