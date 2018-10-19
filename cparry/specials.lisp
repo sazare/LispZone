@@ -66,3 +66,10 @@
 (defvar *OLDMISS*)
 (defvar *LAMDA*)
 (defvar *INPUTFILEAREA*)
+
+(defvar *EXPERIMENT*)
+(defvar *HURT*)
+
+(defvar *TRACEV* )
+(defvar *SAVE_DUMP* )
+

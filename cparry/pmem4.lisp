@@ -1,5 +1,4 @@
 ;; read s-exp from a file
-(load "stub.lisp")
 (load "diaapp.lisp")
 (load "pmem.lisp")
 
@@ -42,14 +41,16 @@
 )
 
 (defun parry ()
+  "parry main function. dont direct trans."
   (progn
+    (terpri t)
     (format t "READY:~%")
     (loop 
       (let ((ind nil))
 	(format t "> ~0%") (force-output t)
 	(setf ind (read-line))
 	(if (equal ind "bye") (return))
-	(parry2 ind)
+	(ERRSET (parry2 ind) nil)
       )
     )
   (format t "Good bye")
@@ -82,7 +83,8 @@
 (defvar *INTLIST* NIL)
 
 (defvar *belfile* "bel0")
-(defvar *inffile* "inf0")
+;(defvar *inffile* "inf0")
+(defvar *inffile* "inf1")
 
 (defun make-bel (bel)
   (let (B)
@@ -133,6 +135,7 @@
     inf
     )
   )
+
 
 (defun make-infs (infs)
   (let (b )

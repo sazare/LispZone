@@ -1,7 +1,7 @@
 (defun experiment ()
-  (if (or *experiment* 
-	  (eq *experiment* 'SEVEN))
-    (return nil))
-  (if (= 7 *inputno*) (setf *hurt (+ *hurt* 5)))
-  (if (= 17 *inputno*) (setf *hurt (- *hurt* 5)))
+  ;; EXPERIMENTS OF RAISING AND LOWERING SHAME
+  (unless (or *EXPERIMENT* (eq *EXPERIMENT* 'SEVEN))
+    (if (= 7 *INPUTNO*) (setf *HURT* (+ *HURT* 5)))
+    (if (= 17 *INPUTNO*) (setf *HURT* (- *HURT* 5)))
   )
+)
