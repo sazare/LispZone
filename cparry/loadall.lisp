@@ -1,5 +1,7 @@
 (load "stub.lisp")
 (load "specials.lisp")
+;(load "rdata.lisp")
+(load "pdatb.lisp")
 (load "diaapp.lisp")
 (load "pmem.lisp")
 (load "pmem5.lisp")

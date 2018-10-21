@@ -2,6 +2,80 @@
 (load "diaapp.lisp")
 (load "pmem.lisp")
 
+(defun testm ()
+  (test_pattern)
+  )
+
+(defun angermode ()
+  (if (>= *ANGER* 17.5) 
+    (choose 'ANGER)
+    (choose 'HOSTILEREPLIES)
+    )
+  )
+
+(defun fearmode ()
+  (if (>= *fear* 18.4)
+    (progn
+      (setq *ende* t)
+      (choose 'exit)
+      )
+      ;DISTINGUISH BETWEEN QUESTIONS AND STATEMENTS OF 'OTHER 
+    (if (and (not (bl 'DDHARM))
+	     (bl 'DHELPFUL)
+	     (not (bl 'DMAFIA)))
+      (PROGN
+	(decf *FEAR*)
+	nil
+	)
+      (if (equal *STYLE 'Q)
+	(choose 'THREATQ)
+	(choose 'AFRAID))
+      )
+    )
+  )
+
+(defun angerfearmode (topic)
+  (if (or (member topic (get 'FLARELIST 'SETS))
+	  (member topic '(MAFIA BYE IYOUME STRONGFEELINGS FEELINGS GAMES))
+	  )
+    nil
+    (if (>= *fear* 14) (fearmode) (angermove))
+    )
+  )
+
+
+
+(defun react ())
+;; structure
+;;; parry2 ->save_obj()
+;;;        ->experiment()
+;;;        ->testm()
+;;;        ->choose('silence) when len(ssent)==1
+;;;        -> analyze(T)
+;;;        -> not lambdaname(a) = a=nil
+;;;        -> when atom(a) a=get(a, 'meqv)
+;;;        -> reactinput = a
+;;;        -> window(9,t,a)
+;;;        -> readlambda(a); window(9, nil, get(a,bondvalue)
+;;;        -> react(list(a, q(ssent), ssent))
+;;;        -> when *ende* {
+;;;              tracev = not(tracev); 
+;;;              modifvar() 
+;;;              winxit();
+;;;              swap()
+;;;              exit()
+;;;            }
+;;; question
+;;; 1. *ssend*, *ende*はどこで設定されるのか
+;;; 2. exit()の定義がないが、parry()を終わるのだろう
+;;; 3. prop meqvはどこで最初に設定されるか
+;;; 4. 重要そうな関数は
+;;;    - experiment()はパラメタ変化の実験用コード。
+;;;    - lambdanameには'meqvというプロバティがある
+;;;    - readlambda(), react(), 
+;;;    - readlambda(), react(), 
+;;;    - *ende*のときは終了だから、modifvar()はあまり重要ではないだろう
+
 (defun parry2 (ind)
   (let (a b)
     (if *save_dump* (savejob *save_dump* 'sav))
@@ -69,6 +143,7 @@
 ;; dont use this
 (defun readsexp (fname)
   (let (alls)
+    (nyi)
   (with-open-file (stream fname :direction :input)
     (do ((sexp (read stream nil)(read stream nil)))
         ((null sexp))

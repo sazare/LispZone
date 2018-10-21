@@ -8,5 +8,55 @@
 1.4 playparry.lispは、テストで書いていない部分も含めてうごかすための操作全般を書く。
 1.5 ERRやSETERRRは動作がよくわからないのと、エラーの処理なので無視する・・・
 1.6 BUG := n はデバッグ用に使っているようなので、無視する
+1.7 RDATBのdefpropがなかったのでmacroで作成した
+1.8 RDATAは、コメントが~で始まっているので、~を;に変換する必要があった
+　　そもそもこれはプログラムなのかデータなのか? コードの断片のようにしか見えない。
+    さらに、りすとの前についている@がよくわからない。appendのようではあるが
+    setq fl @((...)(...)...)) ひとつの要素は(MAFIASET (MAFIA) WORDS)のような形
+　　として
+　　(MAPCAR (FUNCTION (LAMBDA (X) (EVAL (CONS @DEFPROP X))))  FL)
+　　としているので、リストの要素を(defprop a b c)としているらしい。
+　　@DEFPROPになっているのは何か? ほかに定義がない・・・
+1.9 @について... RDATAには@のついた式がいくつかある
+    @DEFPROPは、FUNCTIONかもしれない。
+
+    (SETQ SETLIST (GET @SETLIST @SETS))
+　　　これは変数についているのでQUOTEにみえる。
+    (SETQ WTS @(17 15 12 10 9 7 6 5 4 3 1))
+　　　これもまたquoteにみえる。あるいはlistかもしれない。
+
+~    %   RESPECTIVE WEIGHTS OF THE GIVEN FLARE CONCEPTS   %
+
+    (SETQ WTS @(17 15 12 10 9 7 6 5 4 3 1))
+
+~    %WEIGHTS ARE ASSIGNED TO CONCEPTS RATHER THAN TO INDIVIDUAL WORDS%
+
+    (SETQ FLARELIST (GET @FLARELIST @SETS))
+    (MAPCAR (FUNCTION (LAMBDA (WT) (PROG2 (PUTPROP (CAR FLARELIST) WT @WT)
+                                          (SETQ FLARELIST (CDR FLARELIST))
+                                   ))) WTS)
+     この1行目は上と同じ。2行目の@WTもまたquoteに思える。
+     (putprop xxx 1 '1)などということはできないと思う・・・
+     こめんとによると、FLARELISTにはCONCEPTがならんでいて、WTは同じ数のwightらしい。
+
+　　RDATAはOPAR3でのみ参照していて
+    EXPR  OPARINITIALIZE ();
+         BEGIN
+                EVAL '(INC (INPUT (PAR BLF) RDATA) NIL);
+                WHILE NOT ATOM X  ⇦   ERRSET(READ(),T) DO EVAL CAR X;
+                INC(NIL,T);
+　　     ....
+　　RDATAはデータとして読み込んで、EVALして使っているのだろうか。INC, INPUT、はわからない。lisp1.6かな
+    (PAR BLF)は変数なのか???
+    (PAR BLF)はa(DSKIN ..) の引数に使われている。が、DOR*の中は制御文字多発
+    バイナリファイルからのデータなのだろうか。
+    謎
+
+
+
+
+
+
+
 
 

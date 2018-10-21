@@ -1,7 +1,7 @@
-(defun choose (x) x)
+(defun nyi() (format t "NOT YET IMPLEMENT"))
+
 (defun modifyvar ())
 (defun react (a) a)
-(defun readlambda (x) x)
 (defun window (x y z) x y z)
 (defun winxit ())
 ;(defun q (a b) a b)
@@ -13,4 +13,9 @@
 ;; about error 
 (defun ERRSET (a &rest rest) (list a rest))
 (defun ERR (x) x)
+
+;; others
+(defmacro defprop (sym val prop)
+    `(setf (get ',sym ',prop) ',val)
+  )
 
