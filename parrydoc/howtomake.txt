@@ -52,6 +52,26 @@
     バイナリファイルからのデータなのだろうか。
     謎
 
+2.0 (10/22)
+RDATB やRDATAで、defpropがでてきて
+(defprop A B C)
+と書いていた。
+すべてのAについて(defvar A)が必要になるので、macroでできないかやってみたが
+(defmacro defprop (a b c)
+(progn
+ (defvar ,a)
+ (setf (get ',a ',c) ,b)
+)
+)
+
+だと、defvarしたaのスコープがprognの中になってしまい思ったようにならない。
+defvarなしでメッセージでるけどいいのか??
+
+別途作ったらどうかと思ったら、rdataでは mapでdefpropをまわしていて
+アトムをすべて集めるのがめんどう・・・
+
+しかし、いずれにせよglobalなatomをどうにかする必要はでてくる。
+データ中のアトムにputpropしているから・・・
 
 
 
