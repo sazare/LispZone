@@ -1,4 +1,4 @@
-;; read s-exp from a file
+; read s-exp from a file
 (load "diaapp.lisp")
 (load "pmem.lisp")
 
@@ -14,9 +14,9 @@
   )
 
 (defun fearmode ()
-  (if (>= *fear* 18.4)
+  (if (>= *FEAR* 18.4)
     (progn
-      (setq *ende* t)
+      (setq *ENDE* t)
       (choose 'exit)
       )
       ;DISTINGUISH BETWEEN QUESTIONS AND STATEMENTS OF 'OTHER 
@@ -27,7 +27,7 @@
 	(decf *FEAR*)
 	nil
 	)
-      (if (equal *STYLE 'Q)
+      (if (equal *STYLE* 'Q)
 	(choose 'THREATQ)
 	(choose 'AFRAID))
       )
@@ -39,7 +39,7 @@
 	  (member topic '(MAFIA BYE IYOUME STRONGFEELINGS FEELINGS GAMES))
 	  )
     nil
-    (if (>= *fear* 14) (fearmode) (angermove))
+    (if (>= *FEAR* 14) (fearmode) (angermove))
     )
   )
 
@@ -75,7 +75,6 @@
 ;;;    - readlambda(), react(), 
 ;;;    - readlambda(), react(), 
 ;;;    - *ende*のときは終了だから、modifvar()はあまり重要ではないだろう
-
 (defun parry2 (ind)
   (let (a b)
     (if *save_dump* (savejob *save_dump* 'sav))

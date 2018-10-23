@@ -1,3 +1,6 @@
+(load "setting.lisp")
+(load "primitives.lisp")
+
 (load "stub.lisp")
 (load "specials.lisp")
 ;(load "rdata.lisp")

@@ -73,3 +73,15 @@
 (defvar *TRACEV* )
 (defvar *SAVE_DUMP* )
 
+(defvar *ANGER* nil)
+(defvar *FEAR* nil)
+(defvar *ENDE* nil)
+
+(defvar *SAVE_DUMP* nil)
+(defvar *PM2INPUT* nil)
+(defvar *PMINPUT* nil)
+(defvar *SSENT* nil)
+(defvar *REACTINPUT* nil)
+
+(defvar *STYLE* nil)
+

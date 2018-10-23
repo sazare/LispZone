@@ -52,13 +52,13 @@
     )
   )
 
-
-(defun carn (s)
-  (if (atom s) 
-    s
-    (car s)
-    )
-  )
-
+;carn is defined in diaapp.lisp
+;(defun carn (s)
+;  (if (atom s) 
+;    s
+;    (car s)
+;    )
+;  )
+;
 
 
