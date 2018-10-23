@@ -1,0 +1,80 @@
+ALL.DOC,text,use, ドキュメント。ファイルの内容の概要とか。PARRY UUO AND INPUT/OUTPUT DOCUMENTATION
+CHANGE,data,多数,(数字 . 数字) 。~から行末はコメントのようだ。[ALL.DOC]最新の20個の修正内容-- FRONTデータとPDATデータのコンパチ化。PDATはないみたい
+[FILES READ DURING LOADING OF PARRY CORE IMAGE: (note -- all are read by LISP),,,
+PDATB,lisp,4/initb(),defpropで、単語の間の関係を定義しているように見える。0040の意味がここであきらかに? [ALL.DOC] PDATから抽出した有益な情報
+BEL,data,4/binit(); opar3/oparinitialize,信じることのデータ(状態　レベル　対象)(状態　レベル *対象 n) レベルはコメントの順序。[ALL.DOC] inferencerに使われる、信念(belief)
+INF,data,4/binit(),推論規則。(タイプ (状態 数字) リンク...)かな。[ALL.DOC] INFERENCERによって使われる推論規則
+RDATA,lisp,opar3/oparinitialize,なにか??[ALL.DOC] OPARで使われていた古いPARRYからもってきたデータ
+[read by FRONT.LAP:],,,
+NEARBY.KEY,data,FRONT.LAP/INIT_CHAR,キーボードで近くにある文字([ALLDOC]respellerで使用)
+STARTR.ALF,data,FRONT.LAP/INIT_DICTIO/MARK,前置詞、関係代名詞、など単語のリスト。[ALL.DOC] フラグメントの最初の語
+STOPPR.ALF,data,FRONT.LAP/INIT_DICTIO/MARK,動詞のリスト。[ALL.DOC]フラグメントの最後の語
+FLAGS.ALF,data,? FRONT.LAP/INIT_DICTIO/MARK,何かのキーとなる単語か(andとかfamilyとかmonとか)。[ALL.DOC]special functionと語
+IRREG.ALF,data,? FRONT.LAP/INIT_DICTIO/SET_VAL,タイプミスの正解対応票。[ALL.DOC]間違っている動詞。既知のミススペルとcontraction
+SUFFIX.ALF,lisp,? FRONT.LAP/INIT_DICTIO/STORE_IDIOM,語尾の一覧。わかるものはその展開形。[ALL.DOC]語の末尾
+IDIOM.ALF,data,? FRONT.LAP/INIT_DICTIO/STORE_IDIOM,表現の同じものの対応票か[ALL.DOC]Idiomatic substitutions
+FILLER.PAT,data,? FRONT.LAP/INIT_DICTIO/MARK,インデックスなのか?? P0000、P0010は何かのアドレスか??。[ALL.DOC]有効でないパターン(Non-vital patterns)
+NEGATE.PAT,data,? FRONT.LAP/INIT_DICTIO/MARK,数字とかP数字の対応票。[ALL.DOC]反対語とのパターン
+DAD.PAT,なし,,[ALL.DOC]Patterns specific to father
+MOM.PAT,なし,,[ALL.DOC]Patterns specific to mother
+FAMLY.PAT,data,,[ALL.DOC]Patterns referring to family
+[ALL.DOC WHILE PARRY IS RUNNING:],,,
+ALL.PAR,なし,,tables read in dump mode.  this file is always open.
+SYNONM.ALF,lisp,5/sumex1/synnym,同義語のリスト。[ALL.DOC] ALL.PARのもとになったファイル。Words recognized and synonyms
+SPATS.SEL,lisp,5/sumex1/spat(),動詞のフラグメントと数字。[ALL.DOC] ALL.PARのもとになったファイル。Simple sentence patterns
+CPATS.SEL,data,5/sumex1/cpat(), (リスト 数字) なんだろう。[ALL.DOC] ALL.PARのもとになったファイル。Compound sentence patterns
+PDATX.PAR,なし,5/sumex/dskloc(),[ALL.DOC] ALL.PARのもとになったファイル。index to PDAT
+PDAT,なし,,"[ALL.DAT] -- memory data, read with a CHSETI (a LISP 1.6 function). this file is always open"
+ERR.FILP,なし,,"[ALL.DAT] -- read in, incremented, and written out to get a number for Pnnn.ERR"
+Pnnn.ERR,なし,,"[ALL.DAT] --  written whenever an error occurs,,"
+PAR2.FIL,なし,,"[ALL.DAT] -- read in, incremented, and written out to get a number for Pnnn.DIA"
+Pnnn.DIA,なし,,"[ALL.DAT] -- opened, appended to with another i/o pair, and closed for each i/o pair"
+[上のファイルと関係あるかもしれないもの]拡張子が違う,,,
+SPATS.PAR,data,,テキストの羅列。たぶん単語をインデックスに変換するための表ではないか。SPATS.SEL?
+CPATS.PAR,data,,ずらっと数字。CPATS.SEL?
+SYNONM.PAR,data,,文字の羅列。たぶん単語をインデックスに変換するための表ではないか。SYNONIM.ALF
+[以下ALL.DOCにない],,,
+README,text,,readme
+[MLISPとLAP],,,
+DIAAPP,mlisp,,dialogを作るらしい
+FRONT.LAP,lap,,"ソースはない。初期化ぽい。pminitialize;init_char;init_dictio;read_clean;find_word;de_suffix;root_val;learn;fprint;canonize;idiom_val,same;segment;match;first_lambda;window;cycle; run;restartとか。ここでファイル読み込みしている模様。nearby.key;startr.alf; stoppr.alf; flag.alf;synonm;filler.pat;negate.pat;synonm.new;spats.int;cpats.int;,"
+OPAR3,mlisp,,パラノイドモデルとある。parryの古いバージョンからの変更部分のようなコメントあり
+OPAR3.LAP,lap,,opar3のlap
+PMEM,mlisp,,readlambda()は、lambda numberを入力し、対応するsemantic関数(frame)をメモリから読み込む
+PMEM.LAP,lap,,
+PMEM2,mlisp,,初期化や、時刻情報の獲得。入力の前処理。医者の名前を取り出すGETDOCTNAME()など
+PMEM2.LAP,lap,,
+PMEM3,mlisp,,入出力関数
+PMEM3.LAP,lap,,
+PMEM4,mlisp,,トップレベル関数
+PMEM4.LAP,lap,,
+PMEM5,mlisp,,experiment();opinion()とか
+PMEM5.LAP,lap,,
+RANDOM.LAP,lap,,ソースなし。乱数を作る関数かな
+SAVEJ.LAP,lap,,ソースなし。savejog;sixbit;
+WIN,mlisp,,window機能とは何か? それのプログラム
+WIN.LAP,lap,,
+[コマンド],,,
+DOX,script,,OSのコマンドのように見える
+[LISP(1.5?)],,,
+DOS2,lisp,,lispソースのように見える 
+SAME.PAT,lisp,,数字やSP数字のペア
+[アセンブラ],,,LAPとは構文違うがニモニックは共通?
+PARFNS.FAI,asm,,パラメタファイル名の定義とアクセス。これは理解する必要あり
+PINDEX,asm,,parryデータファイルをよみ、ランダムアクセスインデックスを作るプログラム。これも理解する必要あり
+[データ],,,
+DICTIO,data,,単語の属性(品詞とか機能)
+MULTI,data,,目的語などが複数もてるとき、対応するものの品詞票かな
+PREFIX,data,,単語についての表。品詞だったり、意味だったり
+SAMPLE,data,,英語の省略形などの対応票
+PMEM6,data,,文字の羅列
+[そのた],,,
+SUFFIX,data,,表。単語と省略形、品詞、言い換えか
+TOPIC,data,,単語のリスト。トピックというのは発言のテーマのようなもの。それの一覧か
+TOPICS,data,,トピックとそれに対応する文章ではないか
+[ログ],,,
+DOM,ログ,,lispやmlispのスクリプトかログのように見える
+DOP,ログ,,lispやmlispのスクリプトかログのように見える
+DOR,ログ,,lispやmlispのスクリプトかログのように見える
+DORS,ログ,,lispやmlispのスクリプトかログのように見える
+DOW,ログ,,lispソースとログのように見える
