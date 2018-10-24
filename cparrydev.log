@@ -1,4 +1,4 @@
-20181016(Thu)
+﻿20181016(Thu)
 1. All.docによると、mlispのコードはlisp1.6に変換されるらしい
 2. ERR(), SETERR()はLISP1.6で定義されていた
 3. READDATA(はREADINC()の値が'COMMENTでない場合に、処理をしている。
@@ -86,4 +86,28 @@ defvarなしでメッセージでるけどいいのか??
 データ中のアトムにputpropしているから・・・
 動的束縛は楽だ・・・
 
+
+20181024水
+rdata.lispのインデントがおかしいので、手で修正した
+また、グローバル変数 flarelistとpointersを*～*にしてdefvarした
+これらの変数はatomとしてもでてきているので、この対処が間違っている可能性もありそう。
+rdata1.lispとして修正版を作った
+
+関数    -> 処理したatomのたまる変数
+defprop ->  *AOPUTPLIST*
+putprop -> *AODEFPLIST*
+readbel -> *INTLIST*
+
+readinfはまだ対応していない。するとしたらλ名をとりこむのかな
+
+(map (lambda (x) (print (symbol-plist x))))
+みたいなことをすれば
+プロパティの全貌がわかる
+
+PDATBにでてくるatom->prop名->atomのグラフを作成した
+Rのigraphを用いていてRスクリプトはparryplot.R
+pdatb.graphは元のpdatbから()を取り除いた
+pdatab.epsが作成したグラフ
+
+これをみると、ほとんど重複がない。UNITとかINDの意味がよくわからない
 

@@ -3,7 +3,7 @@
 
 (load "stub.lisp")
 (load "specials.lisp")
-;(load "rdata.lisp")
+(load "rdata.lisp")
 (load "pdatb.lisp")
 (load "diaapp.lisp")
 (load "pmem.lisp")
