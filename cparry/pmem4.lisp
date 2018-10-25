@@ -66,15 +66,16 @@
 ;;;              exit()
 ;;;            }
 ;;; question
-;;; 1. *ssend*, *ende*はどこで設定されるのか
-;;; 2. exit()の定義がないが、parry()を終わるのだろう
-;;; 3. prop meqvはどこで最初に設定されるか
-;;; 4. 重要そうな関数は
-;;;    - experiment()はパラメタ変化の実験用コード。
-;;;    - lambdanameには'meqvというプロバティがある
+;;; 1. where are defined *ssend*, *ende*?
+;;; 2. no definition of exit(). perhaps exit from parry()
+;;; 3. where are defined prop and meqv
+;;; 4. possibly important functions
+;;;    - experiment() define a experimental code for parameter changeing
+;;;    - lambdaname has a property 'meqv
 ;;;    - readlambda(), react(), 
 ;;;    - readlambda(), react(), 
-;;;    - *ende*のときは終了だから、modifvar()はあまり重要ではないだろう
+;;;    - when *ende* is t is end, modifvar() seems not important
+
 (defun parry2 (ind)
   (let (a b)
     (if *save_dump* (savejob *save_dump* 'sav))
