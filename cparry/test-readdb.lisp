@@ -1,4 +1,6 @@
 (load "test.lisp")
+(load "diaapp.lisp")
+(load "pmem.lisp")
 (load "pmem4.lisp")
 
 (test-set

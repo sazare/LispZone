@@ -34,7 +34,8 @@
     (progn
       (format t "~% ~a: Test Failed at ~a" desc *test-name*)
       (format t "~%   Expression: ~a" form)
-      (format t "~%    Expected ~a: Evaluated: ~a~%" expv value)
+      (format t "~%    Expected ~a" expv)
+      (format t "~%    Evaluated: ~a~%" value)
       (force-output t)
     )
   )

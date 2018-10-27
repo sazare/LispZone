@@ -111,3 +111,27 @@ pdatab.epsが作成したグラフ
 
 これをみると、ほとんど重複がない。UNITとかINDの意味がよくわからない
 
+20181025木
+- pmem4.lispに日本語のコメントをいれていたら、Windowsで意味不明のエラーになってしまった。日本語をやめる
+
+- files.csvの内容を絵にかいてみた。すこしは全体像がわかるかも。
+- utils.lispは、cparryのatomのpropertyの関係を見えるようにするための道具。
+defpropとputpropで定義したpropertyをigraphでなんとかみたい。
+一方でinfはどうしようか。思案中
+
+20181027土
+- test.lispのexpectとvalueを別の行にした。みやすさ
+- utils.lispは、propertylistによるグラフ構造をigraphで表示するための中間データ作成
+- testxxx.lispをtest-xxx.lispに変更した
+  - git mvすべきだったが、mvしてしまった
+* 変数名に*-*をつける必要はないようなきがする。今回つけた*はとくに・・・
+  - commonlispのルールみたいになっていたのでglobal変数に*-*をつけてはみたものの
+　　たとえばSETLIST, FLARELIST, SENSITIVELISTは、
+    property listから取り出したデータをatomの値にしていると考えるべきだ。
+　　だからこれらの変数には*をつけないことにしよう。
+
+* 元のソースをベースに、commonlisp用に変更していくという方法
+　- 不要な関数をだみーにし、必要なものだけ変更していく・・・それでもうまくいくだろうか
+    悩み中
+
+

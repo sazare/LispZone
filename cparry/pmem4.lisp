@@ -1,6 +1,5 @@
 ; read s-exp from a file
-(load "diaapp.lisp")
-(load "pmem.lisp")
+
 
 (defun testm ()
   (test_pattern)
@@ -39,7 +38,7 @@
 	  (member topic '(MAFIA BYE IYOUME STRONGFEELINGS FEELINGS GAMES))
 	  )
     nil
-    (if (>= *FEAR* 14) (fearmode) (angermove))
+    (if (>= *FEAR* 14) (fearmode) (angermode))
     )
   )
 
@@ -216,7 +215,7 @@
   (let (b )
     (loop for a in infs
 ;;; I may missunderstand READDATA in
-;;;  WHILE not ATOM(A ⇦  ERRSET(READDATA()) ) AND A ⇦  car A DO
+;;;  WHILE not ATOM(A ?  ERRSET(READDATA()) ) AND A ?  car A DO
       do
         (progn
 	  (if (atom a) (return))

@@ -85,3 +85,16 @@
 
 (defvar *STYLE* nil)
 
+(defvar FLARELIST nil)
+(defvar SETLIST nil)
+(defvar SENSITIVELIST nil)
+
+(defvar WTS nil)
+(defvar FL nil)
+(defvar POINTERS nil)
+(defvar STL Nil)
+(defvar DN nil)
+(defvar DV nil)
+(defvar AN nil)
+(defvar AV nil)
+(defvar ANV nil)
