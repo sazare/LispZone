@@ -37,7 +37,7 @@
 (defun diskread (a)
   (progn
     (nyi)
-    (error "nop diskread")
+    (format t "nop diskread ~a" a)
     a
   )
 )
@@ -47,7 +47,7 @@
     nil
     (if (diskread a) 
       t
-      (error "BAD DISKREAD" A)
+      (error "BAD DISKREAD" )
       )
     )
   )

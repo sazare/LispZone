@@ -81,7 +81,6 @@
 (defvar *PM2INPUT* nil)
 (defvar *PMINPUT* nil)
 (defvar *SSENT* nil)
-(defvar *REACTINPUT* nil)
 
 (defvar *STYLE* nil)
 

@@ -1,5 +1,15 @@
 ; read s-exp from a file
 
+(defun bl (b)
+  (if (not (atom b)) 
+    (progn (format t "BL not ATOM ~a" b) NIL)
+    (if (eq (get b 'class) 'INN) 
+      (>= (get b 'ntruth) 5)
+      (get b 'truth)
+      )
+    )
+  )
+
 
 (defun testm ()
   (test_pattern)
@@ -44,7 +54,7 @@
 
 
 
-(defun react ())
+(defun react (x ) x)
 ;; structure
 ;;; parry2 ->save_obj()
 ;;;        ->experiment()
@@ -257,15 +267,5 @@
   (make-infs (read-inf))
   )
 
-
-(defun bl (b)
-  (if (not (atom b)) 
-    (progn (format t "BL not ATOM ~a" b) NIL)
-    (if (eq (get b 'class) 'INN) 
-      (>= (get b 'ntruth) 5)
-      (get b 'truth)
-      )
-    )
-  )
 
 			    

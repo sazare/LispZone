@@ -8,9 +8,7 @@
   (loop for x in LL collect (cons x (symbol-plist x))))
 
 
-;(quote (*INTLIST* *aoputplist* *aodefplist*))
-;(defvar setaoput (union  *aoputplist*  *aoputplist*))
-;(defvar setaodef (union *aodefplist* *aodefplist*))
+
 
 (defun make-arc (a1 p1 targets)
   (cond 
@@ -34,7 +32,6 @@
   (make-arcs (car plist) (cdr plist))
 )
 
-;;; nyw
 ;;; plists = (plist ...)
 (defun make-edges (plists)
   (let (edges)
@@ -44,6 +41,31 @@
     edges
   )
 )
+
+(defun write-edges (edges fname)
+  (with-open-file (ss fname :direction :output :if-exists :supersede)
+    (dolist (e edges)
+      (format ss "~a ~a ~a~%" (nth 0 e) (nth 1 e)(nth 2 e))
+      )
+    )
+  )
+
+
+;(quote (*INTLIST* *aoputplist* *aodefplist*))
+(defun save-edges ()
+  (let (daop dedges)
+;  (let (paop pedges daop dedges)
+    ;; comment out because rdata.lisp is not ok
+;    (setq paop (union  :q *aoputplist*))
+;    (setq pedges (make-edges (allprop paop)))
+;    (write-edges pedges "pedges.csv")
+    (setq daop (union *aodefplist* *aodefplist*))
+    (setq dedges (make-edges (allprop daop)))
+    (write-edges dedges "dedges.csv")
+    )
+  )
+
+
 
 
 ;; intension
