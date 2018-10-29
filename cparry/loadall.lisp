@@ -5,7 +5,6 @@
 (load "specials.lisp")
 ;(load "rdata.lisp") ;; unclear 
 (load "pdatb.lisp")
-(load "diaapp.lisp")
 (load "pmem.lisp")
 (load "pmem5.lisp")
 (load "pmem3.lisp")

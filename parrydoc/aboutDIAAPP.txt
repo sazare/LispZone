@@ -1,0 +1,11 @@
+DIAAPPで定義されている関数は、以下のように他のファィルでも定義されていて同じ定義。
+また唯一他で定義されていないSELECTINPUTNN はほかでは使っていない。
+だから、DIAAPPはなくてもよい。
+
+SELECTINPUTN  => PEM3
+DISKREAD2 =>  PMEM
+CARN => PMEM
+REACTPRINT => PMEM4
+
+loadall.lispからdiaapp.lispを削除した。
+
