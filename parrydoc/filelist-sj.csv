@@ -1,5 +1,5 @@
 ALL.DOC,text,use, ƒhƒLƒ…ƒƒ“ƒgBƒtƒ@ƒCƒ‹‚Ì“à—e‚ÌŠT—v‚Æ‚©BPARRY UUO AND INPUT/OUTPUT DOCUMENTATION
-CHANGE,data,‘½”,(”š . ”š) B~‚©‚çs––‚ÍƒRƒƒ“ƒg‚Ì‚æ‚¤‚¾B[ALL.DOC]ÅV‚Ì20ŒÂ‚ÌC³“à—e-- FRONTƒf[ƒ^‚ÆPDATƒf[ƒ^‚ÌƒRƒ“ƒpƒ`‰»BPDAT‚Í‚È‚¢‚İ‚½‚¢
+CHANGE,data,‘½”,(”š . ”š) B?‚©‚çs––‚ÍƒRƒƒ“ƒg‚Ì‚æ‚¤‚¾B[ALL.DOC]ÅV‚Ì20ŒÂ‚ÌC³“à—e-- FRONTƒf[ƒ^‚ÆPDATƒf[ƒ^‚ÌƒRƒ“ƒpƒ`‰»BPDAT‚Í‚È‚¢‚İ‚½‚¢
 [FILES READ DURING LOADING OF PARRY CORE IMAGE: (note -- all are read by LISP),,,
 PDATB,lisp,4/initb(),defprop‚ÅA’PŒê‚ÌŠÔ‚ÌŠÖŒW‚ğ’è‹`‚µ‚Ä‚¢‚é‚æ‚¤‚ÉŒ©‚¦‚éB0040‚ÌˆÓ–¡‚ª‚±‚±‚Å‚ ‚«‚ç‚©‚É? [ALL.DOC] PDAT‚©‚ç’Šo‚µ‚½—L‰v‚Èî•ñ
 BEL,data,4/binit(); opar3/oparinitialize,M‚¶‚é‚±‚Æ‚Ìƒf[ƒ^(ó‘Ô@ƒŒƒxƒ‹@‘ÎÛ)(ó‘Ô@ƒŒƒxƒ‹ *‘ÎÛ n) ƒŒƒxƒ‹‚ÍƒRƒƒ“ƒg‚Ì‡˜B[ALL.DOC] inferencer‚Ég‚í‚ê‚éAM”O(belief)
@@ -36,19 +36,19 @@ SYNONM.PAR,data,,•¶š‚Ì—…—ñB‚½‚Ô‚ñ’PŒê‚ğƒCƒ“ƒfƒbƒNƒX‚É•ÏŠ·‚·‚é‚½‚ß‚Ì•\‚Å‚Í‚È‚¢‚
 [ˆÈ‰ºALL.DOC‚É‚È‚¢],,,
 README,text,,readme
 [MLISP‚ÆLAP],,,
-DIAAPP,mlisp,,dialog‚ğì‚é‚ç‚µ‚¢
-FRONT.LAP,lap,,"ƒ\[ƒX‚Í‚È‚¢B‰Šú‰»‚Û‚¢Bpminitialize;init_char;init_dictio;read_clean;find_word;de_suffix;root_val;learn;fprint;canonize;idiom_val,same;segment;match;first_lambda;window;cycle; run;restart‚Æ‚©B‚±‚±‚Åƒtƒ@ƒCƒ‹“Ç‚İ‚İ‚µ‚Ä‚¢‚é–Í—lBnearby.key;startr.alf; stoppr.alf; flag.alf;synonm;filler.pat;negate.pat;synonm.new;spats.int;cpats.int;,"
-OPAR3,mlisp,,ƒpƒ‰ƒmƒCƒhƒ‚ƒfƒ‹‚Æ‚ ‚éBparry‚ÌŒÃ‚¢ƒo[ƒWƒ‡ƒ“‚©‚ç‚Ì•ÏX•”•ª‚Ì‚æ‚¤‚ÈƒRƒƒ“ƒg‚ ‚è
+DIAAPP,mlisp,,‚±‚±‚Å’è‹`‚³‚ê‚Ä‚¢‚éŠÖ”‚Í‚·‚×‚Ä‘¼‚Ìƒtƒ@ƒCƒ‹‚Å’è‹`‚³‚ê‚Ä‚¢‚é‚Ì‚ÅA‚±‚Ìƒtƒ@ƒCƒ‹‚Í•K—v‚È‚¢B
+FRONT.LAP,lap,,LAP‚Ì‚İ
+OPAR3,mlisp,,ŒÃ‚¢PARRY‚Ìƒ\[ƒX‚©‚çAFLARE‚ÆDELUSIONƒgƒsƒbƒNŠÖŒW‚Ì‚à‚Ì‚ğ”²‚«o‚µ‚½‚Ì‚©?
 OPAR3.LAP,lap,,opar3‚Ìlap
 PMEM,mlisp,,readlambda()‚ÍAlambda number‚ğ“ü—Í‚µA‘Î‰‚·‚ésemanticŠÖ”(frame)‚ğƒƒ‚ƒŠ‚©‚ç“Ç‚İ‚Ş
 PMEM.LAP,lap,,
-PMEM2,mlisp,,‰Šú‰»‚âAî•ñ‚ÌŠl“¾B“ü—Í‚Ì‘Oˆ—BˆãÒ‚Ì–¼‘O‚ğæ‚èo‚·GETDOCTNAME()‚È‚Ç
+PMEM2,mlisp,,‚±‚±‚Å‚àFLARE‚ÆDELUSION‚Ìˆ—‚ª‚ ‚é
 PMEM2.LAP,lap,,
 PMEM3,mlisp,,“üo—ÍŠÖ”
 PMEM3.LAP,lap,,
-PMEM4,mlisp,,ƒgƒbƒvƒŒƒxƒ‹ŠÖ”
+PMEM4,mlisp,,ƒgƒbƒvƒŒƒxƒ‹ŠÖ”Parry()‚ª’è‹`‚³‚ê‚Ä‚¢‚é
 PMEM4.LAP,lap,,
-PMEM5,mlisp,,experiment();opinion()‚Æ‚©
+PMEM5,mlisp,,ƒRƒƒ“ƒg) intent‚Ìƒ‹[ƒ`ƒ“BˆÓ}‚Ì•Ï‰»‚È‚Ç‚ğˆµ‚¤‚æ‚¤‚¾B
 PMEM5.LAP,lap,,
 RANDOM.LAP,lap,,ƒ\[ƒX‚È‚µB—”‚ğì‚éŠÖ”‚©‚È
 SAVEJ.LAP,lap,,ƒ\[ƒX‚È‚µBsavejog;sixbit;
