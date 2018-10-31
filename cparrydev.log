@@ -152,6 +152,35 @@ defpropとputpropで定義したpropertyをigraphでなんとかみたい。
 
 　さて。やはり~はコメントと考えるべきだと思う。
 
+20181031水
+1. RDATAを解読してみた。@がよくわからないが、quoteだと仮定した。
+  - マフィアに関する妄想がどのように生まれるかが定義されていた。
+　- キーとなる語を、FLARELIST, SETLIST, SENSITIVEにわけて、
+　　各LISTのproperty SETS にはconceptと呼ばれる言葉のlistが定義され
+　　各conceptの各言葉のproperty WORDS にはそのconceptに属する単語が登録されている
+　　また、conceptのproperty WTにはその重みが登録されている。
+  - L65あたりからは、concept 〜SETの間で、最終的にMAFIASETにいたる遷移が定義されている。
+　　property NEXTは遷移の次の状態を示す。
+　- とにかく重要なデータなので、RDATAを参照していないとは考えにくい。
+    これも移す。
 
- 
+2. property listで複雑な構造を作っているので、全体を見るためにt.lisp/showtree を作った。
+   (showtree <atom> '(words sets set) ())
+　というように使う。atomには'FLARELIST, 'SENSITIVELIST, 'SETLISTを想定。
+　words, sets, setは階層になってるproperty list
+  第三引数は作業用なので必ず()にする。
+
+  これをつかって、マフィア妄想の状態遷移をダンプするときはこうなる。
+  遷移図の矢印はproperty nextになっているので。
+  (showlist (get 'flarelist 'sets) '(next) Nil)
+
+  storyを全部表示するのはこう。無駄にlambda名が表示されたので、lambda名は表示しないようにするためpmem.lispを参照してしまった。
+　(showlist (mapcar (lambda (x) (car x)) stl) '(story) () )
+
+
+3. SETLISTの値は、SETLIST.SETSと同じになっているが、FLARELISTとSENSITIVELISTはNIL。
+　重みをつけるときに消している。いいのだろうか。もともとそうだ。
+
+
+
 

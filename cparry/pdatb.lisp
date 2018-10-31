@@ -115,3 +115,6 @@
 (DEFPROP FEARFUL @@2990 IND)
 (DEFPROP MISTRUSTFUL @@2850 IND)
 (DEFPROP IYOUME @@4100 IND)
+
+(format t "end of loading pdatb.lisp~%")
+

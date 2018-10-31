@@ -5,3 +5,6 @@
     (if (= 17 *INPUTNO*) (setf *HURT* (- *HURT* 5)))
   )
 )
+
+(format t "end of loading pmem5.lisp~%")
+

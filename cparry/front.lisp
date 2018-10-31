@@ -19,4 +19,5 @@
     (when (synonm *LEARNING*) (return))
     
     
+(format t "end of loading front.lisp")
 

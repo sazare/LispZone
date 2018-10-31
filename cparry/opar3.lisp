@@ -25,6 +25,7 @@
 ;  )
 )
 
+(formta t "end of loading opar3.lisp")
 
    
 

@@ -1,3 +1,4 @@
+(load "primitives.lisp")
 
 ;; functions for analyzing the property list of known atoms
 
@@ -56,7 +57,7 @@
 ;  (let (daop dedges)
   (let (paop pedges daop dedges)
     ;; comment out because rdata.lisp is not ok
-    (setq paop (union  :q *aoputplist*))
+    (setq paop (union *aoputplist* *aoputplist*))
     (setq pedges (make-edges (allprop paop)))
     (write-edges pedges "pedges.csv")
     (setq daop (union *aodefplist* *aodefplist*))

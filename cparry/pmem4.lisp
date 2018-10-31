@@ -268,4 +268,5 @@
   )
 
 
-			    
+(format t "end of loading pmem4.lisp~%")
+

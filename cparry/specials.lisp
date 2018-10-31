@@ -97,3 +97,6 @@
 (defvar AN nil)
 (defvar AV nil)
 (defvar ANV nil)
+
+(format t "end of specials.lisp~%")
+

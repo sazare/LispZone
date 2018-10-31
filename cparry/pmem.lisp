@@ -61,4 +61,5 @@
 ;  )
 ;
 
+(format t "end of loading pmem.lisp")
 

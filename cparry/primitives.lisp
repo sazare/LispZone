@@ -1,3 +1,5 @@
+(load "setting.lisp")
+
 (defvar *aodefplist* '())
 (defvar *aoputplist* '())
 
@@ -14,3 +16,7 @@
     (when *h3i2-on* (push sym *aoputplist*))
     )
   )
+
+
+(format t "end of loading primitives.lisp~%")
+

@@ -16,3 +16,5 @@
 (defun ERRSET (a &rest rest) (list a rest))
 (defun ERR (x) x)
 
+(format t "end of loadding stub.lisp~%")
+

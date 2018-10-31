@@ -23,3 +23,5 @@
 ;    (return a)
   )
 
+(format t "end of loading pmem3.lisp~%")
+
