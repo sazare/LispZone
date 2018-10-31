@@ -1,0 +1,12 @@
+horseset horseracingset
+horseracingset bookieset
+italianset gangstarset
+personset gangstarset
+policeset gangstarset
+moneyset gamblerset
+cheatset racketset
+gangstarset bookieset
+gamblerset horseracingset
+bookieset racketset
+racketset mafiaset
+mafiaset mafiaset
