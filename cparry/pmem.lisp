@@ -52,14 +52,14 @@
     )
   )
 
-;carn is defined in diaapp.lisp
-;(defun carn (s)
-;  (if (atom s) 
-;    s
-;    (car s)
-;    )
-;  )
-;
+;carn was defined in diaapp.lisp
+(defun carn (s)
+  (if (atom s) 
+    s
+    (car s)
+    )
+  )
 
-(format t "end of loading pmem.lisp")
+
+(format t "end of loading pmem.lisp~%")
 

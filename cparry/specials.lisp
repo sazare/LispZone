@@ -17,7 +17,6 @@
 (defvar *STYPE*)
 (defvar *STOPIC*)
 (defvar *TRACE_MEM*)
-(defvar *ENDE*)
 (defvar *INPUTQUES*)
 (defvar *SSENT*)
 (defvar *DO_SPELL*)
@@ -71,16 +70,11 @@
 (defvar *HURT*)
 
 (defvar *TRACEV* )
-(defvar *SAVE_DUMP* )
 
 (defvar *ANGER* nil)
 (defvar *FEAR* nil)
-(defvar *ENDE* nil)
 
-(defvar *SAVE_DUMP* nil)
-(defvar *PM2INPUT* nil)
-(defvar *PMINPUT* nil)
-(defvar *SSENT* nil)
+(defvar *ENDE* nil)
 
 (defvar *STYLE* nil)
 

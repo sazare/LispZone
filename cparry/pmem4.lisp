@@ -167,8 +167,8 @@
 (defvar *INTLIST* NIL)
 
 (defvar *belfile* "bel0")
-;(defvar *inffile* "inf0")
-(defvar *inffile* "inf1")
+(defvar *inffile* "inf0")
+;(defvar *inffile* "inf1")
 
 (defun make-bel (bel)
   (let (B)
