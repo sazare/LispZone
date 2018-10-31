@@ -3,6 +3,9 @@
 
 (load "stub.lisp")
 (load "specials.lisp")
+
+(load "utils.lisp")
+
 (load "rdata.lisp")
 
 (load "pdatb.lisp")
