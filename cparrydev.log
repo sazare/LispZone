@@ -181,6 +181,7 @@ defpropとputpropで定義したpropertyをigraphでなんとかみたい。
 3. SETLISTの値は、SETLIST.SETSと同じになっているが、FLARELISTとSENSITIVELISTはNIL。
 　重みをつけるときに消している。いいのだろうか。もともとそうだ。
 
+4. INPUTQUE はassoc listになっている。
 
 
 
