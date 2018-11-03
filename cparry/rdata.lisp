@@ -1,3 +1,7 @@
+;; this file camed from RDATA of parry
+;; formatted and converted lambdanames
+;; do loadall.lisp
+
 (DEFPROP INIT  0  WT)
 (DEFPROP INIT  INIT  SET)
 (DEFPROP QLIST  (HOW WHO WHOM WHAT WHEN WHERE WHY WHICH)  IND)

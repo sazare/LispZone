@@ -1,3 +1,6 @@
+;; this came from PDATB of parry
+;; converted lambdaname
+
 (DEFPROP REASON @@0030 UNIT)
 (DEFPROP MANNER @@0031 UNIT)
 (DEFPROP @@0010 GO_ON UNIT)
