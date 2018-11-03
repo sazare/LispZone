@@ -4,4 +4,10 @@ commonlispについてのメモ
 (get 'Ishikawa 'capital)
 (setf (get 'Ishikawa 'capital) 'Kanazawe)
 
+2. dribble 
+  (dribble "file")
+  (dribble)
 
+3. (apropos 'func)
+4. (describe 'func)
+5. 

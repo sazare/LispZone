@@ -1,21 +1,44 @@
+RDATAの内容
+
+RDATAは古いParryからのコードらしいが、Parryが反応する言葉をカテゴリーわけし、
+その基本的な構造を定義している。
+特に、マフィアに関する妄想の部分は、ParryのParanoiaとしての重要な仕組みになっている。
+
+
 マフィア妄想
-RDATAには、Parryのマフィアについての妄想に関する仕組みが書かれているようだ。
+RDATAには、Parryのマフィアについての妄想に関する仕組みが書かれている。
+実際にどういう仕組みで妄想に陥っていくかは別のファイル。
 
-キーとなる語を、FLARELIST, SETLIST, SENSITIVEにわけて、
+
+キーとなる語を、大きくFLARELIST, SETLIST, SENSITIVEの3つにわけている。
 　　各LISTのproperty SETS にはconceptと呼ばれる言葉のlistが定義され
-　　各conceptの各言葉のproperty WORDS にはそのconceptに属する単語が登録されている
-　　また、conceptのproperty WTにはその重みが登録されている。
+　　各conceptの各言葉のproperty WORDS に、そのconceptに属する単語が登録されている
+　　また、FLARELIST, SENSITIVELISTに属するSETのproperty WTにはその重みが登録されている。
 
-flarelistはマフィア妄想にいたるconceptの集合、setlistは一般的な関心事(たぶん)についてのconcept、
-sensitivelisにはセンシティブな言葉のconceptの集合である。
+     LIST
+sets ↓ 
+     SET(concept)
+words↓ ↑set
+     WORD
 
+(SET(concept).type -> {institution, specific)
+specificはSENSITIVELISTのときに設定される
+institutionはFLARELISTだったとおもう・・・★
+
+flarelistはマフィア妄想にいたるconceptの集合
+sensitivelisにはセンシティブな言葉のconceptの集合
+setlistは一般的な関心事(たぶん)についてのconceptの集合
+
+FLARELISTでキーとなる、
 マフィア妄想(Mafia delusion)というのがParryの重要な執着らしい。
-BELにはDDMAFIAという状態があり、これがドクターがマフィアの一員だという確信を示していて
-このファイルで定義している言葉の関係とBELの定義する状態との間をつないでいるのだろう。
-たぶんPMEM4のevaluateとかproveとかがその処理にあたると思う。
+BELのマフィア関係の語に影響を及ぼすということだと思う。
 
+SENSITIVELISは、家族や性生活、宗教などの立ち入った話題の語になる。
 
-また、各リストの中で、conceptには重みがつけられる。
+FLARELISTとSENSITIVELISTのSETには重みがついている。
+SETLISTにはついていない。
+
+次の()の中の数字が重み。重い方が重要らしい。
 
 FLARELIST  (SETS)   WORDS
 　RACKETSET(17)      => RACKETER  CRIME
@@ -32,8 +55,17 @@ FLARELIST  (SETS)   WORDS
 
 たとえば、RACETSETのproperty WORDSに(RACKETER CRIME)が設定され、それは
 RACKETERと CRIMEという語がconcept RACETSETに属する語だということになるらしい。
-作り方からは、同じ語が別のconceptに属することはない。
-()の中は重みで、property WTに設定される。
+作り方から、SETLISTの一部をSENSITIVELISTにしているようだ。
+重みは、property WTに設定される。
+(LIST.SETS).WT=重み
+
+SENSITIVELIST 
+　LOOKS(9)  => LOOKS
+　SEXLIFE(8) => (SEXLIFE SEX GIRLS)
+　FAMILY(6) => (FAMILY DAD)
+　EDUCATION(4) => (EDUCATION SCHOOL)
+　RELIGION(2) => (RELIGION GOD PRAY)
+
 
 SETLIST
    SWEARING => SHIT
@@ -48,15 +80,7 @@ SETLIST
    SERVICE => ARMY
    RELIGION =>  (RELIGION GOD PRAY) 
 
-SETLISTには重みがないみたい
-
-SENSITIVELIST 
-　LOOKS(9)  => LOOKS
-　SEXLIFE(8) => (SEXLIFE SEX GIRLS)
-　FAMILY(6) => (FAMILY DAD)
-　EDUCATION(4) => (EDUCATION SCHOOL)
-　RELIGION(2) => (RELIGION GOD PRAY)
-
+SETLISTには重みがない
 
 ### L65からは、POINTERSという変数が定義されているが、これは
 FLARELISTのconceptの間の繊維を示していて
