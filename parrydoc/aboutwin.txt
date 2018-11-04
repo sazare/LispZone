@@ -1,0 +1,9 @@
+EXPR WINDOW(N,F,L);
+        BEGIN IF TRACEV='ALL THEN TWINDOW(N,F,L);  RETURN L; END;
+EXPR WINDOWSET(N); N;
+EXPR WINDOW_PRINT(A,B,C,D); NIL;
+
+front.lisp:  (windowset 1 *SSENT*)
+front.lisp:  (window  
+pmem4.lisp:    (window 9 t a)
+pmem4.lisp:    (readlambda a) (window 9 nil (get a 'bondvalue))

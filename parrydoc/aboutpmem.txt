@@ -1,0 +1,20 @@
+PMEM
+DISKREAD2(NAME) 
+READしたデータの先頭が^Hか数字なら、SEXPをディスクから読み込む。
+SEXPがすでにメモリにあれば、Tを返す。
+そうでなければ BEL(L)かENG(L)を呼び、情報へのリンクをメモリによみこむ
+
+NAME.INCOREがあれば↑T
+'DSKLOC.SUBRなら、A=DSKLOC(NAME) 
+L80: AがNILなら↑NIL
+
+
+
+
+
+DISKREAD(NAME) A=DISKREAD2(NAME)でエラーならNILそうでなければA
+ DISKREAD2のエラーは、()の対応がおかしいとき。
+ 
+
+
+READLAMBDA(A) Aがラムダ名のときはDISKREAD(A)をしてTをかえす。

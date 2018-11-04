@@ -1,0 +1,73 @@
+INPUTQUES
+
+FRONT.LAP/canonizeで設定しているので、そこの解読がまたれる。
+
+carにあるアトム
+SHIT
+CRAZY
+NAME
+GOOD
+ODD
+BAD
+DAY
+DATE
+WHEN
+LOOKS
+YOU
+
+
+in FRONT
+canonize(L)でassoc化しているらしい
+0 INPUTQUESをNILにする
+1. (memq (car L) '(EVER ANY))
+2.  nullなら? TAG6
+3. 'YOUをスタックに積んで、
+TAG6: と(CAR L)とLでなにかするらしい
+4 NULLならおわりでTAG13
+5. X = (WINDWO 15 T (CAR L))
+6. (CDR (CAR L))
+7. よくわからない ANY = (CDR (CAR L))
+8. (GET XXX 'IDIOM)
+9. がNILのときはTAG20
+10. (WINDOW 16 T (CONS なにか (CAR なにか))
+ 11. (SUFLIST (CADR なにか))
+ 12 (MOVEM 1 -4 P)とかの意味がなぞ
+ 13. ANY = (CDDR なにか)
+ 14. NILならばTAG26
+ 15. (SUBST (CAR なにか) 'any (GET_CHUCK ANY SYNONM )
+ 16 (NEQUAL  'A)
+もうなにかわからないが L1491とL1505のあたりで(CONS(CONS ?INPUTQUES))
+しているので、ここがassoc pairを作っているはず。
+
+ 
+ INPUTQUES)
+
+
+
+
+CANONIZEを呼ぶところ
+PMEM2.canona(L) => CANONIZE( L) 
+canona(L)はLの中のcarがatomならL、そうでなければcdar(L)をCANONIZE()するだけ。returnはINPUTQUESのまま。
+なにやりたいのか不明。
+
+FRONT.TEST_PATTERN()  => CANONIZE(L) 2回呼ぶ
+
+
+
+(GET  ANY 'IDIOM ) ??
+(SETQ ANY (IDIOM_VAL X X) )
+(WINDOW 16 T (CONS X (CAR ANY) ))
+(SUFLIST XX (CADR X)) このXはWINDOWを呼ぶ前のスタックの2つ前か
+(SETQ ANY (GET_CHUCK xx 'SYNONM))
+
+(SUBST (car x) 'any (0 p))
+
+L1488-L1494: (setq INPUTQUES (CONS  (CONS (CAR (-3 P)) (-1 P)) INPUTQUES))
+(-1 P) = かなり遠いのでよくわからない
+(-3 P) = 
+
+L435: GET_CHUCK -- ながい
+
+L447: (CALL 1 (E SYNNYM)) -- SYNNYMの定義ない
+
+

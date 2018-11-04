@@ -1,5 +1,18 @@
 ; read s-exp from a file
 
+(defun  INIT() (SELECTINPUTN '(PAR BLF), INPUTFILE))
+(defun  INITFB() 
+  (progn 
+    (EVAL '(DSKIN(RANDOM.LAP)))
+    (setf LAMDA 8)
+    (INITF)
+    (INITB)
+    )
+  )
+
+(defun  TESTM () TEST_PATTERN())
+(defun  LAMBDANAME (L) (EQUAL (CHRVAL L), LAMDA))
+
 (defun bl (b)
   (if (not (atom b)) 
     (progn (format t "BL not ATOM ~a" b) NIL)
@@ -16,16 +29,16 @@
   )
 
 (defun angermode ()
-  (if (>= *ANGER* 17.5) 
+  (if (>= ANGER 17.5) 
     (choose 'ANGER)
     (choose 'HOSTILEREPLIES)
     )
   )
 
 (defun fearmode ()
-  (if (>= *FEAR* 18.4)
+  (if (>= FEAR 18.4)
     (progn
-      (setq *ENDE* t)
+      (setq ENDE t)
       (choose 'exit)
       )
       ;DISTINGUISH BETWEEN QUESTIONS AND STATEMENTS OF 'OTHER 
@@ -33,10 +46,10 @@
 	     (bl 'DHELPFUL)
 	     (not (bl 'DMAFIA)))
       (PROGN
-	(decf *FEAR*)
+	(decf FEAR)
 	nil
 	)
-      (if (equal *STYLE* 'Q)
+      (if (equal STYLE 'Q)
 	(choose 'THREATQ)
 	(choose 'AFRAID))
       )
@@ -48,7 +61,7 @@
 	  (member topic '(MAFIA BYE IYOUME STRONGFEELINGS FEELINGS GAMES))
 	  )
     nil
-    (if (>= *FEAR* 14) (fearmode) (angermode))
+    (if (>= FEAR 14) (fearmode) (angermode))
     )
   )
 
@@ -67,7 +80,7 @@
 ;;;        -> window(9,t,a)
 ;;;        -> readlambda(a); window(9, nil, get(a,bondvalue)
 ;;;        -> react(list(a, q(ssent), ssent))
-;;;        -> when *ende* {
+;;;        -> when ende {
 ;;;              tracev = not(tracev); 
 ;;;              modifvar() 
 ;;;              winxit();
@@ -75,7 +88,7 @@
 ;;;              exit()
 ;;;            }
 ;;; question
-;;; 1. where are defined *ssend*, *ende*?
+;;; 1. where are defined ssend, ende?
 ;;; 2. no definition of exit(). perhaps exit from parry()
 ;;; 3. where are defined prop and meqv
 ;;; 4. possibly important functions
@@ -83,11 +96,11 @@
 ;;;    - lambdaname has a property 'meqv
 ;;;    - readlambda(), react(), 
 ;;;    - readlambda(), react(), 
-;;;    - when *ende* is t is end, modifvar() seems not important
+;;;    - when ende is t is end, modifvar() seems not important
 
 (defun parry2 (ind)
   (let (a b)
-    (if *save_dump* (savejob *save_dump* 'sav))
+    (if save_dump (savejob save_dump 'sav))
       ;; Program will start here again if system clashes
 
     (format t "~a~%" ind) (force-output t)
@@ -98,23 +111,23 @@
       (format t "Pattern match error")
       )
     (setf a (car a))
-    (setf *pm2input* *pminput*)
-    (setf *pminput* a)
-    (if (= (length *ssent*) 1)
+    (setf pm2input pminput)
+    (setf pminput a)
+    (if (= (length ssent) 1)
       (setf a (choose 'silence)))
     ;; (analyze t)
     (if (not (lambdaname a)) (setf a nil))
     (if (and a (atom a) (setf b (get a 'meqv)))
       (setf a b))
-    (setf *reactinput* a)
+    (setf reactinput a)
     (window 9 t a)
     (readlambda a) (window 9 nil (get a 'bondvalue))
-    (if (not (react (list a (q *ssent*) *ssent*)))
-      (format t "error in react ~a" *ssent*)
+    (if (not (react (list a (q ssent) ssent)))
+      (format t "error in react ~a" ssent)
       )
-    (if *ende* 
+    (if ende 
       (progn 
-	(setf *tracev* (not *tracev*))
+	(setf tracev (not tracev))
         (modifyvar)
 	(winxit)
 	(swapp)

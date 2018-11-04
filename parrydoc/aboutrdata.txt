@@ -58,6 +58,8 @@ RACKETERと CRIMEという語がconcept RACETSETに属する語だというこ�
 作り方から、SETLISTの一部をSENSITIVELISTにしているようだ。
 重みは、property WTに設定される。
 (LIST.SETS).WT=重み
+(注 MAFIOはMAFIAのspell missかどうか?? Mafiosoという言葉があるようで
+間違いでもなさそう。)
 
 SENSITIVELIST 
 　LOOKS(9)  => LOOKS
@@ -140,7 +142,6 @@ WORK      (H0460 H0462 H0490)
 SWEARING  (H2410)
 
 このラムダ名の意味は不明
-
 
 
 

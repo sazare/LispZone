@@ -1,0 +1,22 @@
+PMEM5
+
+L29: EXPERIMENT() 実験用コードなので EXPERIMENTが'SEVENのとき実験モードで
+ INPUTNO=7 ならHURT += 5, 17 ならHURT -= 5
+ 
+
+L119: SUMEX1() 
+% THIS ROUTINE SETS UP A WORKING VERSION OF PARRY WHICH WILL ALMOST RUN ON SUMEX %
+        INITFN(NIL); ; 変数の初期化 ?!ALLANAPHS, EXHAUSTNO, SILENCENO, SWEARNO
+        
+        SYNNYM('A);     % READS IN SYNNYM.PAR %
+        SPAT('(A));     % READS IN SPATS.PAR %  -- 定義なし
+        CPAT('(A));     % READS IN CPATS.PAR % -- 定義なし
+        DSKLOC('A);     % READS IN PDATX.PAR % -- 定義なし ファイルもなし
+        ONEDIA ⇦  T; SUMEX ⇦  T; TRACEVFLAG ⇦  NIL;
+        SWAPP.EXPR = T()
+        WINXIT.EXPR = T()
+        PPNUU.EXPR = 0()
+        TTYUU.EXPR = 0()
+        INITFN('GN2)       ---- INITFNの定義はなし
+        
+L135: SUMEX2()

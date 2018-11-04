@@ -5,12 +5,12 @@
   (nyi)
   (return x)
 ;  (unless (equal x NIL) 
-;    (setf *CHOSEN* (get *CHOSEN* 'IND)) ; setf is correct?
-;    (unless *CHOSEN* 
+;    (setf CHOSEN (get CHOSEN 'IND)) ; setf is correct?
+;    (unless CHOSEN 
 ;      ;go TAG6
-;    (if *CHOSEN* (EQUAL EXHAUST *CHOSEN* ) 
+;    (if CHOSEN (EQUAL EXHAUST CHOSEN ) 
 ;      (go TAG10))
-;   (if (choose t *ENDE* 'BYEFEDUP) ;; order may be reverse
+;   (if (choose t ENDE 'BYEFEDUP) ;; order may be reverse
 ;     (go TAG7))
 ;   ; tag10
 ;   (choose 'EXHAUST)

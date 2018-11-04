@@ -1,0 +1,45 @@
+PMEM2 
+L139のFLARE^Z'INITとは何か?
+ ここでは(setf FLARE 'INIT)にしておく
+
+ちがうらしい
+L185         IF FEAR^\18.4  and  (DELFLAG  or  FLARE^Z'INIT)
+^Z は　or の項になっているので、上の解釈では'INITがきてしまいおかしい。
+他のコードではFLARE <- 'INITというのが多いからこれは、
+FLARE = 'INITだろう。
+
+^\は数字の比較であり、fearが理由で終了するということは大きな値の
+はずだから、(>= fear 18.4)とする。
+
+(chrval (read))= 'aみたいな判定をしているが、
+(chrval x)がxの文字コードを返すのだとすると
+(read)はatomをかえすので不要なきがする。
+
+
+243           THEN PRINTSTR TERPRI ("TRACE INTERNAL PROCESSES? [Y,N] ")
+このterpriの位置がわからないので
+(terpri nil)
+(printstr "TRACE INTERNAL PROCESSES? [Y,N] ")
+にする
+二箇所あった
+
+287         ELSE IF NULL CDR A THEN  < '?" >
+この?はなにか?? '?にしておく
+
+298        A ⇦  TIME();    B ⇦   CAR DIVIDE( 10 * (A-OLDTIME) , 166 );
+DIVIDE(x,y)は商と余りをもとめるのではないか。carは商だろうか
+166とはなにか??
+
+また
+321         A ⇦  cdr DIVIDE(A,7)+1; 
+なので、(商 . 余り) になっているらしい
+
+
+L355 '(I DON?'T PLAY GAMES);
+とあるので ?はエスケープかな
+\' とする
+
+
+ 
+ 
+
