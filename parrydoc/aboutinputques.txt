@@ -71,3 +71,12 @@ L435: GET_CHUCK -- ながい
 L447: (CALL 1 (E SYNNYM)) -- SYNNYMの定義ない
 
 
+PMEMのコメントをみると
+INPUTQUES       is a list of dotted pairs from the pattern matcher to the memory
+                        each pair is (canonical 5-letter atom . input word)
+
+SYNONM.ALFの行は(WORD SYNO) でSYNOは最大5文字なので、これをcanonical 5-letter atom
+として使っているのではないか?
+他の.ALFファイルは5文字にかなうものがない
+
+

@@ -2,6 +2,7 @@
 
 (defun test_pattern ()
   ;; too long
+  (prog ()
   (get_question)
   (windowset 1 SSENT)
   (window 1 t 'INPUT)
@@ -17,6 +18,9 @@
     (window 1 t 'RESPELLED)
     (window 3 t (find_words SSENT))
     (when (synonm LEARNING) (return))
+    )
+  )
+  )
     
     
 (format t "end of loading front.lisp")

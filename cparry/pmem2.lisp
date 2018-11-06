@@ -17,17 +17,20 @@
 ;        % FLARESENT IS A SEMANTIC FUNCTION CALLED BY A FLARE INPUT %
 ;        % IT CALLS THE OLD PARRY ROUTINES FOR FLARE TOPICS %
 ;; % DEACTIVATE NEW FLARE WORDS AND COMPUTE FJUMP  %
-  (flareref INPUTQUES)
+  (prog ()
+    (flareref INPUTQUES)
+    (return nil)
   )
+)
 
 (defun delnsent()
 ;        % FLARESENT IS A SEMANTIC FUNCTION CALLED BY A FLARE INPUT %
 ;        % IT CALLS THE OLD PARRY ROUTINES FOR FLARE TOPICS %
 
-  (let (a b)
+  (prog (a b)
     (setf a (delcheck INPUTQUES))
     (setf b (delref a))
-    b
+    (return b)
     )
   )
 
@@ -73,16 +76,16 @@
 ; % SKEYWD AND KEYWD ARE ONLY USED WHEN NOTHING IS RECOGNIZED BY THE PATTERN MATCHER %
 
 (defun skeywd (type sent)
-  (let (found r)
+  (prog (found r)
         ;;    % CHECK FOR DELN OR FLARE WDS IN INPUT %
         (when (and DELFLAG  (setq r (delcheck SENT)))
                 (if (setq r (delref r)) 
 		  (setq found R)
 		  (setq found (DELSTMT))))
-        (when (and (not found) (eq FLARE 'INIT)) (setq R (flareref SENT))
+        (when (and (not found) (eq FLARE 'INIT) (setq R (flareref SENT)))
 	  (setq found (flstmt r)))
-        (when (not found) (setq found (keywd SENT SETLIST)))
-        (when (not found) (setq found (SPECCONCEPT NIL)))
+        (unless found (setq found (keywd SENT SETLIST)))
+        (unless found (setq found (SPECCONCEPT NIL)))
         (return found)
         )
   )
@@ -92,7 +95,7 @@
 ;        IS ON THE SAME TOPIC AS THE PREVIOUS INPUT %
 
 (defun keywd(inp setlist)
-  (let (result a)
+  (prog (result a)
     (loop for set in (get 'SETLIST 'SETS) do 
 	  (loop for word in (get set 'words) do
 		(when (assoc word inp) (setq result set)) 
@@ -101,23 +104,25 @@
     (unless result (return nil))
     (setq set result)
     (unless (setq result (get result 'STORY))(return nil))
-    (setq a (if (eq STOPIC 'ANAPH) OLDTOPIC STOPIC))
+    (setq a (if (eq STOPIC 'ANAPH) 
+	      OLDTOPIC 
+	      STOPIC))
     (when (equal (synnym a) (synnym set)) (return (car result)))
     ;; % ONLY RETURN ANSWER IF TOPIC SAME AS PREVIOUS TOPIC %
     )
   )
 
 (defun  silencer() ; % SEMANTIC FUNCTION CALLED BY SILENCE INPUT %
-  (progn  
+  (prog () 
     (setf SILENCENO (+1 SILENCENO)) 
     (when (= SILENCENO 11)  (setf ENDE  T))
     (setf AJUMP  0.1)
-    (return)
+    (return nil)
     )
   )
 
 (defun  exhauster () ; % SEMANTIC FUNCTION CALLED BY EXHAUST OUTPUT SELECTION %
-  (progn 
+  (prog ()
     (setf EXHAUSTNO (+1  EXHAUSTNO))
     (setf AJUMP 0.15)
     (when (= EXHAUSTNO 9) 
@@ -128,8 +133,8 @@
   )
 
 (defun  swearer() ; % SEMANTIC FUNCTION CALLED BY SWEAR INPUT %
-  (progn
-    (setf SWEARNO (+1  SWEARNO)i)
+  (prog ()
+    (setf SWEARNO (+1  SWEARNO))
     (setf AJUMP  0.3)
     (when (= SWEARNO 5)
       (setf ENDE T)
@@ -139,7 +144,7 @@
   )
 
 (defun  endroutine() ; % SEMANTIC FUNCTION CALLED BY EXIT OUTPUT SELECTION %
-  (progn 
+  (prog ()
     (setf ENDE  T)
     (when (and (>= FEAR 18.4) (or DELFLAG  (eq  FLARE 'INIT)))
       (setf AJUMP  0.1)
@@ -163,8 +168,8 @@
 
 ;% CANONIZE CANONIZES L USING THE PATTERN MATCHER %
 ; % USED FOR RUNNING THE OUTPUT BACK THRU AN INPUT SCAN FOR DELUSIONAL WORDS %
-(defun  CANONA(L)
-  (let (a b c) 
+(defun  canona(L)
+  (prog (a b c) 
     (setq a INPUTQUES)
     (setq c DO_SPELL)
     (setf DO_SPELL nil)
@@ -179,7 +184,7 @@
 (defun  MEMFIND(struc)  struc)
 
 (defun initparams () ; % INITIALIZED PROGRAM PARAMETERS %
-  (let (a)
+  (prog (a)
     ;; SPECIAL NOTSAVED;
     (setf EOF PERCENT)
     (terpri nil)
@@ -199,7 +204,7 @@
       (setf HURT0 0) 
       (setf TRACEV T)
       (setf SAVE_FILE  NIL)
-      (setf INITFN NIL)
+      (INITFN NIL)
       (progn (printstr "WINDOWS? ") (setf WINDOWS (eq (READ) 'Y) ))
       (when (eq  A 'FILE) 
 	(printstr "FILE=") 
@@ -208,15 +213,15 @@
 	(BILLP) )
       (terpri nil) 
       (return nil)
-      )
-      (setf EXPERIMENT a)
-      (setq A (chrval A))
-      (setf SUPPRESS (not (or (eq A (chrval 'Y)) (eq A (chrval 'y) )))) 
-      (terpri nil)
-      (printstr "VERSION [WEAK, MILD, STRONG]")
-      (setq a (charval (read)))
-      (if (or (eq A (CHRVAL 'W)) (eq A (CHRVAL 'w)))
-	(progn (setf WEAK  T) (setf VERSION 'WEAK))
+     )
+     (setf EXPERIMENT a)
+     (setq A (chrval A))
+     (setf SUPPRESS (not (or (eq A (chrval 'Y)) (eq A (chrval 'y) )))) 
+     (terpri nil)
+     (printstr "VERSION [WEAK, MILD, STRONG]")
+     (setq a (charval (read)))
+     (if (or (eq A (CHRVAL 'W)) (eq A (CHRVAL 'w)))
+        (progn (setf WEAK  T) (setf VERSION 'WEAK))
         (setf ANGER (setf ANGER0 (setf FEAR (setf FEAR0 
 	 (setf MISTRUST (setf MISTRUST0 (setf HURT (setf HURT0 
 	  (if (or (eq A (CHRVAL 'S)) (eq A (CHRVAL 's))) 
@@ -232,7 +237,7 @@
 	)
       (when (and  TRACEVFLAG (not WINDOWS))
 	(terpri nil)
-	(printstr "TRACE INTERNAL PROCESSES? [Y,N] "))
+	(printstr "TRACE INTERNAL PROCESSES? [Y,N] ")
 	(setq A (chrval (READ)))
 	(when (or (eq A (CHRVAL 'Y)) (eq A (CHRVAL 'y)))  (setf TRACEV 'ALL))
 	(when TRACEV (printstr "APPROX 15 LINES OF OUTPUT PER I/O PAIR"))
@@ -266,7 +271,8 @@
   )
 
 (defun  initparams2()
-  (printstr " 
+  (let ()
+    (printstr " 
 END INPUT WITH A PERIOD OR QUESTION MARK, 
    FOLLOWED BY CARRIAGE RETURN. 
 TO INDICATE SILENCE, TYPE   .   
@@ -274,15 +280,16 @@ TO INDICATE SILENCE, TYPE   .
 USE PERIODS ONLY AT THE ENDS OF SENTENCES,
    NOT IN ABBREVIATIONS.
 ")
-  (when  (PTYJOB) (printstr "
+    (when  (PTYJOB) (printstr "
 IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY 
    PROBABLY DOESNT WORK CORRECTLY.
 ")
+    )
   )
   )
 
 (defun  stringate(l) ;% RETURNS A STRING WITH THE QUOTE MARKS, FASTER THAN STR %
-  (let (a b)
+  (prog (a b)
     (setq a (explodec L))
     (setq a (cdr (stringate2 a)))
     (setq a (cons '\" a))
@@ -299,14 +306,14 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 
 (defun  analyze(flag) ; % FOR ANALYZING TIME AND GARBAGE COLLECTION %
         ; SPECIAL OLDTIME, OLDSPEAK, ANALFLAG; 
-  (let (a b)
+  (prog (a b)
     (unless flag 
       (setf OLDTIME (time))
       (setf OLDSPEAK (speak))
       (setf ANALFLAG NIL)
-      (RETURN)
+      (RETURN nil)
       )
-    (unless ANALFLAG (RETURN))
+    (unless ANALFLAG (RETURN nil))
     (setq a (time))
     (setq b (car (divide (* 10 (- A OLDTIME)) 166 )))
     (princ b) (printstr " TICS") (setf  OLDTIME a)
@@ -318,7 +325,7 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 ;%       GET_DATE, GET_TIME, GETDOCNAME  %
 
 (defun  date(n)
-  (let (a b c yr mo date day)
+  (prog (a b c yr mo date day)
     (setq A (dateuu))
     (ten) (setq A (+ A N))  ; % -1 IS YESTERDAY, 0 TODAY, +1 TOMORROW %
     (setq B (divide A 31)) (setf date (cdr (+1 B))) 
@@ -335,20 +342,20 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
     (setq b '(SUNDAY MONDAY TUESDAY WEDNESDAY THURSDAY FRIDAY SATURDAY))
     (setq day (nth a b))
     (setq mo (cdr (nth mo c)))
-    (list yr mo date day)
+    (return (list yr mo date day))
     )
   )
 
 (defun  getdocname()
-  (let (a b c doc test name)
+  (prog (a b c doc test name)
     (setq a SSENT)
     (setq a (DELETE 'PD a))(setq a (DELETE 'COMMA a))
     (setq b a)
     (loop do 
 	  (when (and (eq (car b) 'MY) (eq (cadr b) 'NAME) (eq (caddr b) 'IS))
-	    (setq c (cddr b))
-	    until (or c (not (setq b (cdr b)))))
-	  )
+	    (setq c (cddr b)))
+	    until (or c (not (setq b (cdr b))))
+	    )
     (setq b a)
     (when (not c)
       (loop do 
@@ -356,8 +363,8 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 		       (or (eq (caddr b) 'DR)
 			   (eq (caddr b) 'DOCTOR)))
 	      (setq c (cdddr b))
-	      (setq doc T)
-	      until (or c (not (setq b(cdr b))))))
+	      (setq doc T))
+	      until (or c (not (setq b(cdr b)))))
       )
     (setq b a)
     (unless c 
@@ -380,9 +387,9 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
   )
 
 (defun  get_date(a n) ;% FORMS THE OUTPUT SENTENCE FOR YR,MONTH,DAY,DATE %
-  (let (b)
+  (prog (b)
     (setq b (date n))
-    (unless b (RETURN '(I DON\'T PLAY GAMES)))
+    (unless b (return '(I DON\'T PLAY GAMES)))
     (when (or (eq a 'YEAR)(eq a 'MONTH)) 
       (return (append  '(THE YEAR IS) (list (car b) '\;)  
 		       '(THE MONTH IS) (list (cadr b)) ))
@@ -394,7 +401,7 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
   )
 
 (defun  get_date_arb2 (n) ;% DECIDES WHETHER YEAR,MONTH,DAY,DATE, OR TIME REQUESTED %
-  (let (a) 
+  (prog (a) 
     (setq a (assoc 'DAY INPUTQUES))
     (unless a (setq a (assoc 'DATE INPUTQUES)))
     (when (and a (memq (cdr a) '(YEAR MONTH DAY DATE)))
@@ -418,7 +425,7 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 (defun  ddjob()  (greaterp (lsh (lsh (ttyuu) 4) -35) 0)); % RETURNS T IF A DD JOB %
 
 (defun  get_time();        % LOOKS UP SYSTEM TIME AND GETS THE APPROX HOUR %
-  (let (a hour min ahour)
+  (prog (a hour min ahour)
     (setq a (timeuuh))
     (setq hour (car A))
     (setq min (cadr A))
@@ -433,7 +440,7 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
   )
 
 (defun  timeuuh()
-  (let (a)
+  (prog (a)
     (setq A (car (divide (timeuu) 3600)))
     (setq A (divide A 60))
     (return (list (car a) (cdr a))); % THIS RETURNS (HOUR MINUTE) %
@@ -442,13 +449,12 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 
 (defun  specconcept (L)
   ; % USED FOR GENERAL IYOUME INPUT WHICH THE PATTERN MATCHER DIDNT RECOGNIZE %
-  (progn
-    (let (con you neg found adj inp)
+  (prog (con you neg found adj inp)
       (setq inp INPUTQUES)
       (loop for word in inp do
 	  (when (member (get (car word) 'SET) SENSITIVELIST) (setq con (car word)))
 	  until con)
-    (unless con (return))
+    (unless con (return nil))
     (when (assoc 'YOU inp) (setq you T))
     (setq neg NOT_FLAG)
     (if (assoc 'GOOD inp) 

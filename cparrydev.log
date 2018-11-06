@@ -196,3 +196,9 @@ defpropとputpropで定義したpropertyをigraphでなんとかみたい。
 7. LAPmemo-j.txtを一部修正。FRONT.LAPをみて気づいたことを追加
 ともかく、基本の関数がいろいろないので、完全な移植はむりだなあと思う。
 
+20181105月
+アセンブラコードPARFNS.FAI,PINDEXにREAD/WRITEなどの基本関数が定義されている。
+これはLAPでなくPDP-10のアセンブラみたいだ
+
+20181106火
+1. returnに対応してletをprogに変更した

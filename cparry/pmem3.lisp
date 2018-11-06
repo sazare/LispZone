@@ -1,7 +1,7 @@
 (defun readinc()
   ; original code is uncertain
   (read)
-;  (let (i)
+;  (prog (i)
 ;    (inc inchan nil)
 ;    (setf i (read))
 ;    (inc nil nil)
@@ -12,7 +12,7 @@
 (defun readdata ()
   ;; original code is uncertain
   (readinc)
-;  (let (a)
+;  (prog (a)
 ;    (setf a (readinc))
 ;    (when (eq a 'COMMENT)
 ;      (until (and (char= a 'C') (char= a '?')) ;; uncertain

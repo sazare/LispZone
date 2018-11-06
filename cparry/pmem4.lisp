@@ -1,6 +1,6 @@
 ; read s-exp from a file
 
-(defun  INIT() (SELECTINPUTN '(PAR BLF), INPUTFILE))
+(defun  INIT() (SELECTINPUTN '(PAR BLF) INPUTFILE))
 (defun  INITFB() 
   (progn 
     (EVAL '(DSKIN(RANDOM.LAP)))
@@ -11,7 +11,7 @@
   )
 
 (defun  TESTM () TEST_PATTERN())
-(defun  LAMBDANAME (L) (EQUAL (CHRVAL L), LAMDA))
+(defun  LAMBDANAME (L) (EQUAL (CHRVAL L) LAMDA))
 
 (defun bl (b)
   (if (not (atom b)) 
@@ -138,7 +138,7 @@
 
 (defun parry ()
   "parry main function. dont direct trans."
-  (progn
+  (prog ()
     (terpri t)
     (format t "READY:~%")
     (loop 
@@ -235,12 +235,12 @@
 
 
 (defun make-infs (infs)
-  (let (b )
+  (prog (b )
     (loop for a in infs
 ;;; I may missunderstand READDATA in
 ;;;  WHILE not ATOM(A ?  ERRSET(READDATA()) ) AND A ?  car A DO
       do
-        (progn
+        (prog ()
 	  (if (atom a) (return))
           (if (member (car a) '(TH2 EMOTE))
 	      (loop for i in (cddr a) do 
@@ -250,7 +250,7 @@
 ;;; if ignore the measure form, when evaluate where it comes from???
 		      (setf (get i (car a)) (cons (cadr a) (get i (car a)))))
 		    )
-	      (progn 
+	      (prog ()
 	        (setq b a)
 	        (if (get (car a) 'theorem) 
 		  (progn (format t "~%duplicate inf: ~a" (car a))(force-output t)))
