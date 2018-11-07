@@ -1,0 +1,46 @@
+メモ20181107
+
+[assocに着目して]
+
+assoc変数
+?!ANAPHLISTNEW
+?!ALLANAPHS 
+?!ANAPHLISTOLD
+
+
+INPUTQUESのCAR - SYNONYMとの比較
+DAY
+DATE
+WHEN
+YOU  ?2
+GOOD ?2
+LOOKS
+SHIT
+CRAZY
+BAD
+ODD
+NAME
+YOU
+
+上記はSYNONM.ALFのCADRにあるほうだと思う。
+carが違ってcadrが同じものになっているパターン
+同義語の標準の語
+
+だから、inputquesには、
+given x
+(push ((assoc X SYNONM) X) INPUTQUES)
+みたいなかんじか
+
+これをFRONT.LAPでやっているような
+
+
+PARFNS.LAP(SYNNYMを定義している)のあたまのほう
+SYNNYM:
+        ;ASSUMES (A) IS AN ATOM WHOSE PNAME IS AN ENGLISH WORD FOR WHICH A
+        ;STANDARD SYNONYM IS DESIRED. RETURNS WITH (A) NIL IF NO SUCH WORD CAN
+        ;BE FOUND, A LIST CONTAINING THE STANDARD SYNONYM OTHERWISE.
+(CDR (ASSOC A SYNONYM)) 
+A を SYNONYMテーブルからひく。
+
+INPUTQUESはこんなかんじなのか
+
