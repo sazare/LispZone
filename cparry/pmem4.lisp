@@ -1,17 +1,17 @@
 ; read s-exp from a file
 
-(defun  INIT() (SELECTINPUTN '(PAR BLF) INPUTFILE))
-(defun  INITFB() 
+(defun  init() (selectinputn '(PAR BLF) INPUTFILE))
+(defun  initfb() 
   (progn 
     (EVAL '(DSKIN(RANDOM.LAP)))
     (setf LAMDA 8)
-    (INITF)
-    (INITB)
+    (initf)
+    (initb)
     )
   )
 
-(defun  TESTM () TEST_PATTERN())
-(defun  LAMBDANAME (L) (EQUAL (CHRVAL L) LAMDA))
+(defun  testm () (test_pattern))
+(defun  lambdaname (L) (equal (chrval L) LAMDA))
 
 (defun bl (b)
   (if (not (atom b)) 
@@ -57,15 +57,60 @@
   )
 
 (defun angerfearmode (topic)
-  (if (or (member topic (get 'FLARELIST 'SETS))
-	  (member topic '(MAFIA BYE IYOUME STRONGFEELINGS FEELINGS GAMES))
+  (if (or (memq topic (get 'FLARELIST 'SETS))
+	  (memq topic '(MAFIA BYE IYOUME STRONGFEELINGS FEELINGS GAMES))
 	  )
     nil
     (if (>= FEAR 14) (fearmode) (angermode))
     )
   )
 
+;% TOPICANALYZE  RECORDS THE NUMBER OF OLD TOPICS, CHANGED TOPICS, AND THE PREVIOUS TOPIC %
+(defun topicanalyze ()
+  (prog ()
+	(unless STPIC (return nil))
+        (when (memq STOPIC '(ANAPH FACTS STRONGFEELINGS GREETINGS)) (return nil))
+        (when (eql STOPIC OLDTOPIC) (return nil))
+        (setf NEWTOPICNO (+1 NEWTOPICNO))
+        (setf OLDTOPICS (cons OLDTOPIC OLDTOPICS))
+        (setf OLDTOPIC STOPIC)
+	)
+  )
 
+(defun prevtopic () (memq STOPIC OLDTOPICS))
+
+;% HISTORY  RECORDS THE SPECIFIC EMOTION THAT WAS AFFECTED BY THIS INPUT %
+
+(defun history(L)
+  (prog ()
+    (when L (return (memq L HLIST)))
+    (setf HLIST nil)
+    (when (and AJUMP (>= AJUMP 0.1)) (addh '(AJUMP MJUMP)))
+    (when (and FJUMP (>= FJUMP 0.1)) (addh '(FJUMP MJUMP)))
+    )
+  )
+
+(defun addh(L) (for i in L do (setf HLIST (CONS I HLIST))))
+
+; % REACT2  CALLS REPLYR WITH APPROPRIATE ARGUMENTS AND ENTERS THE INPUT ON THE CONVERSATION LIST %
+
+(defun react2 (B)
+  (prog (a) 
+	(setf ?!EXHAUST nil)
+        (unless (LAMBDANAME B) 
+	  (error "NONLAMBDA INTO REACT2" B)
+	  (return nil))
+	(when ?!OUTPUT ;    % ALREADY HAVE SENTENCE IN ?!OUTPUT %
+          (andthen (list 'IN B))
+	  (andthen (list 'OUT nil))
+          (return T))
+	(unless (diskread B) 
+	  (error "REACT2 ERROR BAD DISKREAD" B)
+	  (return nil))
+	(andthen (list 'IN B))
+	(return (replyr B))
+	)
+  )
 
 (defun react (x ) x)
 ;; structure
@@ -100,27 +145,29 @@
 
 (defun parry2 (ind)
   (let (a b)
-    (if save_dump (savejob save_dump 'sav))
+    (when save_dump (savejob save_dump 'sav))
       ;; Program will start here again if system clashes
-
-    (format t "~a~%" ind) (force-output t)
-    (format t "> ~0%") (force-output t)
+    (unless (not_last_input) 
+      (terpri)
+      (format t "READY:")
+      (force-output t)
+      )
     (experiment)
-    (setf a (testm)) 
+    (setq a (testm)) 
     (if (atom a) 
       (format t "Pattern match error")
       )
-    (setf a (car a))
-    (setf pm2input pminput)
-    (setf pminput a)
-    (if (= (length ssent) 1)
-      (setf a (choose 'silence)))
-    ;; (analyze t)
-    (if (not (lambdaname a)) (setf a nil))
-    (if (and a (atom a) (setf b (get a 'meqv)))
-      (setf a b))
-    (setf reactinput a)
-    (window 9 t a)
+    (setq a (car a))
+    (setf PM2INPUT PMINPUT)
+    (setf PMINPUT a)
+    (if (= (length SSENT) 1)
+      (setq a (choose 'silence)))
+    (analyze t)
+    (if (not (lambdaname a)) (setq a nil))
+    (if (and a (atom a) (setq b (get a 'meqv)))
+      (setq a b))
+    (setf REACTINPUT a)
+    (window 9 T a)
     (readlambda a) (window 9 nil (get a 'bondvalue))
     (if (not (react (list a (q ssent) ssent)))
       (format t "error in react ~a" ssent)
@@ -134,7 +181,7 @@
 	(exit)
 	))
     )
-)
+  )
 
 (defun parry ()
   "parry main function. dont direct trans."
@@ -153,6 +200,29 @@
   )
 )
 
+(defun initb ()
+  (let ()
+    (eight)
+    (nouud T)
+    (dparinitialize)
+    (setupstl)
+    (setf INPUTFILEAREA '(1 3))
+    (setf DIAFILEAREA '(DIA KMC))
+    (gcgag nil)
+    (changel 'CHANGE)
+    (setf DELNO 0)
+    (setf OLDMISS 0)
+    (setf OLDGIBB 0)
+    (setf INPUTNO 0)
+    (setf REPEATNO 0)
+    (setf SPECFNNO 0)
+    (setf MISCNO 0)
+    (setf NEWTOPICNO 0)
+    (setf HLIST nil)
+    (setf OLDTOPIC nil)
+    (setf OLDTOPICS nil)
+    )
+  )
 
 (defun read-file(fname)
     (with-open-file (in fname :direction :input)
@@ -242,7 +312,7 @@
       do
         (prog ()
 	  (if (atom a) (return))
-          (if (member (car a) '(TH2 EMOTE))
+          (if (memq (car a) '(TH2 EMOTE))
 	      (loop for i in (cddr a) do 
 		    (when (atom i) ;; this when is needed for 
 ;;;  error at (setf (list) 'TH2) corr. (putprop (list) 'TH)

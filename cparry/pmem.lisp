@@ -97,6 +97,97 @@
     )
   )
 
+(defun bel(x)
+(nyi)
+  )
+
+(defun eng (x)
+(nyi)
+  )
+
+;% REPLYR IS THE FUNCTION WHICH SELECTS AND EXPRESSES AN OUTPUT SENTENCE
+;        AFTER THE PROPER ^H NUMBER HAS BEEN DETERMINED BY THE MEMORY.
+;        A SENTENCE GENERATOR WOULD REPLACE THIS FUNCTION %
+;% REPLYR  ADDS TO CONVERSATION LIST, AND EXPRESSES %
+;        % SEMANT IS ^H NAME, TYPE=D OR Q, CLASS IS RESP   INTO EXPRESS %
+;        % CALLS  ANDTHEN, EXPRESS %
+
+(defun replyr (SEMANT)
+  (prog (a)
+	(unless SEMANT 
+	  (error NIL "NOSEMANT IN REPLYR")
+	  (return nil))
+        (andthen (list 'OUT SEMANT))
+	(setq A (express SEMANT 'RESP))
+	(setf ?!OUTPUT (if (and a WDFLAG)
+			 (append a (LASTWORD WDFLAG))
+	 		 a))
+        (setf WDFLAG nil) 
+	(return ?!OUTPUT)
+	)
+  )
+
+;% ANDTHEN PUTS THING ON THE CONVERSATION LIST %
+;% INPUT THING IS A LIST OF INFORMATION ABOUT THE CURRENT SEMANTS %
+
+(defun andthen (THING);
+  (prog (a)
+	;; % IF THE LAST THING ADDED TO THE CONVERSATION LIST, THEN DONT DO THIS ONE %
+	(while (equal ?!LAST_ANDTHEN (car THING)) (return nil))
+        (setf ?!CLIST (cons THING ?!CLIST))
+	(if (eql (car THING) 'IN)
+	  (setf ?!LASTIN A)
+	  (when (eql (car THING) 'OUT) (setf ?!LASTOUT A)))
+	(setf ?!LAST_ANDTHEN (car THING))
+	(return (car ?!CLIST))
+	)
+  )
+
+;%-------------------------------------------------------------------%
+;%--EXPRESS -------------%
+;% SAYS SEMANT USING CLASS, HAVING THE SUBCL AS THE NECESSARY SLOT, IN MODE %
+;%  SEMANT = ^H17, CLASS = SQR OR LIT,
+;SUBCL = HOSPITAL OR NIL; APPLIES TO SQR, MODE = NORMAL OR EMBD OR EMBQ %
+;%    SUBCL IS THE NAME OF THE SLOT WHICH HAD THE QMARK %
+
+(defun express (SEMANT CLASS)
+  (prog (a bond c k)
+	(DISKREAD SEMANT)
+	(setq a (get SEMANT CLASS))
+	(setq bond (get SEMANT 'BONDVALUE))
+
+	; % USE PREDICATE FOR FINDING CLASS %
+        (when (and (null a) BOND (setq C (get (car bond) UNIT))(DISKREAD C))
+           (setq A (get c CLASS)))
+
+	; %  ONLY QUIT IF THERE IS NO RESP   %
+        (when (and (null a) (null (setq a (get SEMANT 'RESP))))
+           (error "NO CLASS~a ~a " CLASS SEMANT)
+	   (return nil))
+	
+	; %SET UP ANAPHS FOR NEXT INPUT  %
+        (when (setq K (GET SEMANT 'ANAPH)) (addanaph K))
+
+        (setq A (selsentence A))
+        (return (when A (say A (cdr bond))))
+	)
+  )
+
+;%-------------------------------------------------------------------%
+;%-  SELSENTENCE  ---------------%
+;% SELECTS AND RETURNS A  SENTENCE (AN car ), ADDING TO THE ANAPHORA LIST%
+;% INPUT UNIT IS AN car  NUMBER -- LIKE car 17, CLASS IS LIKE NORMAL %
+;% DELETES THE SENTENCE FROM MEMORY  %
+;
+;% CALLS ADDANAPH %
+
+(defun selsentence (unit)
+  (nyi)
+  )
+        
+
+
+
 
 (format t "end of loading pmem.lisp~%")
 
