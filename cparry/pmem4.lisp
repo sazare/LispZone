@@ -24,10 +24,6 @@
   )
 
 
-(defun testm ()
-  (test_pattern)
-  )
-
 (defun angermode ()
   (if (>= ANGER 17.5) 
     (choose 'ANGER)
