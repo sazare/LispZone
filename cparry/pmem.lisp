@@ -1,32 +1,5 @@
 ;;; from PMEM
 
-;;; MASTER LIST OF GLOBAL VARIABLES
-;;;; ***GLOBAL VARIABLES***
-
-;!ANAPHLIST      is the current list of anaphora dotted-pairs.
-;!ANAPHLISTOLD   is the previous list of anaphora dotted-pairs.
-;!ANAPHLISTNEW   is the next list of anaphora dotted-pairs to go into anaphlist
-;!ALLANAPHS      is a list of lists - ((who they he)(he who)(they who)....)
-;!CLIST          is a pointer to the first element of the conversation list.
-;!CLAST          is a pointer to the last element of the conversation list.
-;!LAST_ANDTHEN   is either IN or OUT as the last ANDTHEN processed
-;!LASTIN         points to atom under which is stored the last semantic unit
-;                inputed by the doctor.
-;!LASTOUT        points to the atom under which is stored the last semantic
-;                unit outputed by Parry.
-;
-;!ERROR          contains a list of errors made
-;!EXHAUST        is true if a set of responses is exhausted and the exhaust responses are to be used
-;                  it is set by SELECT_SENTENCE  and used at the end of REACT2
-;!OUTPUT         is the output of parry, to be sent whereever
-;!LAST_OUTPUT    is the ^H-name of the last output
-;
-;INPUTQUES       is a list of dotted pairs from the pattern matcher to the memory
-;                        each pair is (canonical 5-letter atom . input word)
-
-
-
-
 ;;;
 
 (defun lambdaname (s) (equal (subseq (string s) 0 2) "@@"))
@@ -98,7 +71,26 @@
   )
 
 (defun bel(x)
-(nyi)
+  (prog (name truth unit)
+    (setq name (car x))
+    (setq truth (cadr x))
+    (setq unit    (caddr x))
+    (when (or (null x)(null (cdr x))(null (cddr x))(not (numberp truth)))
+      (error "B BAD INPUT ~a" x)
+      (return nil)
+    )
+    (when (get name 'bondvalue) (error "BAD INPUT-DOUBLE ENTRy ~%" name))
+    (putpropt name unit 'BONDVALUE)
+    (setq x (cdr x))
+    (loop while (setq x (cddr x)) do
+       ;% PUT THEM ON THE PROPERTY LIST OF THE ^H NAME %
+      (when (or (not (atom x)) (null (cdr)))
+         (error "BAD INPUT ~%~%" name)
+         (return nil)
+       )
+       (putprop name (cadr x) (car x)))
+    (return name)
+  )
   )
 
 (defun eng (x)
