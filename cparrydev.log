@@ -202,3 +202,5 @@ defpropとputpropで定義したpropertyをigraphでなんとかみたい。
 
 20181106火
 1. returnに対応してletをprogに変更した
+20181110土
+1. pmem5.lispの関数を作り続けている
