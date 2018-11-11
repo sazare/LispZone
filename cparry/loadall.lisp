@@ -9,6 +9,7 @@
 
 (load "utils.lisp")
 
+(load "opar3.lisp")
 (load "pmem.lisp")
 (load "pmem2.lisp")
 (load "pmem5.lisp")

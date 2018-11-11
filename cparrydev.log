@@ -102,6 +102,8 @@ readinfはまだ対応していない。するとしたらλ名をとりこむ�
 
 (map (lambda (x) (print (symbol-plist x))))
 みたいなことをすれば
+
+
 プロパティの全貌がわかる
 
 PDATBにでてくるatom->prop名->atomのグラフを作成した
@@ -208,4 +210,5 @@ defpropとputpropで定義したpropertyをigraphでなんとかみたい。
 20181111日
 1. pmem5.lispの関数は完了。ただし、error()を再定義しているところでえらー。
 　　別のpackageにしてみる。
+2. deleteも同様だった。padeleteに変更する
 
