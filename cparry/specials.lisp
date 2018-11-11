@@ -152,6 +152,6 @@
 (defvar OLDSPEAK nil)
 (defvar OLDTIME nil)
 
-
+(defvar PARBEL nil) ;; pmem5.lisp
 (format t "end of specials.lisp~%")
 

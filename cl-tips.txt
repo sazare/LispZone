@@ -36,3 +36,4 @@ ex.
 (functionp 'a) => nil
 (functionp #'fn) => T
 
+

@@ -8,7 +8,7 @@
   )
 )
 
-(defun error (mess L)
+(defun paerror (mess L)
   (setf ?!ERROR (cons (error_file (list mess L PM2INPUT PMINPUT FILE1 BUG))
 	      ?!ERROR))
   )
@@ -39,7 +39,7 @@
     )
   )
 
-(defun measuer (L M) ; % USED IN INFERENCES TO MEASURE QUANTITIES %
+(defun measuere (L M) ; % USED IN INFERENCES TO MEASURE QUANTITIES %
   (if (and (numberp L) (numberp M)) (greaterp L M) (EQ L M)))
 
 (defun inf (a) ;% INITIALIZATION ROUTINE %
@@ -155,7 +155,7 @@
 	  (setq B '(INTERVIEW HAS BEEN LONG ENOUGH))
 	  (addto 'PEXIT2 10)
 	  (setf ENDE T)
-	  (ERROR (with-output-to-string (str)
+	  (paerror (with-output-to-string (str)
 		   (format str "INPUTNO= ~a  SHORT OF SPACE ~a FS, FW ~a"
 			   INPUTNO (length (NUMVAL 13)) (length (NUMVAL 14)))))
 	  )
@@ -250,18 +250,114 @@
   )
 
 
+(defun opinion ()
+  (prog (a)
+	(cond ((or (bl 'DDHARM)(BL 'DHOSTILE)(BL '?*DDHELP)) (setq a (CHOOSE 'HOSTILEREPLIES))a)
+	      ((or (BL '?*DTRUSTWORTHY)(BL '?*DHONEST)) (setq a (CHOOSE '?*DHONEST)))
+	      (T (loop for i in '(DABNORMAL DEXCITED DRATIONAL DHELPFUL DSOCIABLE) do
+                when (BL i) (setq A (CHOOSE i))
+		until a )))
+        (return a)
+	)
+  )
+
+(defun selffeeling ()
+  (cond ((>= ANGER 10) (choose 'ANGRY))
+	((>= FEAR 10) (choose 'FEARFUL))
+	((bl 'INTHELPFUL) (choose 'GOOD)))
+  )
+
+(defun interview ()
+  (cond ((bl 'INTBAD) (choose 'INTBAD))
+	((bl 'INTHELPFUL) (choose 'PRAISE)))
+  )
+
+; % AFFECT, INTENTION, AND INTENTION ROUTINES %
+; % AFFECT EXPRESSES EMOTIONS BASED ON THE INPUT RECOMMENDATION, THE CURRENT VALUES,
+;          THE TOPIC, AND CURRENT BELIEFS %
+
+(defun affect ()
+  (prog (a b)
+        (setf ACTION NIL)
+	(setf INTENT NIL)
+        (when (member (get STOPIC 'SET) SENSITIVELIST) (setf AJUMP  0.2))
+        (raise)
+        (when (or (>= FEAR 18) (>= ANGER 18.8)) (addto 'PEXIT2 10))
+
+;  % ** THE TEST FOR ACTIVATING THE PARANOID MODE ******* %
+        (cond ((or (and (eq VERSION 'STRONG) (or (>= HURT 7) (and HJUMP (>= HJUMP 0.1)) ))
+		   (and (eq VERSION 'MILD)  (>= HURT 8)))
+	       (anddo (addto 'PPARANOIA 5) (anddo (PARANOIA) (setf INTENT 'PPARANOIA))))
+	      ((or (and FJUMP (>= FJUMP 0.01))  
+		      (and AJUMP (>= AJUMP 0.01))  
+		      (>= FEAR 14) OR (ANGER >= 14) 
+		      (eq STOPIC 'STRONGFEELINGS) 
+		      ACTION) 
+	       (anddo (addto 'PSTRONGFEEL 5)
+		      (setf INTENT 'PSTRONGFEEL))
+	      )
+	      ) 
+	(loop for I in '((FJUMP . FEAR)(AJUMP . ANGER)(HJUMP . SHAME))
+	      do
+	      (when (eval (car I)) (WINDOW 40 T 
+					   (append (list (cdr I) 'RAISED) 
+						   (when (setq a (GET (car I) 'INF))
+						     (anddo  (list 'FROM a) (putprop (car I) NIL 'INF)) ) ))
+		))
+        (when (and (not FJUMP) (not AJUMP) (not HJUMP)) (window 40 T '(NO CHANGE)))
+        (when WINDOWS (WPRINTVARS))
+        (return ACTION)
+	)
+  )
+
+(defun infemote (BEL L VAL) ;% L LOOKS LIKE ((HJUMP 0.5) ... )  %
+  (loop for a in L do
+	(prog (b c d)
+        (setq B (car A))
+	(setq C (cadr A))
+        (when (eq B 'HJUMP) (setf PARBEL (cons BEL PARBEL)))
+	(when (and (eq B 'HJUMP) WEAK ) (setq C (/ C 2))) ;% IF WEAK PARANOIA THEN DONT LET HJUMP BE STRONG %
+        (when (NUMBERP VAL) (setq C (/ C 2))) ;% THIS CAME FROM ADDTO, NOT ASSERT -- WEAKEN THE EFFECT %
+        (setq D (ZERONIL (EVAL B)))
+        (when (>= C D) (PUTPROP B BEL 'INF))
+	(set b (max d c))
+	)
+	)
+  )
 
 (defun zeronil (L) (if (not L) 0 L))
 
-(defun intention ()
-  (nyi)
+(defun intention () ;% CALCULATES THE CURRENT INTENTION %
+  (prog (a)
+	(loop for i in INTLIST do 
+	      (when (>= (GET0 I 'NTRUTH) 5) (setq A (WINDOW 42  NIL I)))
+	      (when (or (not INTENT)(eq A 'PEXIT)(eq A 'PEXIT2)
+			(setf INTENT A)))
+	      (WINDOW 42 NIL (format nil " : ~a" INTENT)))
+	)
   )
 
 ;% DOINTENT  PERFORMS THE CURRENT INTENTION, CALCULATES AN ACTION, AND RETURNS A ^H %
 ;%       CHECKS INTENTS, RETURNS NEW VALUE FOR FOUND IN REACT, ELSE NIL %
 
 (defun dointent ()
-  (nyi)
+  (prog (I a)
+	(intention)
+	(when PRINTALL (PRINT INTENT) (TERPRI NIL))
+	(setq I INTENT)
+	(setq a (GET INTENT 'TH))
+	(setf PROVEL (append PROVEL A))
+	(PROVE)
+	(setq A (ERRSET (if I (eval I) NIL)))
+        (if (atom A)
+	  (progn (paerror  "IN DOINTENT BAD FN" I)  
+		 (setq A NIL))
+	  (setq A (car A)))
+
+        (setf OLDINTENT INTENT)
+        (WINDOW 44 T (if CHOSEN CHOSEN 'ANSWER)) ;% **** ACTION WINDOW **** %
+	(return a)
+  )
   )
 
 ;% THE FOLLOWING ARE INTENTION ROUTINES, ONE PER INTENTION %

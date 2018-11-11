@@ -94,7 +94,7 @@
   (prog (a) 
 	(setf ?!EXHAUST nil)
         (unless (LAMBDANAME B) 
-	  (error "NONLAMBDA INTO REACT2" B)
+	  (paerror "NONLAMBDA INTO REACT2" B)
 	  (return nil))
 	(when ?!OUTPUT ;    % ALREADY HAVE SENTENCE IN ?!OUTPUT %
           (andthen (list 'IN B))
