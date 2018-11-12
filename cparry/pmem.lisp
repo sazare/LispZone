@@ -94,7 +94,35 @@
   )
 
 (defun eng (x)
-(nyi)
+  (prog (unit error)
+	(when (or (null x) (null (cdr x))(null (cddr x)))
+	  (paerror paerror "E BAD INPUT" X)
+	  (return nil))
+	(setq UNIT (CAR X))
+	(when (or (GET UNIT 'NORMAL)  (GET UNIT 'EMBQ))
+	  (paerror("BAD INPUT-DOUBLE ENTRY" UNIT)))
+	(setq X (CDR X))
+	(when (eq (CAR X) 'ANAPH)
+	  (setq X (CDR X)) ;% PUT ANAPH ON PROPERTY LIST %
+	  (PUTPROP UNIT (CAR X) 'ANAPH)
+	  (setq X (CDR X)))
+	(when (eq (CAR X) 'EXH)
+	  (PUTPROP UNIT (CADR X) (CAR X))
+	  (setq X (CDDR X)))
+	(loop DO 
+	      ; % PUT SENTENCES ON THE PROPERTY LIST %
+	      (when (or (NULL X) (NULL (cdr X)) (ATOM (cdr X)) (not (ATOM (car X))))
+		(paerror "E BAD INPUT" UNIT)  
+		(setf ERROR T)
+		(RETURN NIL))
+	      (PUTPROP UNIT (CADR X) (CAR X))
+	      until (or ERROR (not (setq X (CDDR X))))
+	      )
+        (unless (not (GET UNIT 'NORMAL))
+	  (paerror "NO NORMAL SENTS" UNIT))
+	(return unit)
+        ;%-- REPLYR, ANTHEN, EXPRESS, SELSENTENCE, SAY ------%
+	)
   )
 
 ;% REPLYR IS THE FUNCTION WHICH SELECTS AND EXPRESSES AN OUTPUT SENTENCE
