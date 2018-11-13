@@ -54,11 +54,11 @@
 ;  (let (daop dedges)
   (let (paop pedges daop dedges)
     ;; comment out because rdata.lisp is not ok
-    (setq paop (union *aoputplist* *aoputplist*))
-    (setq pedges (make-edges (allprop paop)))
+    (setf paop (union *aoputplist* *aoputplist*))
+    (setf pedges (make-edges (allprop paop)))
     (write-edges pedges "pedges.csv")
-    (setq daop (union *aodefplist* *aodefplist*))
-    (setq dedges (make-edges (allprop daop)))
+    (setf daop (union *aodefplist* *aodefplist*))
+    (setf dedges (make-edges (allprop daop)))
     (write-edges dedges "dedges.csv")
     )
   )
@@ -129,9 +129,9 @@
     (unless (member atm prev) 
       (let ((tprev prev) vlist)
       (unless (lambdaname atm) (print-plist atm) )
-      (setq tprev (cons atm tprev))
+      (setf tprev (cons atm tprev))
       (loop for kd in keys do
-	    (setq vlist (get atm kd))
+	    (setf vlist (get atm kd))
 	    (when vlist 
 	      (if (atom vlist) 
 		(showtree vlist keys (cons vlist tprev)) 

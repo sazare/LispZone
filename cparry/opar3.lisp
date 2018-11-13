@@ -12,7 +12,7 @@
 ;%THE FOLLOWING FUNCTION IS TO FIX OCTAL-DECIMAL PROBLEM %
 (defun  lapin (L)
   (prog (ibase)
-	(setq ibase 8)
+	(setf ibase 8)
 	(return (eval (cons 'DSKIN L)))
 	)
   )
@@ -57,7 +57,7 @@
 
                 ;%   DISTINGUISH FLARES FOUND WITHIN THE STATEMENT (NFLARE)
                 ; FROM MOST RECENT FLARE (FLARE)   %
-        (setq NFLARE 'INIT)  ;        %   GET ('INIT, 'WT) = 0   %
+        (setf NFLARE 'INIT)  ;        %   GET ('INIT, 'WT) = 0   %
                 ;%   SCAN INPUT FOR FLARES AND CHECK WHETHER WEIGHT IS
                 ;    GREATER THAN ANY PRECEDING FLARES IN INPUT   %
 
@@ -70,11 +70,11 @@
 		(when (greaterp (get FSET 'WT)(get (get NFRAME 'SET) 'WT))
 		  (prog2 (setf NFLARE (CAR WORD))
 			 (setf RESULT T)
-			 (setq W (CDR WORD))))))
+			 (setf W (CDR WORD))))))
 	(when RESULT 
 ;                   %   IF FLARE ALREADY BEING DISCUSSED, DISREGARD ANY
 ;                        VERY WEAK NEW FLARE   %
-             (if (and (NOT (eq FLARE 'INIT) (NOT (setq WT (greaterp (GET (GET NFLARE 'SET) 'WT) 1)))))
+             (if (and (NOT (eq FLARE 'INIT) (NOT (setf WT (greaterp (GET (GET NFLARE 'SET) 'WT) 1)))))
 	       (setf RESULT NIL)
 	       (progn
 		 (setf FLARE NFLARE)
@@ -244,12 +244,12 @@
   (prog (words)
 ;%   CHECK FOR STRONG DELUSION-NOUNS AND -VERBS
 ;    (AT PRESENT THE NOUN-VERB DISTINCTION IS NOT UTILIZED   %
-	(if (or (setq words (member3 DELNLIST INP) )
-		(setq words (member3 DELVLIST INP) ))
+	(if (or (setf words (member3 DELNLIST INP) )
+		(setf words (member3 DELVLIST INP) ))
 	  nil
 ;          %   CHECK FOR AMBIGUOUS DELUSION WORDS AT HIGH MISTRUST LEVEL  %
 	  (if (and (greaterp MISTRUST 10)
-		   (setq WORDS (MEMBER3 DELALIST INP)))
+		   (setf WORDS (MEMBER3 DELALIST INP)))
 	    nil
             (when (and WORDS  (CDR WORDS))
 	      (putprop (CDR WORDS) T 'USED)))
@@ -353,7 +353,7 @@
 ;% CALLED BY FLSTMT  %
 (defun leadon (OLDSET)
   (prog (NEWSET)
-	(setq NEWSET (GET OLDSET 'NEXT))
+	(setf NEWSET (GET OLDSET 'NEXT))
 	(cond 
 	  ((neq NEWSET 'MAFIASET)
 
@@ -444,7 +444,7 @@
 ;% CALLED BY ANSWER  %
 (defun miscs (S)
   (prog (ANS FOUND)
-	(setq FOUND 
+	(setf FOUND 
 	      (cond 
 		((member 'JUMP S) (PROG2 (setf ENDE T) (CHOOSE 'EXIT)))
 		((or (eq (CAR S) 'HI) 
@@ -478,7 +478,7 @@
 	(setf HURT (MAX (- HURT 0.5) HURT0))
 	(if DELFLAG (setf FEAR (max (- FEAR 0.1) (+ FEAR0 5)))
 ;                   %   ADD 5 TO BASE VALUE OF FEAR IF DELUSIONS UNDER DISCUSSION   %
-          (if (neq FLARE 'INIT) (setq FEAR (MAX (- FEAR 0.2) (+ FEAR0 3)))
+          (if (neq FLARE 'INIT) (setf FEAR (MAX (- FEAR 0.2) (+ FEAR0 3)))
 ;                   %   ADD 3 TO BASE VALUE OF FEAR IF FLARES UNDER DISCUSSION   %
           (setf FEAR (MAX (- FEAR 0.3)  FEAR0)))
           (setf MISTRUST (MAX (- MISTRUST 0.05) MISTRUST0)))
