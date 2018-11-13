@@ -24,7 +24,7 @@
 
 (defun diskread (name)
   (prog (a)
-    (if (setq a (diskread2 name)) 
+    (if (setf a (diskread2 name)) 
       (progn 
 	(format t "error in diskread ~a" name)
         (return nil))
@@ -39,7 +39,7 @@
 (defun diskread2 (name)
   (prog (a b charno)
     (when (get name 'INCORE) (return T))
-    (when (get 'DSKLOC 'SUBR) (setq a (dskloc name))) ; % GET THE CHAR NO OF THE SEXPR %
+    (when (get 'DSKLOC 'SUBR) (setf a (dskloc name))) ; % GET THE CHAR NO OF THE SEXPR %
     (unless a (return nil)) ; % NOT THERE %
     (setf CHARNO A)
     ; % CHARNO IS THE CHARACTER NUMBER IN THE FILE THAT THE SEXPR NAME BEGINS ON %
@@ -49,7 +49,7 @@
     (init);% INITIALIZE THE READ CHANNEL FOR THE MEMORY FILE %
     (inc INCHAN NIL)
     (CHSETI INCHAN CHARNO) ;  % SET THE INPUT POINTER TO THE CORRECT SEXPR %
-    (setq B (READ))
+    (setf B (READ))
     (INC CHANSAVE NIL)
     (when b (PUTPROP NAME T 'INCORE))
     (if (eq (car B) '\#B) 
@@ -72,17 +72,17 @@
 
 (defun bel(x)
   (prog (name truth unit)
-    (setq name (car x))
-    (setq truth (cadr x))
-    (setq unit    (caddr x))
+    (setf name (car x))
+    (setf truth (cadr x))
+    (setf unit    (caddr x))
     (when (or (null x)(null (cdr x))(null (cddr x))(not (numberp truth)))
       (error "B BAD INPUT ~a" x)
       (return nil)
     )
     (when (get name 'bondvalue) (error "BAD INPUT-DOUBLE ENTRy ~%" name))
     (putpropt name unit 'BONDVALUE)
-    (setq x (cdr x))
-    (loop while (setq x (cddr x)) do
+    (setf x (cdr x))
+    (loop while (setf x (cddr x)) do
        ;% PUT THEM ON THE PROPERTY LIST OF THE ^H NAME %
       (when (or (not (atom x)) (null (cdr)))
          (error "BAD INPUT ~%~%" name)
@@ -98,17 +98,17 @@
 	(when (or (null x) (null (cdr x))(null (cddr x)))
 	  (paerror paerror "E BAD INPUT" X)
 	  (return nil))
-	(setq UNIT (CAR X))
+	(setf UNIT (CAR X))
 	(when (or (GET UNIT 'NORMAL)  (GET UNIT 'EMBQ))
 	  (paerror("BAD INPUT-DOUBLE ENTRY" UNIT)))
-	(setq X (CDR X))
+	(setf X (CDR X))
 	(when (eq (CAR X) 'ANAPH)
-	  (setq X (CDR X)) ;% PUT ANAPH ON PROPERTY LIST %
+	  (setf X (CDR X)) ;% PUT ANAPH ON PROPERTY LIST %
 	  (PUTPROP UNIT (CAR X) 'ANAPH)
-	  (setq X (CDR X)))
+	  (setf X (CDR X)))
 	(when (eq (CAR X) 'EXH)
 	  (PUTPROP UNIT (CADR X) (CAR X))
-	  (setq X (CDDR X)))
+	  (setf X (CDDR X)))
 	(loop DO 
 	      ; % PUT SENTENCES ON THE PROPERTY LIST %
 	      (when (or (NULL X) (NULL (cdr X)) (ATOM (cdr X)) (not (ATOM (car X))))
@@ -116,7 +116,7 @@
 		(setf ERROR T)
 		(RETURN NIL))
 	      (PUTPROP UNIT (CADR X) (CAR X))
-	      until (or ERROR (not (setq X (CDDR X))))
+	      until (or ERROR (not (setf X (CDDR X))))
 	      )
         (unless (not (GET UNIT 'NORMAL))
 	  (paerror "NO NORMAL SENTS" UNIT))
@@ -138,7 +138,7 @@
 	  (error NIL "NOSEMANT IN REPLYR")
 	  (return nil))
         (andthen (list 'OUT SEMANT))
-	(setq A (express SEMANT 'RESP))
+	(setf A (express SEMANT 'RESP))
 	(setf ?!OUTPUT (if (and a WDFLAG)
 			 (append a (LASTWORD WDFLAG))
 	 		 a))
@@ -173,22 +173,22 @@
 (defun express (SEMANT CLASS)
   (prog (a bond c k)
 	(DISKREAD SEMANT)
-	(setq a (get SEMANT CLASS))
-	(setq bond (get SEMANT 'BONDVALUE))
+	(setf a (get SEMANT CLASS))
+	(setf bond (get SEMANT 'BONDVALUE))
 
 	; % USE PREDICATE FOR FINDING CLASS %
-        (when (and (null a) BOND (setq C (get (car bond) UNIT))(DISKREAD C))
-           (setq A (get c CLASS)))
+        (when (and (null a) BOND (setf C (get (car bond) UNIT))(DISKREAD C))
+           (setf A (get c CLASS)))
 
 	; %  ONLY QUIT IF THERE IS NO RESP   %
-        (when (and (null a) (null (setq a (get SEMANT 'RESP))))
+        (when (and (null a) (null (setf a (get SEMANT 'RESP))))
            (error "NO CLASS~a ~a " CLASS SEMANT)
 	   (return nil))
 	
 	; %SET UP ANAPHS FOR NEXT INPUT  %
-        (when (setq K (GET SEMANT 'ANAPH)) (addanaph K))
+        (when (setf K (GET SEMANT 'ANAPH)) (addanaph K))
 
-        (setq A (selsentence A))
+        (setf A (selsentence A))
         (return (when A (say A (cdr bond))))
 	)
   )
@@ -202,9 +202,70 @@
 ;% CALLS ADDANAPH %
 
 (defun selsentence (unit)
-  (nyi)
+  (prog (SENTS S A ANAPH CLASS)
+	(setf CLASS 'NORMAL)
+        (unless (not (DISKREAD UNIT)) (return nil)) ;  % READ FROM DISK INTO MEMORY %
+	(setf A (GET UNIT CLASS)) ;  % USE NORMAL REPONSES AS DEFAULT %
+	(setf ANAPH (GET UNIT 'ANAPH))
+        (setf SENTS A)
+	(when (NULL SENTS) 
+	  (setf ?!EXHAUST T)
+	  (RETURN NIL) ;  % IF NO SENTS THEN SET THE EXHAUST FLAG %
+	  )
+        ;%  IF EXH IS T, THEN TAKE THE SENTENCES IN ORDER, OTHERWISE CHOOSE RANDOMLY %
+        (if (GET UNIT 'EXH) 
+	  (setf A 1)
+	  (setf A (RANDOM (LENGTH SENTS)))
+	  )
+	(setf S (nth A SENTS))
+	(PUTPROP UNIT (DELETEN SENTS A) CLASS) ;% DELETE THE SENTENCE FROM MEMORY %
+
+	(when (and (ATOM ANAPH) ANAPH) (setf ANAPH (EVAL ANAPH)))
+	(ADDANAPH ANAPH) ;% ADD ANAPH FOR THIS SENTENCE %
+	(return S)
+	)
   )
-        
+
+;%       RETURNS THE LIST L MINUS THE NTH ELEMENT %
+
+(defun  deleten (L N) 
+  (if (= N 1) (cdr L) (cons (car L) (DELETEN (cdr L) (- N 1))))
+  )
+
+;% SAY  TAKES A LIST OF ENGLISH OR ARGUMENTS TO BE FILLED AND PRODUCES AN ENGLISH SENTENCE %
+;
+;        % L MAY BE A LIST OF ENGLISH WORDS REPRESENTING THE OUTPUT SENTENCE %
+;        % L MAY ALSO BE A LIST OF ONE ELEMENT, WHICH IS A LIST OF ARGUMENTS TO EXPRESS %
+;        % THE FIRST ARG SELECTS FROM ARGS WHICH ^H NUMBER TO TAKE %
+;        % CALLS EXPRESS  %
+
+(defun say (L ARGS)
+  (if (and (not (ATOM (car L)))  
+	   (NUMBERP (CAAR L)))
+    (express (nth (caar L)  ARGS) (CADAR L))
+    L)
+  )
+
+;% ANAPHORA ROUTINES, ADDANAPH  %
+;
+;% ADDANAPH ADDS STUFF FROM ANAPHS FROM car  ON TO GLOBAL ANAPHORA LIST %
+
+(defun addanaph (L)
+  (prog (a)
+	(loop for i in L do
+	      (if (setf a (ASSOC (CAR I) ?!ANAPHLISTNEW))
+       ;         % IF ALREADY ON ANAPH LIST THEN REPLACE %
+           (RPLACD A (CDR I))
+	   (setf ?!ANAPHLISTNEW (cons I ?!ANAPHLISTNEW ))
+	   )
+	      )
+	(return ?!ANAPHLISTNEW)
+	)
+  )
+
+
+
+
 
 
 
