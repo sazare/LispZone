@@ -264,6 +264,59 @@
   )
 
 
+(defun random(N) 1) ;  % GETS REPLACE BY RANDOM.LAP, LOADED IN AFTER THIS FUNCTION %
+
+;% SPECFN CALLS THE SPECIAL FN IF THERE IS ONE %
+
+(defun specfn(STRUC)
+  (prog (a name)
+	(setf name (get struc  'UNIT)) ;IF not NAME THEN RETURN NIL;  % IE, NOT AN ANAPH %
+	(when (member name '(GO_ON ELAB WHO WHAT)); % CALL THE SPEC FN PROTECTED BY ERRSET %
+	  (if (ATOM (setf A (ERRSET (EVAL (list NAME NIL T )) NIL)))
+	     (progn (ERROR "SPECFN" NAME) (setf A NIL))
+	     (setf A (car A )))
+	  (RETURN (IF A A 'QUIT))
+	  )
+        ;% QUIT MEANS THERE WAS AN ANAPHORA, BUT WE DIDNT HAVE THE POINTER FOR IT IN MEMORY %
+        (when (ASSOC NAME ?!ALLANAPHS )
+	  (setf A (GENL STRUC T NAME ))
+	  (RETURN (IF A A 'QUIT )))
+	)
+  )
+
+;% GO_ON, ELAB, WHO, WHAT
+;        TRY TO GET THE ANAPHORA, ELSE USE A STORY %
+
+(defun go_on(L F)
+  (prog (a)
+	(unless a (setf a (GET_ANAPH 'GO_ON)))
+	(unless a (setf a (GET_STORY)))
+	(when (and A F) (ANDTHEN (list 'IN (GET 'GO_ON 'UNIT))))
+	(return a)
+	)
+  )
+
+(defun  elab (L F)
+  (prog (a)
+	(unless A (setf A (GET_ANAPH 'ELAB)))
+	(unless A (setf A (GET_STORY)))
+	(when (not a f) (setf A (GO_ON L NIL)))
+	(when (and a f) (ANDTHEN (list 'IN (GET 'ELAB 'UNIT))))
+	(return A)
+	)
+  )
+
+(defun genl (L F ANAPH) ;% TRY THE ANAPH, ELSE TRY GO_ON  %
+  (prog (a)
+	(setf a nil)
+        (unless A (setf A (GET_ANAPH ANAPH)))
+	(unless A (setf A (GO_ON L NIL)))
+	(return a)
+	)
+  )
+
+
+
 
 
 
