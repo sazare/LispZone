@@ -315,6 +315,37 @@
 	)
   )
 
+;% GET_STORY GETS THE NEXT LINE IN WHATEVER STORY IS BEING TALKED ABOUT %
+;%  IT GETS THE TOPIC EITHER FROM THE CURRENT INPUT, OR FROM THE PREVIOUS INPUT %
+;%  IT THEN LOCATES THE STORY NAME, AND SELECTS THE NEXT ONE WHICH HASNT BEEN USED %
+
+(defun get_story()
+  (prog (b,c) ; % TOPIC %
+	(if (and (setf b (carn (get REACTTO 'TOPIC))) ; % TRY CURRENT INPUT TOPIC %
+              ; %       ALREADY A SETNAME               GET CANONICAL WD AND SET  %
+	         (if (GET B 'WORDS) 
+		   T 
+		   (progn (setf B (CARN (SYNNYM B)))
+			  (setf B (GET B 'SET))a)))
+	  (setf c b))
+	(if (and (not C) (setf B (CARN (GET ?!LAST_OUTPUT 'TOPIC) ))  ;% TRY PREVIOUS INPUT TOPIC %
+              ;%       ALREADY A SETNAME               GET CANONICAL WD AND SET  %
+		 (IF (GET B 'WORDS) 
+		     T 
+		     (progn 
+		       (setf B (CARN SYNNYM(B)))
+		       (setf B (GET B 'SET)) )
+		     ))
+	  (setf C B))
+	(unless c (return nil)) ; % NO STORY FROM EITHER %
+	(when (setf b (get c 'STORY)) 
+	  (DELETEP C (CARN B 'STORY))
+	  (RETURN (CARN B)))
+	(when (memq c (get 'FLARELIST 'SETS)) (RETURN (FLSTMT C)))
+	)
+  )
+
+
 
 
 
