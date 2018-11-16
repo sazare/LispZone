@@ -1,3 +1,7 @@
+0. オリジナルについて
+0.1 オリジナルは、.tgzと.zipなどがあるが、ファイル名がzipは大文字、
+tgzは小文字になっている
+
 1. オリジナルのPARRYコードをCOMMONLISPに変換する方針
 
 1.1 ファイル名は元のままにする
@@ -17,3 +21,22 @@
 　　(MAPCAR (FUNCTION (LAMBDA (X) (EVAL (CONS @DEFPROP X))))  FL)
 　　としているので、リストの要素を(defprop a b c)としているらしい。
 　　@DEFPROPになっているのは何か? ほかに定義がない・・・
+
+
+文字の置換
+^A CONS  86 83
+^B CAR PREFIX
+^C CDR PREFIX
+^E not 
+^L CR - 削除
+^M LF - 削除
+^P STOREBYTE 5 5
+^Q PROG2 5 5
+^W SET0  5 5
+^Y THEN 
+^Z nequal
+^\ leq
+\  ELSE  -- \ は普通の記号なので、使われている故にsedできなかった
+CARN carn PREFIX
+CHOOSE choose PREFIX
+

@@ -26,6 +26,8 @@
   x ;; now it seems be enough
   )
 
+(defun nequal (x y) (not (equal x y)))
+
 (defun memq (x y) (member x y))
 (defun greaterp (x y) (> x y))
 (defun lsh (x y) (* x (expt 2 y))) ;; uncertain

@@ -264,11 +264,183 @@
   )
 
 
+(defun random(N) 1) ;  % GETS REPLACE BY RANDOM.LAP, LOADED IN AFTER THIS FUNCTION %
+
+;% SPECFN CALLS THE SPECIAL FN IF THERE IS ONE %
+
+(defun specfn(STRUC)
+  (prog (a name)
+	(setf name (get struc  'UNIT)) ;IF not NAME THEN RETURN NIL;  % IE, NOT AN ANAPH %
+	(when (member name '(GO_ON ELAB WHO WHAT)); % CALL THE SPEC FN PROTECTED BY ERRSET %
+	  (if (ATOM (setf A (ERRSET (EVAL (list NAME NIL T )) NIL)))
+	     (progn (ERROR "SPECFN" NAME) (setf A NIL))
+	     (setf A (car A )))
+	  (RETURN (IF A A 'QUIT))
+	  )
+        ;% QUIT MEANS THERE WAS AN ANAPHORA, BUT WE DIDNT HAVE THE POINTER FOR IT IN MEMORY %
+        (when (ASSOC NAME ?!ALLANAPHS )
+	  (setf A (GENL STRUC T NAME ))
+	  (RETURN (IF A A 'QUIT )))
+	)
+  )
+
+;% GO_ON, ELAB, WHO, WHAT
+;        TRY TO GET THE ANAPHORA, ELSE USE A STORY %
+
+(defun go_on(L F)
+  (prog (a)
+	(unless a (setf a (GET_ANAPH 'GO_ON)))
+	(unless a (setf a (GET_STORY)))
+	(when (and A F) (ANDTHEN (list 'IN (GET 'GO_ON 'UNIT))))
+	(return a)
+	)
+  )
+
+(defun  elab (L F)
+  (prog (a)
+	(unless A (setf A (GET_ANAPH 'ELAB)))
+	(unless A (setf A (GET_STORY)))
+	(when (not a f) (setf A (GO_ON L NIL)))
+	(when (and a f) (ANDTHEN (list 'IN (GET 'ELAB 'UNIT))))
+	(return A)
+	)
+  )
+
+(defun genl (L F ANAPH) ;% TRY THE ANAPH, ELSE TRY GO_ON  %
+  (prog (a)
+	(setf a nil)
+        (unless A (setf A (GET_ANAPH ANAPH)))
+	(unless A (setf A (GO_ON L NIL)))
+	(return a)
+	)
+  )
+
+;% GET_STORY GETS THE NEXT LINE IN WHATEVER STORY IS BEING TALKED ABOUT %
+;%  IT GETS THE TOPIC EITHER FROM THE CURRENT INPUT, OR FROM THE PREVIOUS INPUT %
+;%  IT THEN LOCATES THE STORY NAME, AND SELECTS THE NEXT ONE WHICH HASNT BEEN USED %
+
+(defun get_story()
+  (prog (b,c) ; % TOPIC %
+	(if (and (setf b (carn (get REACTTO 'TOPIC))) ; % TRY CURRENT INPUT TOPIC %
+              ; %       ALREADY A SETNAME               GET CANONICAL WD AND SET  %
+	         (if (GET B 'WORDS) 
+		   T 
+		   (progn (setf B (CARN (SYNNYM B)))
+			  (setf B (GET B 'SET))a)))
+	  (setf c b))
+	(if (and (not C) (setf B (CARN (GET ?!LAST_OUTPUT 'TOPIC) ))  ;% TRY PREVIOUS INPUT TOPIC %
+              ;%       ALREADY A SETNAME               GET CANONICAL WD AND SET  %
+		 (IF (GET B 'WORDS) 
+		     T 
+		     (progn 
+		       (setf B (CARN SYNNYM(B)))
+		       (setf B (GET B 'SET)) )
+		     ))
+	  (setf C B))
+	(unless c (return nil)) ; % NO STORY FROM EITHER %
+	(when (setf b (get c 'STORY)) 
+	  (DELETEP C (CARN B 'STORY))
+	  (RETURN (CARN B)))
+	(when (memq c (get 'FLARELIST 'SETS)) (RETURN (FLSTMT C)))
+	)
+  )
 
 
+;% GET_ANAPH TAKES AN ANAPH NAME AS INPUT (EG THEY, GO_ON, WHO) AND LOOKS
+;  ON THE CURRENT ANAPH LIST IF ITS NOT NULL, ELSE LOOKS ON THE OLD ANAPHLIST.
+;  IT ALSO USES THE TRANSLATIONS OF ANAPHORA FOUND ON ?!ALLANAPHS %
 
+(defun get_anaph (L)
+  (prog (ana b alist)
+	(setf ALIST (IF ?!ANAPHLIST ?!ANAPHLIST ?!ANAPHLISTOLD))
+	; % GET ALL ANAPHS WITH APPROX THE SAME MEANING %
+        (setf ANA (ASSOC L ?!ALLANAPHS))
+	(loop for J in ANA do 
+	      (setf B (ASSOC J ALIST)) 
+	      until B)
+	(when (and B  (CDR B) (ATOM (CDR B))) (RETURN (CDR B)))
+	(when (and (eq L 'THEY) (setf B (ASSOC L ?!ANAPHLISTOLD))) (RETURN (CDR B)))
+	)
+  )
 
+(defun  who (L F)
+  (prog (a)
+	(setf a nil)
+        (setf A (get_anaph 'WHO))
+	(if (LAMBDANAME A) (RETURN A) (setf A NIL))
+	(unless (not a) (stf A (GO_ON L NIL)))
+	(RETURN A)
+	)
+  )
 
+(defun  what (L F)
+  (prog (a)
+        (setf A (GET_ANAPH 'WHAT))
+	(if (and L (equal (cadr (GET A 'BONDVALUE)) (car L))) T (setf A NIL))
+	(unless A (setf A (GO_ON L T)))
+	(RETURN A)
+	)
+  )
 
+;% REPETITION RETURNS T IF SEM ( A ^H NUMBER ) HAS BEEN USED BEFORE AS TYPE (IN OR OUT) %
+(defun repetition (SEM TYPE)
+  (prog (PTR FOUND)
+	(setf PTR  ?!CLIST)
+	(loop while (and PTR (not FOUND)) dO
+	      (IF (and (eql (car  PTR) TYPE) (eql (cadr PTR) SEM) (nequal PTR ?!LASTIN))
+		  (setf FOUND T)
+		  (setf PTR  (CDR PTR))))
+	(RETURN FOUND)
+	)
+  )
+
+;%  READING INDEXES,   SETUPSTL    %
+;%   THESE ROUTINES READ IN DATA FILES AND INTERCONNECT THEM %
+;
+;% SETUPSTL  SETS UP STORY AND STORYLIST POINTERS %
+(defun setupstl () ;% MUST BE DONE AFTER INITIALIZE IN OPAR3  %
+  (prog (a b c)
+	(setf c T)
+        (setf a (loop for I in (GET 'SENSITIVELIST 'SETS) collect (get I 'WORDS)))
+	(PUTPROP 'SENSITIVELIST  A  'WORDS)
+	(setf A (cons 'DELNSET (append (GET 'FLARELIST 'SETS) (GET 'SETLIST 'SETS) )))
+	(loop for I in A do ;      % I IS THE NAME OF A FLARESET %
+	      for J in (GET I 'STORY) do 
+	      (prog ;% J IS A ^H-NAME %
+                (setf B J)
+		(if B (PUTPROP B I 'STORYNAME) 
+		  (progn 
+		    (setf C NIL) 
+		    (print J)
+		    )
+		  )
+		)
+	      )
+        (RETURN (IF C '(SET UP OK) '(SET UP BAD) ))
+	)
+  )
+
+(defun readbonds (FILENAME) ;% THIS READS IN A FILE(PDATB) CONTAINING USEFUL INFORMATION ABOUT PDAT %
+  (prog (a)
+        (SELECTINPUT NIL FILENAME)
+	(loop while (and (not (atom (setf A (ERRSET(READDATA))))) 
+			 (setf A (car A))) do
+                (EVAL A))
+        (PRINTSTR FILENAME " read in.")
+	(SELECTINPUT NIL NIL)
+	)
+  )
+
+(defun  changel (FILENAME)
+        ;% THIS READS IN A FILE OF TEMPORARY @@ NUMBER CHANGES TO MAKE THE PATTERN MATCHER
+        ;        AND MEMORY COMPATIBLE %
+  (prog (a)
+	(SELECTINPUT NIL FILENAME)
+	(loop while (and (not (ATOM (setf A (ERRSET(READDATA)))))
+			 (setf A  (car A))) do
+                (PUTPROP (car A) (cdr A) 'MEQV))
+	(PRINTSTR FILENAME " read in.")
+	)
+  )
 (format t "end of loading pmem.lisp~%")
 
