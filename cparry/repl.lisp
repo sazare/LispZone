@@ -1,20 +1,31 @@
-(defun parry2 ()
+
+(defun answer (ind)
+  (prog (a)
+	(setf a ind)
+	(return (format nil "answer: ~a" a))
+	)
+  )
+	
+(defun parry2 (ind)
+  (format t "parry> ~a~%" (answer ind))
   )
 
 (defun parry ()
-  (progn
-    (format t "READY: ~0%")
-    (force-output t)
+  (prog ()
     (loop 
-      (let ((ind nil))
-	(format t "> ~0%")
+      (let (ind )
+	(format t "you> ~0%")
+        (force-output t)
 	(setf ind (read-line))
+	(when (equal ind "end") (return))
+	(terpri t)
 	(parry2 ind)
-	(if (equal ind "end") (return))
-	(format t "~a~%" ind);(terpri)
+	(terpri)
     )
   )
   (format t "Good bye")
+  )
 )
+
 (parry)
 

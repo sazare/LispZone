@@ -36,7 +36,11 @@ tgzは小文字になっている
 ^Y THEN 
 ^Z nequal
 ^\ leq
+^_ or
 \  ELSE  -- \ は普通の記号なので、使われている故にsedできなかった
 CARN carn PREFIX
 CHOOSE choose PREFIX
+
+lispの関数 -- packageで解決する
+assert, random => paをつけた
 

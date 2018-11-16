@@ -212,3 +212,8 @@ defpropとputpropで定義したpropertyをigraphでなんとかみたい。
 　　別のpackageにしてみる。
 2. deleteも同様だった。padeleteに変更する
 
+20181116金
+1. mlispの関数はすべて書き換えた
+2. chop.shで、特殊記号などをどう変換するかをまとめた
+3. WINはまだやっていなかった。これはどうするか・・・
+

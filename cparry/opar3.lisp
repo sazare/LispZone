@@ -317,7 +317,7 @@
 ;           TO INTRODUCE THE FLARE CONCEPT   %
 ;% CALLED BY LEADON  %
 (defun flarelead (FLSET)
-  (progn
+  (prog ()
     (putprop FLSET T 'USED)
     (if (eq (get FLSET 'TYPE) 'INSTITUTION)
       (setf WDFLAG (append '(THE) (list (CAR (GET FLSET 'WORDS)))  ))

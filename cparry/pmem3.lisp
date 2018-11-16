@@ -3,19 +3,20 @@
 ;
 ;% takes a file name (or NIL for TTY) and assigns it to the input channel%
 
-(defun selectinput (AREA, FILE)
-  (progn 
-    (IF FILE 
-	(progn 
-	  (if AREA 
-	    (setf INCHAN (EVAL (list 'INPUT AREA FILE)))
-	    (setf INCHAN (EVAL (list 'INPUT 'DSK: FILE))))
-	    (INC NIL NIL)
-	    (PRINTSTR FILE " SELECTED FOR INPUT."))
-	(progn 
-	  (PRINTSTR "TTY SELECTED FOR INPUT.")
-	  (INC NIL T))
-	)
+(defun selectinput (AREA FILE)
+  (IF FILE 
+      (progn 
+	(if AREA 
+	  (setf INCHAN (EVAL (list 'INPUT AREA FILE)))
+	  (setf INCHAN (EVAL (list 'INPUT 'DSK\: FILE)))
+	  )
+	(INC NIL NIL)
+	(PRINTSTR FILE " SELECTED FOR INPUT."))
+      (progn 
+	(PRINTSTR "TTY SELECTED FOR INPUT.")
+	(INC NIL T))
+      )
+  )
 
 (defun selectinputn (AREA FILE)
   (when FILE 

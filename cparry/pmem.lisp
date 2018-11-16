@@ -215,7 +215,7 @@
         ;%  IF EXH IS T, THEN TAKE THE SENTENCES IN ORDER, OTHERWISE CHOOSE RANDOMLY %
         (if (GET UNIT 'EXH) 
 	  (setf A 1)
-	  (setf A (RANDOM (LENGTH SENTS)))
+	  (setf A (parandom (LENGTH SENTS)))
 	  )
 	(setf S (nth A SENTS))
 	(PUTPROP UNIT (DELETEN SENTS A) CLASS) ;% DELETE THE SENTENCE FROM MEMORY %
@@ -264,7 +264,7 @@
   )
 
 
-(defun random(N) 1) ;  % GETS REPLACE BY RANDOM.LAP, LOADED IN AFTER THIS FUNCTION %
+(defun parandom(N) 1) ;  % GETS REPLACE BY RANDOM.LAP, LOADED IN AFTER THIS FUNCTION %
 
 ;% SPECFN CALLS THE SPECIAL FN IF THERE IS ONE %
 
@@ -320,7 +320,7 @@
 ;%  IT THEN LOCATES THE STORY NAME, AND SELECTS THE NEXT ONE WHICH HASNT BEEN USED %
 
 (defun get_story()
-  (prog (b,c) ; % TOPIC %
+  (prog (b c) ; % TOPIC %
 	(if (and (setf b (carn (get REACTTO 'TOPIC))) ; % TRY CURRENT INPUT TOPIC %
               ; %       ALREADY A SETNAME               GET CANONICAL WD AND SET  %
 	         (if (GET B 'WORDS) 
