@@ -1,4 +1,7 @@
-; read s-exp from a file
+;; this from pmem4
+
+;% THIS IS ALL THE TOP-LEVEL GOODIES PLUS INFERENCE %
+
 
 (defun  init() (selectinputn '(PAR BLF) INPUTFILE))
 (defun  initfb() 
@@ -165,7 +168,7 @@
 	)
   )
 
-(defun chooselead() (nth (random 4) '(BOOKIESET GAMBLERSET HORSERACINGSET GANGSTERSET)))
+(defun chooselead() (nth (parandom 4) '(BOOKIESET GAMBLERSET HORSERACINGSET GANGSTERSET)))
 
 (defun printvars ()
   (progn 
@@ -393,7 +396,7 @@
 			      (DELETEP A ?!LAST_OUTPUT 'STORY))
 			    (when (and (LAMBDANAME FOUND2) (setf A (GET FOUND2 'STORYNAME)))
 			      (DELETEP A FOUND2 'STORY))) NIL))
-	    (ERROR "ERROR FROM BOTTOM OF REACT",FOUND))
+	    (ERROR "ERROR FROM BOTTOM OF REACT" FOUND))
 
 	(ANALYZE T)
 	(setf BUG 50)
@@ -554,7 +557,7 @@
 (defun posit (B) (IF (ATOM B) (ASSERT2 B) (ADDTO (car B)(cadr B))))
 
 ;% B IS A NAME OF A BELIEF %
-(defun assert (B) ;% ASSERT B, AND TRY TO PROVE ANY CONSEQUENCES OF IT %
+(defun paassert (B) ;% ASSERT B, AND TRY TO PROVE ANY CONSEQUENCES OF IT %
         (prog2 T (prog2 (ASSERT2 B) (PROVE)))
 	)
 

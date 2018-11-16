@@ -408,7 +408,7 @@
   ;% IF MISC IS USED AND LULL(), THEN WILL JUMP BACK TO FLARES OR DELNS %
   (cond ((or (eq OLDTOPIC 'ANAPH) (eq OLDTOPIC 'IYOUME)) T)
 	((>= (length SSENT 10) ) nil)
-	(T (eq 1 (random 2)))
+	(T (eq 1 (parandom 2)))
 	)
   )
 
@@ -459,7 +459,7 @@
 
 (defun paranoid ()
   (prog (a)
-	(assert '?*DTRUSTWORTHY)
+	(paassert '?*DTRUSTWORTHY)
 	(loop for i in PARBEL do
 	      (when (memq I '(LYING LOSER CRAZY DUMB))
 		(addto i -1)
@@ -469,7 +469,7 @@
 			      (LOSER . ?*DSOCIABLE)
 			      (CRAZY . DABNORMAL) 
 			      (DUMB . ?*DCHELP) )))
-	  (assert (cdr A))
+	  (paassert (cdr A))
 	  )
 	(setf PARBEL nil)
 	)
