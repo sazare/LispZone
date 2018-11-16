@@ -21,3 +21,22 @@ tgzは小文字になっている
 　　(MAPCAR (FUNCTION (LAMBDA (X) (EVAL (CONS @DEFPROP X))))  FL)
 　　としているので、リストの要素を(defprop a b c)としているらしい。
 　　@DEFPROPになっているのは何か? ほかに定義がない・・・
+
+
+文字の置換
+^A CONS  86 83
+^B CAR PREFIX
+^C CDR PREFIX
+^E not 
+^L CR - 削除
+^M LF - 削除
+^P STOREBYTE 5 5
+^Q PROG2 5 5
+^W SET0  5 5
+^Y THEN 
+^Z nequal
+^\ leq
+\  ELSE  -- \ は普通の記号なので、使われている故にsedできなかった
+CARN carn PREFIX
+CHOOSE choose PREFIX
+

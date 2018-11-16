@@ -153,5 +153,11 @@
 (defvar OLDTIME nil)
 
 (defvar PARBEL nil) ;; pmem5.lisp
+
+(defvar DIAFILEAREA nil)
+(defvar ONEDIA nil)
+(defvar FILE12 nil)
+
+
 (format t "end of specials.lisp~%")
 
