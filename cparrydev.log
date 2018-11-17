@@ -217,3 +217,19 @@ defpropとputpropで定義したpropertyをigraphでなんとかみたい。
 2. chop.shで、特殊記号などをどう変換するかをまとめた
 3. WINはまだやっていなかった。これはどうするか・・・
 
+4. synnym()の定義がない。これは、(word word1 word2 ...)でどれかのword_iにヒットしたらwordを返すはず
+   各word, word_iのproperty SYNONYMにwordをいれておけば、高速になる。
+   このwordを同義語の標準形とよぼう。
+5. INPUTQUESは、((word . word2)...) らしい。word2が入力された語で、wordはそれの標準形のはず。
+   標準形にはプロパティWORDS, SETが定義されている。
+   FRONT.LAPでINPUTQUESは作られているはず。
+6. pmem5などには、SYNNYM.PARと書かれているが、これはSYNONM.PARのとことだと解釈
+
+20181117土
+1. make-infsでいろいろエラーになる
+　TH2のとき、putpropのところでatomでないリストのためにエラーになった。
+  (TH2 (DDHARM 3) ((MEASURE FEAR 14) DDOMINATING))
+　(when (atom i) (setf (get i (car a)) (cons (cadr a) (get i (car a))))))
+にした。
+  listのときputpropしないのか。この例では、DDOMINATINGのTH2に設定しなくていいのか
+
