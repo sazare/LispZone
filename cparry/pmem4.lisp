@@ -450,24 +450,21 @@
 
 (defvar *INTLIST* NIL)
 
-(defvar *belfile* "bel0")
-(defvar *inffile* "inf0")
+(defvar *belfile* "data/bel0")
+(defvar *inffile* "data/inf0")
 ;(defvar *inffile* "inf1")
 
 (defun make-bel (bel)
   (let (B)
-    (progn 
       (setf (get (car bel) 'NTRUTH) (cadr bel))
-      (if (eq (caddr bel) 'INN) 
+      (when (eq (caddr bel) 'INN) 
         (setf (get (car bel) 'CLASS) (caddr bel)))
-      (if (setf B (cdddr bel))
-        (progn 
+      (when (setf B (cdddr bel))
           (setf (get (car B) 'NTRUTH) (cadr B))
-	        (setf (get (car B) 'OPPOS) (car bel))
-	        (setf (get (car bel) 'OPPOS) (car B))
-	      ))    
+	  (setf (get (car B) 'OPPOS) (car bel))
+	  (setf (get (car bel) 'OPPOS) (car B))
+	  )
      (car bel)
-    )
   )
 )
 
@@ -509,7 +506,7 @@
     (loop 
       for a in infs
       do
-      (format t "a=~a~%" a)
+;      (format t "a=~a~%" a)
       (if (memq (car a) '(TH2 EMOTE))
 	  (loop for i in (cddr a) do 
 		(when (atom i) (setf (get i (car a)) (cons (cadr a) (get i (car a))))))
@@ -517,13 +514,13 @@
 	    (setf b a)
 	    (when (get (car a) 'theorem) 
 		(format t "~%duplicate inf: ~a" (car a)(force-output t)))
-	    (format t "(car a) = ~a~%" (car a))
+;	    (format t "(car a) = ~a~%" (car a))
 	    (setf (get (car a) 'theorem) (cons (cadr a) (caddr a)))
-	    (format t "carn(cadr a) = ~a~%" (carn (cadr a)))
+;	    (format t "carn(cadr a) = ~a~%" (carn (cadr a)))
             (when (not (get (carn (cadr a)) 'ntruth)) 
 		(format t "~%NO BEL: ~a" (cadr a))(force-output t))
             ;; backpointer from antecedent to th name
-	    (format t "caddr a=~a~%" (caddr a))
+;	    (format t "caddr a=~a~%" (caddr a))
 	    (loop for i in (caddr a) do
 	      (when (atom i) 
 		  (setf (get i 'TH) (cons (car a) (get i 'th)))
@@ -612,8 +609,10 @@
 	(setf C (car A)) (setf B T)
 	(loop for I In (cdr A) do
 	      (setf B (and B  (EVALUATE I)))) ;% TRY EACH ANTECEDENT AND "AND" THEM TOGETHER %
-	(when B (IF PRINTALL (PRINTSTR (format "~a PROVEN" C) ) (POSIT C)
-                (WINDOW 36 T A)))
+	(when B 
+	  (IF PRINTALL (PRINTSTR (format "~a PROVEN" C) ))
+	  (POSIT C)
+	  (WINDOW 36 T A))
 	)
   )
 

@@ -23,7 +23,7 @@
 (defun oparinitialize ()
   (progn 
     (eval '(INC (INPUT (PAR BLF) RDATA) NIL)) ;;; this may be infix notation...
-    (loop while (NOT (ATOM (setvf X (ERRSET (READ) T) )))do
+    (loop while (NOT (ATOM (setf X (ERRSET (READ) T) )))do
 	  (eval (car x))
 	  (inc nil T))
     (setf FLARE 'INIT)                         ;%   FLARE=CURRENT FLARE TOPIC; 'INIT = NONE   %
@@ -65,8 +65,8 @@
 ;        %   FOR EXAMPLE, USE THE PATTERN OR THE WORDS THAT MATCHED THE PATTERN  %
 
         (loop for word in INP do
-	      (if (setf FSET (and (member (GET (CAR WORD) 'SET)(FLARELIST))
-				  (not (get (cdr WORD) 'USED))))
+	      (if (and (member (setf FSET (GET (CAR WORD) 'SET)) (FLARELIST))
+		       (not (get (cdr WORD) 'USED)))
 		(when (greaterp (get FSET 'WT)(get (get NFRAME 'SET) 'WT))
 		  (prog2 (setf NFLARE (CAR WORD))
 			 (setf RESULT T)
@@ -79,7 +79,7 @@
 	       (progn
 		 (setf FLARE NFLARE)
 		 (setf WEIGHT WT)   ;%   USED IN COMPUTING RISE IN FEAR   %
-		 (when (and W FLAG) (putprop W T 'USED))
+		 (when (and W FLAG) (setf (get W 'USED) T))
 		 )
 	       )
 	     )
