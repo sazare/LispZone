@@ -14,7 +14,8 @@
   )
 
 (defun  testm () (test_pattern))
-(defun  lambdaname (L) (equal (chrval L) LAMDA))
+;(defun  lambdaname (L) (equal (chrval L) LAMDA))
+;;; lambdaname is defined in pmem.lisp
 
 (defun parry ()
   "parry main function. dont direct trans."
@@ -503,48 +504,39 @@
     )
   )
 
-
 (defun make-infs (infs)
   (prog (b )
-    (loop for a in infs
-;;; I may missunderstand READDATA in
-;;;  WHILE not ATOM(A ?  ERRSET(READDATA()) ) AND A ?  car A DO
+    (loop 
+      for a in infs
       do
-        (prog ()
-	  (if (atom a) (return))
-          (if (memq (car a) '(TH2 EMOTE))
-	      (loop for i in (cddr a) do 
-		    (when (atom i) ;; this when is needed for 
-;;;  error at (setf (list) 'TH2) corr. (putprop (list) 'TH)
-;;; at (TH2 (DDHARM 3) ((MEASURE FEAR 14) DDOMINATING) )
-;;; if ignore the measure form, when evaluate where it comes from???
-		      (setf (get i (car a)) (cons (cadr a) (get i (car a)))))
-		    )
-	      (prog ()
-	        (setf b a)
-	        (if (get (car a) 'theorem) 
-		  (progn (format t "~%duplicate inf: ~a" (car a))(force-output t)))
-	        (setf (get (car a) 'theorem) (cons (cadr a) (caddr a)))
-	        (if (not (get (carn (cadr a)) 'ntruth)) 
-		  (progn (format t "~%NO BEL: ~a" (cadr a))(force-output t)))
-                ;; backpointer from antecedent to th name
-	        (loop for i in (caddr a) do
-	          (if (atom i) 
-		    (progn
-		      (setf (get i 'TH) (cons (car a) (get i 'th)))
-		      (if (and (not (lambdaname i)) 
-			     (null (get i 'ntruth)))
-		      (format t "~%no BEL: ~a" i)(force-output t)))
-		    )
-		  )
-		)
+      (format t "a=~a~%" a)
+      (if (memq (car a) '(TH2 EMOTE))
+	  (loop for i in (cddr a) do 
+		(when (atom i) (setf (get i (car a)) (cons (cadr a) (get i (car a))))))
+	  (prog ()
+	    (setf b a)
+	    (when (get (car a) 'theorem) 
+		(format t "~%duplicate inf: ~a" (car a)(force-output t)))
+	    (format t "(car a) = ~a~%" (car a))
+	    (setf (get (car a) 'theorem) (cons (cadr a) (caddr a)))
+	    (format t "carn(cadr a) = ~a~%" (carn (cadr a)))
+            (when (not (get (carn (cadr a)) 'ntruth)) 
+		(format t "~%NO BEL: ~a" (cadr a))(force-output t))
+            ;; backpointer from antecedent to th name
+	    (format t "caddr a=~a~%" (caddr a))
+	    (loop for i in (caddr a) do
+	      (when (atom i) 
+		  (setf (get i 'TH) (cons (car a) (get i 'th)))
+		  (when (and (not (lambdaname i)) 
+				 (not (get i 'ntruth)))
+			(format t "~%no BEL: ~a" i)(force-output t)))
 	      )
+	    )
 	  )
-	)
-        (format t "~%INF file read, last inf: ~a"  (car b))
-	(force-output t)
+      )
+    (format t "~%INF file read, last inf: ~a" b) (force-output t)
     )
-)
+  )
 
 (defun readinf ()
   (make-infs (read-inf))
