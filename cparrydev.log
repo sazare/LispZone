@@ -233,3 +233,14 @@ defpropとputpropで定義したpropertyをigraphでなんとかみたい。
 にした。
   listのときputpropしないのか。この例では、DDOMINATINGのTH2に設定しなくていいのか
 
+20181118日
+1. putpropが一箇所あったのをsetfに直した
+2. readbelの中身がおかしかったのを整理した 
+3. test-*.shなどを実行してみた。pmem4.lispではmemqを使っていた。
+4. 各test*.lispの中でloadして実行していたため、load時のメッセージとテストの
+　結果メッセージが混ざってわかりにくかった。
+　testall.lispでloadall.lispをしてから各test*.lispを実行するようにして
+　各test-*.lispではloadしないようにした。
+　そして、test-all.lispのテスト開始メッセージを追加した
+
+

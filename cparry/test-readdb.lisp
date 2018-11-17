@@ -1,6 +1,7 @@
-(load "test.lisp")
-(load "pmem.lisp")
-(load "pmem4.lisp")
+;(load "test.lisp")
+;(load "primitives.lisp")
+;(load "pmem.lisp")
+;(load "pmem4.lisp")
 
 (test-set
   "test for make-bel"

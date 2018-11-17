@@ -1,5 +1,5 @@
-(load "test.lisp")
-(load "utils.lisp")
+;(load "test.lisp")
+;(load "utils.lisp")
 
 (test-set
   "test for make-arc"

@@ -1,5 +1,5 @@
-(load "test.lisp")
-(load "pmem4.lisp")
+;(load "test.lisp")
+;(load "pmem4.lisp")
 
 (test-set "test for BL"
 	  (test "not atom" NIL (bl '(a b c)))
