@@ -243,4 +243,6 @@ defpropとputpropで定義したpropertyをigraphでなんとかみたい。
 　各test-*.lispではloadしないようにした。
 　そして、test-all.lispのテスト開始メッセージを追加した
 
+parfns.faiにのsymnymの定義があり、そこでSYNONMを読み込んでいる。
+
 

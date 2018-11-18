@@ -4,6 +4,7 @@
 
 
 (defun  init() (selectinputn '(PAR BLF) INPUTFILE))
+
 (defun  initfb() 
   (progn 
     (EVAL '(DSKIN(RANDOM.LAP)))
@@ -416,37 +417,6 @@
     )
   )
 
-
-
-
-
-
-(defun react (x ) x)
-
-
-
-(defun read-file(fname)
-    (with-open-file (in fname :direction :input)
-      (loop for line = (read in nil nil)
-	    while line 
-	    collect line
-      )
-    )
-)
-;; dont use this
-(defun readsexp (fname)
-  (let (alls)
-    (nyi)
-  (with-open-file (stream fname :direction :input)
-    (do ((sexp (read stream nil)(read stream nil)))
-        ((null sexp))
-	(progn (print sexp)
-	       (unless (eq sexp '~) (setf alls (cons sexp alls))))
-	)
-  (reverse alls)
-  )
-  )
-)
 
 (defvar *INTLIST* NIL)
 
