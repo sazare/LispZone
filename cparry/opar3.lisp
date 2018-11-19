@@ -210,7 +210,7 @@
 ;          OUTPUT WILL BE A LAMBDA NUMBER  %
 (defun choose (replies) 
   (prog (response)
-	(unless (not replies) (return NIL))
+	(unless replies (return NIL))
 	(setf CHOSEN replies)
 	(when (null (setf RESPONSE (get replies 'IND)))
 	  (return 
