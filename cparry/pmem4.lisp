@@ -175,9 +175,9 @@
 (defun printvars ()
   (progn 
     (BUFFER T)(TERPRI NIL)
-    (PRINC "      FEAR = ")(PRINTSTR NUMED FEAR)
-    (PRINC "     ANGER = ")(PRINTSTR NUMED ANGER)
-    (PRINC "     SHAME = ")(PRINTSTR NUMED HURT)
+    (PRINC "      FEAR = ")(PRINTSTR (NUMED FEAR))
+    (PRINC "     ANGER = ")(PRINTSTR (NUMED ANGER))
+    (PRINC "     SHAME = ")(PRINTSTR (NUMED HURT))
     (BUFFER NIL)
     ))
 
