@@ -210,14 +210,14 @@
 ;          OUTPUT WILL BE A LAMBDA NUMBER  %
 (defun choose (replies) 
   (prog (response)
-	(unless (not replies) (return NIL))
-	(setf CHOSEN REPLIES)
-	(when (null (setf RESPONSE (get REPLIES 'IND)))
+	(unless replies (return NIL))
+	(setf CHOSEN replies)
+	(when (null (setf RESPONSE (get replies 'IND)))
 	  (return 
 	    (if  (eq replies 'EXHAUST)
 	      (progn (setf ENDE T) (choose 'BYEFEDUP))
 	      (choose 'EXHAUST))))
-	(return RESPONSE)
+	(return response)
 	)
   )
 
