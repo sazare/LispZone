@@ -4,7 +4,7 @@
   (setf EXHAUSTNO 0)
   (setf SILENCENO 0)
   (setf SWEARNO 0)
-  (setf ?!ALLANAPHS '( (WHO   % THEY HE SHE WE %  )
+  (setf ?!ALLANAPHS '( (WHO ) ;% THEY HE SHE WE %  
                        (THEY  HE SHE WE)
                        (HE )  (SHE )  (WE )
                        (THERE WHERE)  (HERE THERE WHERE)  (WHERE)
@@ -66,7 +66,7 @@
     )
   )
 
-(defun numed (n) ;; % 0.00 ^\ N ^\ 99.99, RETURNS STRING "12.34" %
+(defun numed (n) ;; % 0.00 <= N <= 99.99, RETURNS STRING "12.34" %
   (nedit (fix (+ (* n 100) 0.5)))
   )
 
@@ -114,7 +114,7 @@
 
 (defun  silencer() ; % SEMANTIC FUNCTION CALLED BY SILENCE INPUT %
   (prog () 
-    (setf SILENCENO (+1 SILENCENO)) 
+    (setf SILENCENO (+ 1 SILENCENO)) 
     (when (= SILENCENO 11)  (setf ENDE  T))
     (setf AJUMP  0.1)
     (return nil)
@@ -123,7 +123,7 @@
 
 (defun  exhauster () ; % SEMANTIC FUNCTION CALLED BY EXHAUST OUTPUT SELECTION %
   (prog ()
-    (setf EXHAUSTNO (+1  EXHAUSTNO))
+    (setf EXHAUSTNO (+ 1  EXHAUSTNO))
     (setf AJUMP 0.15)
     (when (= EXHAUSTNO 9) 
       (setf ENDE T)
@@ -134,7 +134,7 @@
 
 (defun  swearer() ; % SEMANTIC FUNCTION CALLED BY SWEAR INPUT %
   (prog ()
-    (setf SWEARNO (+1  SWEARNO))
+    (setf SWEARNO (+ 1  SWEARNO))
     (setf AJUMP  0.3)
     (when (= SWEARNO 5)
       (setf ENDE T)
@@ -241,6 +241,7 @@
 	(setf A (chrval (READ)))
 	(when (or (eq A (CHRVAL 'Y)) (eq A (CHRVAL 'y)))  (setf TRACEV 'ALL))
 	(when TRACEV (printstr "APPROX 15 LINES OF OUTPUT PER I/O PAIR"))
+	)
 
       (when (and (not TRACEV) (not WINDOWS))
 	(terpri nil) 
@@ -286,7 +287,7 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 ")
     )
   )
-  )
+ )
 
 (defun  stringate(l) ;% RETURNS A STRING WITH THE QUOTE MARKS, FASTER THAN STR %
   (prog (a b)
@@ -327,9 +328,9 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 (defun  date(n)
   (prog (a b c yr mo date day)
     (setf A (dateuu))
-    (ten) (setf A (+ A N))  ; % -1 IS YESTERDAY, 0 TODAY, +1 TOMORROW %
-    (setf B (divide A 31)) (setf date (cdr (+1 B))) 
-    (setf B (divide (car B) 12))(setf mo (cdr (+1 B)))
+    (ten) (setf A (+ A N))  ; % -1 IS YESTERDAY, 0 TODAY, + 1 TOMORROW %
+    (setf B (divide A 31)) (setf date (cdr (+ 1 B))) 
+    (setf B (divide (car B) 12))(setf mo (cdr (+ 1 B)))
     (setf YR (car (+ B 1964)))
     (setf C '((31 .JANUARY)(28 .FEBRUARY)(31 .MARCH)(30 .APRIL)(31 .MAY)(30 .JUNE)
          (31 .JULY)(31 .AUGUST)(30 .SEPTEMBER)(31 .OCTOBER)(30 .NOVEMBER)(31 .DECEMBER)))
@@ -470,7 +471,6 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
     (return found)
     )
   )
-  )
 
 ;% LASTWORD CHANGES L INTO THE APPROPRIATE ENGLISH WORD TO ADD TO THE END OF THE OUTPUT %
 
@@ -502,5 +502,5 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
     )
   )
 
-(format t "end of loading pmemw.lisp~%")
+(format t "end of loading pmem2.lisp~%")
 
