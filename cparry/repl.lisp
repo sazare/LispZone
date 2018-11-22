@@ -29,3 +29,48 @@
 
 ;(parry)
 
+
+;;; new repl
+(defvar symlist '((be is are were was) (do does did) (see find look)))
+(defvar inputq nil)
+
+(defun ask ()
+  (read-line)
+)  
+
+(defun proc (word)
+  (format t ":~a~%" word)
+)
+
+(defun setupsym (symlist)
+  (loop for syms in symlist do
+    (loop for word in syms do
+      (setf (get word 'synonym) (car syms))
+    )
+  )
+)
+
+(defun symfy (word)
+  (let ((sym (get word 'synonym)))
+    (if sym (cons sym word)(cons word word))
+  )
+)
+ 
+(defun getline ()
+  (unless inq (loop for wd in (ask) collect (symfy wd)))
+)
+
+(defun getword ()
+  (unless inq (setf inq (getline)))
+  (pop inq)
+)
+
+(defun repl ()
+  (prog (word)
+    (loop 
+      (setf word (getword))
+      (proc word)
+    )
+  )
+)
+

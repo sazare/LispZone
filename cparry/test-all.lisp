@@ -1,3 +1,4 @@
+(format t "~%~%~%**** START LOADING ****~%")
 (load "test.lisp")
 (load "loadall.lisp")
 
