@@ -1,3 +1,7 @@
+;(defpackage :sazare.test (:use :common-lisp))
+;(in-package :sazare.test)
+
+
 ;; test framework
 ;; based on the code of ch. 9 of Practical Commonlisp by Peter Seibel.
 ;;  modified it as a novice commonlisper

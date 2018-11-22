@@ -1,3 +1,6 @@
+;(defpackage :mad.t.parry (:use :common-lisp))
+;(in-package :mad.t.parry)
+
 (load "setting.lisp")
 (load "primitives.lisp")
 
