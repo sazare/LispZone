@@ -41,6 +41,7 @@
 (defvar REACTTO nil)
 (defvar ERRNAME nil)
 (defvar STYPE nil)
+(defvar TOPIC nil)
 (defvar STOPIC nil)
 (defvar TRACE_MEM nil)
 (defvar INPUTQUES nil)
@@ -61,6 +62,7 @@
 (defvar EOF nil)
 (defvar FILE1 nil)
 (defvar FILE2 nil)
+(defvar CHARNO 0)
 (defvar DIACHARNO 0)
 (defvar INPUTFILE nil)
 (defvar PMINPUT nil)
@@ -118,6 +120,9 @@
 (defvar FLARELIST nil)
 (defvar SETLIST nil)
 (defvar SENSITIVELIST nil)
+
+(defvar LIVEFLARES NIL)
+(defvar DEADFLARES NIL)
 
 (defvar WTS nil)
 (defvar FL nil)

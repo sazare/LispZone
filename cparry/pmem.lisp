@@ -1,34 +1,34 @@
 ;;; from PMEM
 
 ;;;
+;; different from original lambdaname. because cwchanged ^H to @@.
+(defun lambdaname (s) (and (>= (length (string s)) 3) (equal (subseq (string s) 0 2) "@@")))
 
-(defun lambdaname (s) (equal (subseq (string s) 0 2) "@@"))
 ;; now replaced ^B to car, alphaname is incorrect
 ;; but noone call alphaname
 (defun alphaneme (s) (equal (subseq (string s) 0 2) ""))
 
 ;% READLAMBDA ATTEMPTS TO READ IN A SEMANTIC FUNCTION (FRAME) FROM THE MEMORY
 ;        GIVEN A LAMBDA NUMBER AS INPUT %
+;;; omura dont use disk
 (defun readlambda (a)
   (prog ()
     (unless (lambdaname a) (return nil))
-    (if (diskread a) 
-      t
-      (error "BAD DISKREAD" )
-      )
+    (when (diskread a) (return T))
+    (paerror "BAD DISKREAD")
     )
   )
 
 ;%        DOES DISKREAD2 PROTECTED BY AN ERRSET;
 ;         ERRORS MAY OCCUR IF THE MEMORY FILE HAS MISMATCHED PARENS  %
-
+;;; omura dont use disk
 (defun diskread (name)
   (prog (a)
-    (if (setf a (diskread2 name)) 
-      (progn 
-	(format t "error in diskread ~a" name)
-        (return nil))
-      (car a))
+    (if (not (setf a (diskread2 name)) )
+        (progn
+	  (paerror t "error in diskread ~a" name)
+          (return nil))
+        (return (car a)))
   )
 )
 
@@ -37,6 +37,7 @@
 ;        OTHERWISE IT CALLS BEL OR ENG TO PROPERLY LINK ALL THE INFO INTO THE MEMORY %
 
 (defun diskread2 (name)
+;;; omura dont use disk
   (prog (a b charno)
     (when (get name 'INCORE) (return T))
     (when (get 'DSKLOC 'SUBR) (setf a (dskloc name))) ; % GET THE CHAR NO OF THE SEXPR %
@@ -62,45 +63,46 @@
     )
   )
 
-;carn was defined in diaapp.lisp
-(defun carn (s)
-  (if (atom s) 
-    s
-    (car s)
-    )
-  )
+;carn was defined in diaapp.lisp. diaapp was gone.
+(defun carn (s) (if (atom s) s (car s)))
 
+;%       BEL AND ENG TAKE AN SEXPR FROM THE MEMORY FILE (PDAT) AND LINK
+;        THE INFORMATION IN THE MEMORY IN THE RIGHT WAY %
+;        % READ IN SEMANTS AND SURFACE AND STORE UNDER LAMBDAS AND ALPHAS %
+;        % X IS THE LIST WITHOUT THE B OR E %
+;        %   X LOOKS LIKE:  ( @@17 100 (LOC I HOSP) LIT (...)  ) %
 (defun bel(x)
   (prog (name truth unit)
-    (setf name (car x))
+    (setf name  (car x))
     (setf truth (cadr x))
-    (setf unit    (caddr x))
+    (setf unit  (caddr x))
     (when (or (null x)(null (cdr x))(null (cddr x))(not (numberp truth)))
-      (error "B BAD INPUT ~a" x)
+      (paerror "B BAD INPUT ~a" x)
       (return nil)
     )
-    (when (get name 'bondvalue) (error "BAD INPUT-DOUBLE ENTRy ~%" name))
-    (putpropt name unit 'BONDVALUE)
+    (when (get name 'BONDVALUE) (paerror "BAD INPUT-DOUBLE ENTRY ~%" name))
+    (putprop name unit 'BONDVALUE)
     (setf x (cdr x))
     (loop while (setf x (cddr x)) do
        ;% PUT THEM ON THE PROPERTY LIST OF THE ^H NAME %
-      (when (or (not (atom x)) (null (cdr)))
-         (error "BAD INPUT ~%~%" name)
-         (return nil)
-       )
-       (putprop name (cadr x) (car x)))
+      (if (or (not (atom (car x))) (null (cdr x)))
+         (progn
+           (paerror "BAD INPUT ~a~%" name)
+           (return nil)
+          )
+          (putprop name (cadr x) (car x))))
     (return name)
   )
-  )
+)
 
 (defun eng (x)
   (prog (unit error)
 	(when (or (null x) (null (cdr x))(null (cddr x)))
-	  (paerror paerror "E BAD INPUT" X)
+	  (paerror paerror "E BAD INPUT~a" X)
 	  (return nil))
 	(setf UNIT (CAR X))
 	(when (or (GET UNIT 'NORMAL)  (GET UNIT 'EMBQ))
-	  (paerror("BAD INPUT-DOUBLE ENTRY" UNIT)))
+	  (paerror("BAD INPUT-DOUBLE ENTRY ~a" UNIT)))
 	(setf X (CDR X))
 	(when (eq (CAR X) 'ANAPH)
 	  (setf X (CDR X)) ;% PUT ANAPH ON PROPERTY LIST %
@@ -110,17 +112,18 @@
 	  (PUTPROP UNIT (CADR X) (CAR X))
 	  (setf X (CDDR X)))
 	(loop DO 
+             (progn 
 	      ; % PUT SENTENCES ON THE PROPERTY LIST %
 	      (when (or (NULL X) (NULL (cdr X)) (ATOM (cdr X)) (not (ATOM (car X))))
-		(paerror "E BAD INPUT" UNIT)  
+		(paerror "E BAD INPUT ~a" UNIT)  
 		(setf ERROR T)
 		(RETURN NIL))
 	      (PUTPROP UNIT (CADR X) (CAR X))
-	      until (or ERROR (not (setf X (CDDR X))))
-	      )
-        (unless (not (GET UNIT 'NORMAL))
-	  (paerror "NO NORMAL SENTS" UNIT))
-	(return unit)
+             )
+	until (or ERROR (not (setf X (CDDR X))))
+	)
+        (unless (GET UNIT 'NORMAL) (paerror "NO NORMAL SENTS ~a" UNIT))
+        (return unit)
         ;%-- REPLYR, ANTHEN, EXPRESS, SELSENTENCE, SAY ------%
 	)
   )
@@ -135,7 +138,7 @@
 (defun replyr (SEMANT)
   (prog (a)
 	(unless SEMANT 
-	  (error NIL "NOSEMANT IN REPLYR")
+	  (paerror "~aNOSEMANT IN REPLYR" "")
 	  (return nil))
         (andthen (list 'OUT SEMANT))
 	(setf A (express SEMANT 'RESP))
@@ -153,7 +156,7 @@
 (defun andthen (THING);
   (prog (a)
 	;; % IF THE LAST THING ADDED TO THE CONVERSATION LIST, THEN DONT DO THIS ONE %
-	(while (equal ?!LAST_ANDTHEN (car THING)) (return nil))
+	(when (equal ?!LAST_ANDTHEN (car THING)) (return nil))
         (setf ?!CLIST (cons THING ?!CLIST))
 	(if (eql (car THING) 'IN)
 	  (setf ?!LASTIN A)
@@ -177,7 +180,7 @@
 	(setf bond (get SEMANT 'BONDVALUE))
 
 	; % USE PREDICATE FOR FINDING CLASS %
-        (when (and (null a) BOND (setf C (get (car bond) UNIT))(DISKREAD C))
+        (when (and (null a) BOND (setf C (get (car bond) 'UNIT))(DISKREAD C))
            (setf A (get c CLASS)))
 
 	; %  ONLY QUIT IF THERE IS NO RESP   %
@@ -204,7 +207,8 @@
 (defun selsentence (unit)
   (prog (SENTS S A ANAPH CLASS)
 	(setf CLASS 'NORMAL)
-        (unless (not (DISKREAD UNIT)) (return nil)) ;  % READ FROM DISK INTO MEMORY %
+        (unless (DISKREAD UNIT) (return nil)) ;  % READ FROM DISK INTO MEMORY %
+
 	(setf A (GET UNIT CLASS)) ;  % USE NORMAL REPONSES AS DEFAULT %
 	(setf ANAPH (GET UNIT 'ANAPH))
         (setf SENTS A)
@@ -273,7 +277,7 @@
 	(setf name (get struc  'UNIT)) ;IF not NAME THEN RETURN NIL;  % IE, NOT AN ANAPH %
 	(when (member name '(GO_ON ELAB WHO WHAT)); % CALL THE SPEC FN PROTECTED BY ERRSET %
 	  (if (ATOM (setf A (ERRSET (EVAL (list NAME NIL T )) NIL)))
-	     (progn (ERROR "SPECFN" NAME) (setf A NIL))
+	     (progn (paERROR "SPECFN" NAME) (setf A NIL))
 	     (setf A (car A )))
 	  (RETURN (IF A A 'QUIT))
 	  )
@@ -300,7 +304,7 @@
   (prog (a)
 	(unless A (setf A (GET_ANAPH 'ELAB)))
 	(unless A (setf A (GET_STORY)))
-	(when (not a f) (setf A (GO_ON L NIL)))
+	(when (and (not a) f) (setf A (GO_ON L NIL)))
 	(when (and a f) (ANDTHEN (list 'IN (GET 'ELAB 'UNIT))))
 	(return A)
 	)
@@ -321,25 +325,26 @@
 
 (defun get_story()
   (prog (b c) ; % TOPIC %
-	(if (and (setf b (carn (get REACTTO 'TOPIC))) ; % TRY CURRENT INPUT TOPIC %
+	(when (and (setf b (carn (get REACTTO 'TOPIC))) ; % TRY CURRENT INPUT TOPIC %
               ; %       ALREADY A SETNAME               GET CANONICAL WD AND SET  %
 	         (if (GET B 'WORDS) 
 		   T 
-		   (progn (setf B (CARN (SYNNYM B)))
-			  (setf B (GET B 'SET))a)))
-	  (setf c b))
-	(if (and (not C) (setf B (CARN (GET ?!LAST_OUTPUT 'TOPIC) ))  ;% TRY PREVIOUS INPUT TOPIC %
+		   (and (setf B (CARN (SYNNYM B)))
+			(setf B (GET B 'SET))))
+            )
+	    (setf c b))
+	(when (and (not C) (setf B (CARN (GET ?!LAST_OUTPUT 'TOPIC) ))  ;% TRY PREVIOUS INPUT TOPIC %
               ;%       ALREADY A SETNAME               GET CANONICAL WD AND SET  %
 		 (IF (GET B 'WORDS) 
 		     T 
-		     (progn 
-		       (setf B (CARN SYNNYM(B)))
+		     (and 
+		       (setf B (CARN (SYNNYM B)))
 		       (setf B (GET B 'SET)) )
 		     ))
 	  (setf C B))
 	(unless c (return nil)) ; % NO STORY FROM EITHER %
 	(when (setf b (get c 'STORY)) 
-	  (DELETEP C (CARN B 'STORY))
+	  (DELETEP C (CARN B) 'STORY)
 	  (RETURN (CARN B)))
 	(when (memq c (get 'FLARELIST 'SETS)) (RETURN (FLSTMT C)))
 	)
@@ -368,7 +373,7 @@
 	(setf a nil)
         (setf A (get_anaph 'WHO))
 	(if (LAMBDANAME A) (RETURN A) (setf A NIL))
-	(unless (not a) (stf A (GO_ON L NIL)))
+	(unless a (stf A (GO_ON L NIL)))
 	(RETURN A)
 	)
   )
@@ -402,11 +407,11 @@
   (prog (a b c)
 	(setf c T)
         (setf a (loop for I in (GET 'SENSITIVELIST 'SETS) collect (get I 'WORDS)))
-	(PUTPROP 'SENSITIVELIST  A  'WORDS)
+	(PUTPROP 'SENSITIVELIST  A  'WORDS);; now sensitivelist.words directly points all words
 	(setf A (cons 'DELNSET (append (GET 'FLARELIST 'SETS) (GET 'SETLIST 'SETS) )))
-	(loop for I in A do ;      % I IS THE NAME OF A FLARESET %
-	      for J in (GET I 'STORY) do 
-	      (prog ;% J IS A ^H-NAME %
+	(loop for I in A do ;% I IS THE NAME OF A FLARESET %
+	      for J in (GET I 'STORY) do ;because flareset's i only have story 
+	      (progn ;% J IS A @@-NAME % ;;; I dont know omura
                 (setf B J)
 		(if B (PUTPROP B I 'STORYNAME) 
 		  (progn 
@@ -426,21 +431,22 @@
 	(loop while (and (not (atom (setf A (ERRSET(READDATA))))) 
 			 (setf A (car A))) do
                 (EVAL A))
-        (PRINTSTR FILENAME " read in.")
+        (PRINTSTR (format nil "~a read in." FILENAME))
 	(SELECTINPUT NIL NIL)
 	)
   )
 
 (defun  changel (FILENAME)
         ;% THIS READS IN A FILE OF TEMPORARY @@ NUMBER CHANGES TO MAKE THE PATTERN MATCHER
-        ;        AND MEMORY COMPATIBLE %
+        ;  AND MEMORY COMPATIBLE %
   (prog (a)
 	(SELECTINPUT NIL FILENAME)
 	(loop while (and (not (ATOM (setf A (ERRSET(READDATA)))))
 			 (setf A  (car A))) do
                 (PUTPROP (car A) (cdr A) 'MEQV))
-	(PRINTSTR FILENAME " read in.")
+	(PRINTSTR (format nil "~a read in." FILENAME))
 	)
   )
+
 (format t "end of loading pmem.lisp~%")
 

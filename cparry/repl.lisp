@@ -45,6 +45,7 @@
 (setupsym symlist)
 
 (defun ask ()
+;;  (format t "input: ")(force-output t) ;; dont work prompt
   (input-line)
  ; (read-line)
 )  
@@ -61,7 +62,9 @@
 )
  
 (defun getline ()
-  (unless inputq (loop for wd in (ask) collect (symfy wd)))
+  (let ()
+    (unless inputq (loop for wd in (ask) collect (symfy wd)))
+  )
 )
 
 (defun getword ()
@@ -73,6 +76,7 @@
   (prog (word)
     (loop 
       (setf word (getword))
+      (when (eq (car word) 'end) (format t "bye~%")(return))
       (proc word)
     )
   )
