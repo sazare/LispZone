@@ -1,0 +1,220 @@
+
+2.0 (10/22)
+RDATB やRDATAで、defpropがでてきて
+(defprop A B C)
+と書いていた。
+すべてのAについて(defvar A)が必要になるので、macroでできないかやってみたが
+(defmacro defprop (a b c)
+(progn
+ (defvar ,a)
+ (setf (get ',a ',c) ,b)
+)
+)
+
+だと、defvarしたaのスコープがprognの中になってしまい思ったようにならない。
+defvarなしでメッセージでるけどいいのか??
+
+別途, defvarを作ったらどうかと思ったら、rdataでは mapでdefpropをまわしていて,
+そこから アトムをすべて集めるのがめんどう・・・
+
+しかし、いずれにせよglobalなatomをどうにかする必要はでてくる。
+データ中のアトムにputpropしているから・・・
+動的束縛は楽だ・・・
+
+
+###
+
+SSENT
+INPUTQUES
+
+semant はsemantics
+
+replyr(semant) -- 
+
+express
+lastword
+
+*express(semant, class)
+expressがdiskreadを呼んでいる。
+ semantに関する何かを読み込んでいるらしい
+ 
+ a = semant.class 
+ bond = semant.bondvalue
+ 
+ aもbondもあれば、
+ c = (car bond).unit
+ a = (car bond).unit.class
+ 
+ addanaph(semant.anaph)
+ say(selsentence(semant.resp), (cdr bond))
+ 
+ aがnullの場合とか、どうなっている前提なのか??
+ 
+ *selsentence(unit)
+  (diskread unit)とやっている。diskにunitがあるということか。
+  anaphはunit.anaph
+  sents はunit.class (classはへんすう)
+  sentsが()だと ?!Exaust Tにしている
+   Aとして、unit.exhがTならsentsの先頭を、そうでなければ  sentsからランダムに語を選んでSとする
+   このインデックスAをつかって(deleten sents a)としているのでdeletenはn番目を消すという意味か
+    このようにして1つへったsentsをunit.classに設定
+    
+    ATOM ANAPH  AND  ANAPH という条件は意味不明。(atom anaph)ならanaphはnilではないだろう。と思ったら(atom nil)はTだった・・・文字としてNILなのでatomだったのか・・・
+    とにかく、anaphがnil以外のatomなら、anaphをevalしてanaphにする。
+    (addanaph anaph)
+    
+    anaphがatom
+    
+  anaphoraというのは同じ語を繰り返さないために言い換えることらしい。
+  I like it and so do they.
+  
+ 
+ 
+ラムダ名の^Hをどうするか??
+
+
+** raiseは、変化
+HJUMP, FJUMP, AJUMP
+
+H : HURT
+F: FEAR
+A ANGER
+
+WEAKのときは、各JUMPの値が少なめになる。
+FJUMPとAJUMPはHURT/50だけ変化する。
+MISTRUST, MISTRUST0
+
+HURT, HURT0
+FEAR0, FEAR
+ANGER0, ANGER0
+
+
+*** 文に出てくる語
+文末のQM  -- ?のことか
+
+
+*** getdocname()から
+
+
+
+
+20181125 日
+
+PD : .
+COMMA: ,
+^\ は <=なのか??
+
+
+getdoctorname()のテスト
+　SSENT のパタン
+　なくなるPDとコンマをいれる。
+　My name is dr Nakahachi
+　My name is doctor Nakahachi
+   I am dr Nakahachi 
+   I am doctor Nakahachi
+   I\'m doctor Nakahachi
+   I\m DR Nakahachi
+   I\m Dr Nakahachi
+   
+   ==> name = (doctor Nakahachi)
+   
+   (canona '(nakahachi)) のペアを(doctor a d) かな??
+   
+   ** parryに時間を聞くと答えてくれる
+   YearかYRかな
+   month
+   date
+   day
+   time
+   when
+   
+   *** specconcept
+    -- refer INPUTQUES
+    -- refer NOT_FLAG
+    
+     inputquesに使われている語
+      語.set が sensitivelistに含まれていたら、その語をconにセット。conがnilならおわり
+     you     => you=T
+      good ==> adj = 'GOOD
+      bad   ==> adj ='BAD
+      odd   ==> adj ='BAD 
+      youとadjが定義されていて、adj='goodでNOT_FLAGがnilか
+      NOT_FLAGがTでadjが'badの場合。
+         (choose 'POSADJ)
+         でなければ (choose 'NEGADJ)
+     単純に、YouについてのADJの価値がNOT_FLAGで  反転する。
+     con.specialなら
+   
+   
+   
+  * 昨日、LISTのwordsに全部wordsをもってくる処理があった
+   初期化しないといけない
+      
+*** pmem5
+* gn2の中で(inf 'PDAT2)を呼んでいた。たしかにINFとPDAT2は似ている。
+しかしgn2を呼んでいるところがない・・・ dorか???
+
+* evalの使い方を間違えているかも・・・ 'の扱いとか
+
+* sumex1()で
+　propertyに(lambda nil T)とか'(lambda nil 0)とか設定しているが
+　これをどう動かすのだ
+　(apply '(lambda nil T) ())ではなく
+   (appy (lambda nil T) nil)
+   ううむ
+   sumex1()でつけている'はいらないのかも
+   
+   (initfn 'gn2)で呼んでいるかもしれないが initfnの定義がない
+   
+* checkinputの中で ^\がある。>=ではないが<=なのか<なのか???
+
+psent, prev_ssent, prev_output
+
+同じ間違いを二度するとprev_ssentの先頭に'TWICEがいれられる
+(TWICE SSENT)になる。
+そうでなければ単i
+SSENTが設定される
+
+
+play gameというのは飽きているという意味かも
+
+/はfloorだ
+しかし、(/ a b) でaが実数なら/でいい
+
+   
+opar3はindentがおかしい。
+infix notationは演算子の優先順位がわからないと混乱する。
+さらにindentがでたらめだとつらい。たとえば、elseが不要なのか忘れているのか判断つきにくい。
+
+
+opar3/fixptrs は、liveflares, deadflaresの中から nextがflaresetと同じものがあったら
+そのconceptのnextに引数にとったflaresetのnextを設定する。なんのことやら
+flmodから呼ばれる
+nextは動的にふえるのか??
+
+コメントをみているとflareが増えていくのかもしれない
+
+flrecord(flset0 -> flmod(flset) -> fixptrs(flset)
+
+flrecord(flset) 
+
+flmod(flset)
+ liveからけしてdeadに追加する
+ fixptrs()でnextのポインタをコピーしている。
+ 消すほうはnextを参照しようがないのでなにもしない。
+ 
+liveのほうを消してからfixptrを呼ぶので、liveのなかのnextはコピーできないのでは??
+
+
+
+** 
+flarelead(flset)
+if  flset.used = T then flset.type == 'institution  wdflat = (the (car(get flset 'words)))
+ else if ('S = (car (last (explode  flare ) then wdflag = (list flare)
+  else wdflag = (list (car (get flset 'words))))
+  
+///
+pmem3.lisp
+- (eval どうするか
+　これはたくさんあるが、たぶん通したくないやつ
+

@@ -28,11 +28,14 @@
 
 (defun nequal (x y) (not (equal x y)))
 
+(defun gcgag (x) (if x (gc) (gc))) ; just ignore x
 (defun memq (x y) (member x y))
 (defun greaterp (x y) (> x y))
 (defun lsh (x y) (* x (expt 2 y))) ;; uncertain
 (defun ttyuu (x) x);; uncertain
 (defun divide (x y) (floor x y))
+
+(defun paerror (x y) (format t "~a ~a" x y))
 
 (defun read-file(fname)
     (with-open-file (in fname :direction :input)

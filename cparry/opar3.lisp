@@ -74,7 +74,7 @@
 	(when RESULT 
 ;                   %   IF FLARE ALREADY BEING DISCUSSED, DISREGARD ANY
 ;                        VERY WEAK NEW FLARE   %
-             (if (and (NOT (eq FLARE 'INIT) (NOT (setf WT (greaterp (GET (GET NFLARE 'SET) 'WT) 1)))))
+             (if (and (NOT (nequal FLARE 'INIT) (NOT (setf WT (greaterp (GET (GET NFLARE 'SET) 'WT) 1)))))
 	       (setf RESULT NIL)
 	       (progn
 		 (setf FLARE NFLARE)
@@ -111,27 +111,24 @@
                   (PUTPROP 'MAFIA T 'USED)
 ;                         %   MODIFY FLARE STRUCTURES TO NOTE THAT 'MAFIA' TOPIC
 ;                          HAS ALREADY BEEN BROUGHT UP   %
-                FLMOD ('MAFIASET);
-		)
+
+                  (FLMOD 'MAFIASET)
+		 )
+              )
 ;                   %   SET (OR KEEP) DELFLAG = T UNLESS 'SELF HAS
 ;                          FINISHED DISCUSSION DELUSIONS   %
-
              (unless DELEND (setf DELFLAG T))
-
 ;                %   RESET SO THAT FLARES OF LOWER PRIORITY THAN THOSE WHICH
 ;                 MAY HAVE BEEN PREVIOUSLY MENTIONED ARE RECOGNIZED   %
 ;
              (setf FLARE 'INIT)
-
 ;                   %   FORGET ABOUT RECENTLY DISCUSSED SELF-TOPICS   %
-
              (setf TOPIC 'DELUSIONS)
              (setf RESULT NIL)
-	     )
-	     )
-	  (if (and (eq FOUND 'MAFIAEND)  ;  % I.E. AS ALREADY USED DEL WD AND IN INPUT  %
-		   DELEND)
-	    (setf RESULT (CHOOSE 'MAFIASET)))
+	   )
+	   (when (and (eq FOUND 'MAFIAEND)  ;  % I.E. AS ALREADY USED DEL WD AND IN INPUT  %
+		      DELEND)
+	         (setf RESULT (CHOOSE 'MAFIASET)))
 	  )
 	  (return RESULT)
 	  )
@@ -142,16 +139,16 @@
 ;% CALLED BY DELREF, MISCQ, MISCS, FLSTMT  %
 ;
 (defun delstmt ()
-  (prog ()
+  (prog (stmt)
 ;%   IN WEAK VEVSION, TALK ABOUT RACKETS RATHER THAN MAFIA   %
         (when WEAK (return (flstmt 'RACKETSET)))
 
-;          %   IF 'SELF HAS ALREADY EXPRESSED ALL HIS DELUSIONS, HE REFERS TO
-;                PREVIOUSLY MENTIONED ONES UP TO 2 TIMES TOTAL   %
+;       %   IF 'SELF HAS ALREADY EXPRESSED ALL HIS DELUSIONS, HE REFERS TO
+;           PREVIOUSLY MENTIONED ONES UP TO 2 TIMES TOTAL   %
 
         (unless (get 'DELNSET 'STORY) 
-	  (setf DELFLAG NIL)
-	  (CHOOSE 'MAFIASET))
+	        (setf DELFLAG NIL)
+	        (CHOOSE 'MAFIASET))
 
 	(setf DELFLAG T)
 	(setf FLARE 'INIT)
@@ -162,9 +159,7 @@
         (setf STMT (CHOOSEDEL NIL))
 
 ;%   IF STMT CONTAINS DELUSIONAL FLARE, DELETE AS SUCH   %
-
 ;% ***** MAKE SURE DELCHECK IS DONE ON THE OUTPUT SENTENCE  %
-
 ;%   REMEMBER THE DELUSIONAL STATEMENT TO WHICH 'OTHER IS ABOUT TO RESPOND   %
 
      (RETURN STMT)
@@ -228,10 +223,8 @@
 ;          % CALLED BY DELSTMT, SPECQUES  %
 (defun choosedel (type)
   (prog (SEMANT)
-	(unless (setf SEMANT (GET 'DELNSET 'STORY))
-	  (return NIL)
-	  (return (car SEMANT))
-	  )
+	(unless (setf SEMANT (GET 'DELNSET 'STORY)) (return NIL))
+	(return (car SEMANT))
 	)
   )
 
@@ -241,35 +234,38 @@
 ;% INP IS INPUTQUES   %
 
 (defun delcheck (INP)
+;;omura is this function's indentation in mlisp correct??
+;; and the position of comments let me feel ambiguous.
   (prog (words)
 ;%   CHECK FOR STRONG DELUSION-NOUNS AND -VERBS
-;    (AT PRESENT THE NOUN-VERB DISTINCTION IS NOT UTILIZED   %
+;    AT PRESENT THE NOUN-VERB DISTINCTION IS NOT UTILIZED   %
 	(if (or (setf words (member3 DELNLIST INP) )
 		(setf words (member3 DELVLIST INP) ))
 	  nil
 ;          %   CHECK FOR AMBIGUOUS DELUSION WORDS AT HIGH MISTRUST LEVEL  %
 	  (if (and (greaterp MISTRUST 10)
-		   (setf WORDS (MEMBER3 DELALIST INP)))
-	    nil
-            (when (and WORDS  (CDR WORDS))
-	      (putprop (CDR WORDS) T 'USED)))
-	  (if (and WORDS (ATOM WORDS))
-	    (setf WORDS (cons WORDS nil))
-            (when (and (member3 'MAFIA INP) ;% AS ALREADY-USED DELN WD% 
+		   (setf WORDS (MEMBER3 DELALIST INP))) nil))
+
+        (when (and WORDS  (CDR WORDS)) (putprop (CDR WORDS) T 'USED))
+	(if (and WORDS (ATOM WORDS)) (setf WORDS (cons WORDS nil)))
+        (when (and (member3 'MAFIA INP) ;% AS ALREADY-USED DELN WD% 
 		     (not WORDS))
-		(setf WORDS 'MAFIAEND)))
-	  (return WORDS)
-	  )
+		(setf WORDS 'MAFIAEND))
+	(return WORDS)
 	)
   )
 
 ;%
 ;DELETE   DELETES WORD WD FROM LIST L   %
-(defun padelete (WD L)
-  (cond ((null L) nil)
-	((equal WD (car L)) (cdr L))
-        (T (cons (CAR L)) (padelete WD (CDR L))))
-  )
+(defun padelete (WD L) 
+(loop for x in L unless (eq x WD) collect x)
+)
+;; omura delete conflicts commonlisp's one.
+;; I should use packages.
+;  (cond ((null L) nil)
+;	((equal WD (car L)) (cdr L))
+;        (T (cons (CAR L)) (padelete WD (CDR L))))
+;  )
 
 ;%
 ;DELETEP     DELETES WD FROM THE PROP PROPERTY LIST OF L   %
@@ -296,7 +292,7 @@
 (defun flrecord (FLSET)
   (progn 
     (flmod FLSET)
-    (setf FJUMP (/ WEIGHT 40.0))
+    (setf FJUMP (/ WEIGHT 40.0))  ;;omura WEIGhT come from where?
     ; %   REINITIALIZE SELF-TOPIC INDICATORS   %
     (setf TOPIC FLSET)
     )
@@ -338,10 +334,10 @@
 (defun flstmt (FSET)
   (prog (STMT)
 ;                %   IF REACH 'MAFIASET THRU FLARE HIERARCHY, ENTER DELUSIONAL MODE   %
-	(if (and (eq FSET 'MAFIASET) (not DELEND))
+	(when (and (eq FSET 'MAFIASET) (not DELEND))
 	  (setf DELFLAG T)
 	  (return (DELSTMT)))
-	(if (setf STMT (GET FSET 'STORY))
+	(when (setf STMT (GET FSET 'STORY))
 	  (return (car STMT)))
 ;       %   GO TO NEXT FLARE TOPIC   %
         (return (LEADON FSET))
@@ -356,7 +352,6 @@
 	(setf NEWSET (GET OLDSET 'NEXT))
 	(cond 
 	  ((neq NEWSET 'MAFIASET)
-
 ;                %   RECORD NEW FLARE   %
 	    (flmod OLDSET) ; % MARK OLD ONE AS BEING USED UP %
 	    (setf FLARE (CAR (GET NEWSET 'WORDS)))
@@ -367,33 +362,47 @@
 	  ((or WEAK (greaterp FEAR 17) (greaterp ANGER 17)
 		     (greaterp (+ FEAR ANGER MISTRUST) 40))
 ;                   %   ARRIVED AT 'MAFIASET BUT DOES NOT HAVE DELUSIONS ABOUT
-;                          MAFIA OR IS UNWILLING TO DISCUSS THEM   %
+;                       MAFIA OR IS UNWILLING TO DISCUSS THEM   %
 	   (return (CHOOSE 'CHANGESUBJ)))
-	  (t 
+	  ( T
              (padelete 'MAFIA DELNLIST)
 	     (setf DELFLAG T)
 	     (setf FLARE 'INIT)
 	     (setf TOPIC 'DELUSIONS))
 	  )
-;                %   RESPOND WITH NEW FLARE, IF USED THEN NO LEADING STMT   %
+;                 %  RESPOND WITH NEW FLARE, IF USED THEN NO LEADING STMT   %
 ;                 %  MARK AS USED SO WE DON'T DO FLARELEAD TWICE ON IT  %
 	(if (GET NEWSET 'USED) 
 	  (return (FLSTMT NEWSET))
-	  (return (FLARELEAD (NEWSET)))
+	  (return (FLARELEAD NEWSET))
 	  )
 	)
   )
 
+;;%MEMBER1 CHECKS WHETHER ATOMS OR GROUPS OF WORDS IN WLIST ARE PRESENT IN INPUT   %
+;;% ******* NOT USED
+;;        EXPR MEMBER1 (WLIST, SPECIAL INP8);
+;;         BEGIN
+;;          NEW FOUND, GROUP;
+;;          FOR GROUP IN WLIST DO
+;;             FOUND ⇦  IF ATOM (GROUP) THEN GROUP MEMBER INP8
+;;                   ELSE
+;;                EVAL ('AND CONS MAPCAR (FUNCTION (LAMBDA (X); X MEMBER INP8), GROUP))
+;;             UNTIL FOUND;
+;;          IF FOUND THEN RETURN GROUP;
+;;         END;
+;;
+;;**** %
 
 ;%
 ;MEMBER3         CHECKS IF ATOMS ARE IN INPUT -- INPUT IS A LIST OF DOTTED PAIRS  %
 (defun member3 (WLIST L)
   (prog (WORD PAIR)
 	(when (atom WLIST) (setf WLIST (list WLIST)))
-	(loop for in WLIST do
+	(loop for word in WLIST do
 	      (setf PAIR (assoc WORD L))
 	      (when (and PAIR (get (cdr PAIR) 'USED)) (setf PAIR NIL))
-          until PAIR) 
+          until PAIR)  
 	(return PAIR)
 	)
   )
@@ -408,29 +417,27 @@
 (defun miscq (Q)
   (prog (QWORD ANS CONCEPT)
 ; %   CHECK FOR QUESTION ABOUT EXTERNAL WORLD   %
-	(cond 
-	  ((member 'HOW Q)
+	(when
+	  (member 'HOW Q)
 ; %   UNIDENTIFIABLE "HOW-TYPE" QUESTION   %
 	   (loop for CONCEPT in '(MANY MUCH LONG OFTEN) do
-		 (when (member CONCEPT Q) (setf ANS (CHOOSE CONCEPT)))
-		 until ANS)
-	   (when ANS (return ANS)))
-	  ((setf ANS (SPECCONCEPT Q))
+		 (when (member Q CONCEPT) (setf ANS (CHOOSE CONCEPT)))
+		 until ANS))
+        (cond 
+          (ANS (return ANS))
+	  ((setf ANS (SPECCONCEPT Q)) (RETURN ANS))
 ;                %   IF QUESTION NOT RECOGNIZED, TRY TO ANSWER ACCORDING TO CONTEXT   %
-	   (RETURN ANS))
-	  ((and (neq FLARE 'INIT)(LULL)(setf ANS (FLSTMT (GET FLARE 'SET))))
-	   (return ANS))
-	  ((and DELFLAG (LULL) (setf ANS (DELSTMT)))
-	   (return ANS))
+	  ((and (nequal FLARE 'INIT)(LULL)(setf ANS (FLSTMT (GET FLARE 'SET)))) (return ANS))
+	  ((and DELFLAG (LULL) (setf ANS (DELSTMT))) (return ANS))
 ;	               %   WH- QUESTIONS   %
           ((member 'WHY Q) (setf ANS (CHOOSE 'WHY)))
-	  ((loop FOR QWORD in (GET 'QLIST 'IND) do 
-		 (setf ANS (if (member QWORD Q) (CHOOSE 'UNKNOWN)))
-             until ANS)
-	   (if ANS (return ANS)))
-	  ((member 'TELL Q)
+	  (T (loop FOR QWORD in (GET 'QLIST 'IND) do 
+		 (setf ANS (when (member QWORD Q) (CHOOSE 'UNKNOWN))) until ANS)))
+
+        (cond
+          (ANS (return ANS))
 ;                %   MISCELLANEOUS "TELL-" QUESTION   %
-	   (return (CHOOSE 'KNOWNOTHING)))
+	  ((member 'TELL Q) (return (CHOOSE 'KNOWNOTHING)))
 ;                %   NO CLUES - ANSWER NONCOMMITTALLY   %
 	  (T (return (CHOOSE 'QREPLIES)))
 	  )
@@ -456,7 +463,7 @@
 		 (CHOOSE 'ALREADYSAID))
 ;                %   LOOK AT CONTEXT OF CONVERSATION   %
 		((setf  ANS (SPECCONCEPT S)) ANS)
-		((and (neq FLARE 'INIT)
+		((and (nequal FLARE 'INIT)
 		      (LULL)  
 		      (setf ANS (FLSTMT (GET FLARE 'SET))))
 		 ANS)
@@ -474,14 +481,14 @@
 (defun modifvar ()
   (prog ()
 ;                %   ACCOUNT FOR NORMAL DROP IN EACH VARIABLE   %
-	(setf ANGER (MAX (-1 ANGER)ANGER0))
-	(setf HURT (MAX (- HURT 0.5) HURT0))
+	(setf ANGER (max (- ANGER 1) ANGER0))
+	(setf HURT  (max (- HURT 0.5) HURT0))
 	(if DELFLAG (setf FEAR (max (- FEAR 0.1) (+ FEAR0 5)))
 ;                   %   ADD 5 TO BASE VALUE OF FEAR IF DELUSIONS UNDER DISCUSSION   %
-          (if (neq FLARE 'INIT) (setf FEAR (MAX (- FEAR 0.2) (+ FEAR0 3)))
+          (if (nequal FLARE 'INIT) (setf FEAR (max (- FEAR 0.2) (+ FEAR0 3)))
 ;                   %   ADD 3 TO BASE VALUE OF FEAR IF FLARES UNDER DISCUSSION   %
-          (setf FEAR (MAX (- FEAR 0.3)  FEAR0)))
-          (setf MISTRUST (MAX (- MISTRUST 0.05) MISTRUST0)))
+          (setf FEAR (max (- FEAR 0.3)  FEAR0)))
+          (setf MISTRUST (max (- MISTRUST 0.05) MISTRUST0)))
 	(when TRACEV (PRINTVARS)
 	  (setf FJUMP NIL)
 	  (setf AJUMP NIL)

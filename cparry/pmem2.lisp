@@ -41,9 +41,9 @@
       (when WEAK (setf HJUMP (* 0.5 HJUMP)))
       (setf HURT (+ HURT (* HJUMP (- 20 HURT))))
       (setf MISTRUST (+ MISTRUST (* (* 0.5 HJUMP) (- 20 MISTRUST))))
-      (setf MISTRUST0 (+ MISTRUST0 (* 0.1 HJUMP (- 20 - MISTRUST0))))
+      (setf MISTRUST0 (+ MISTRUST0 (* 0.1 HJUMP (- 20 MISTRUST0))))
       (setf HURT0 (max (/ HURT 2) HURT0))
-      ;; % SET HIGHER FLOOR ON FEAR AND ANGER DUE TO HURT %
+          ;; % SET HIGHER FLOOR ON FEAR AND ANGER DUE TO HURT %
       (setf FEAR0 (max FEAR0 (/ HURT0 2)))
       (setf FEAR (max FEAR FEAR0))
       (setf ANGER0 (max ANGER0 (/ HURT0 2)))
@@ -51,14 +51,14 @@
       )
     (when FJUMP 
       (setf FJUMP (+ FJUMP (/ HURT 50))) ;;  % MAKES FEAR VOLATILE ON HIGH HURT %
-      (when WEAK (setf FJUMP (* 0.3 FEAR)))
-      (setf FEAR (+ FEAR (* FJUMP (- 20 MISTRUST))))
-      (setf MISTRUST (+ MISTRUST (* 0.5 FJUMP) (- 20 MISTRUST)))
-      (setf MISTRUST0 (+ MISTRUST0 (* 0.1 FJUMP (- 20 MISTRUST0)))) ;;OPERATOR PRED IS CORRECT?
+      (when WEAK (setf FJUMP (* 0.3 FJUMP)))
+      (setf FEAR (+ FEAR (* FJUMP (- 20 FEAR))))
+      (setf MISTRUST (+ MISTRUST (* (* 0.5 FJUMP) (- 20 MISTRUST))))
+      (setf MISTRUST0 (+ MISTRUST0 (* 0.1 FJUMP (- 20 MISTRUST0))))
       )
     (when AJUMP
       (setf AJUMP (+ AJUMP (/ HURT 50))) ;; % MAKES ANGER VOLATILE ON HIGH HURT %
-      (when WEAK (setf AJUMP (* 0.7 ANGER)))
+      (when WEAK (setf AJUMP (* 0.7 AJUMP)))
       (setf ANGER (+ ANGER (* AJUMP (- 20 ANGER))))
       (setf MISTRUST (+ MISTRUST (* (* 0.5 AJUMP) (- 20 MISTRUST))))
       (setf MISTRUST0 ( + MISTRUST0 (* 0.1 AJUMP (- 20 MISTRUST0))))
@@ -69,8 +69,7 @@
 (defun numed (n) ;; % 0.00 <= N <= 99.99, RETURNS STRING "12.34" %
 ;  (nedit (fix (+ (* n 100) 0.5)))
   (format nil "~2,2$" (/ (+ (* n 100) 0.5) 100))
-  )
-
+  ) 
 ; % SKEYWD, KEYWD, SILENCER, EXHAUSTER, SWEARER, ENDROUTINE  %
 
 ; % SKEYWD CHECKS FOR FLARE AND DELN WORDS USING OLD PARRY ROUTINES %
@@ -83,7 +82,7 @@
                 (if (setf r (delref r)) 
 		  (setf found R)
 		  (setf found (DELSTMT))))
-        (when (and (not found) (eq FLARE 'INIT) (setf R (flareref SENT)))
+        (when (and (not found) (nequal FLARE 'INIT) (setf R (flareref SENT))) ; ^Z is eq??
 	  (setf found (flstmt r)))
         (unless found (setf found (keywd SENT SETLIST)))
         (unless found (setf found (SPECCONCEPT NIL)))
@@ -135,7 +134,7 @@
 
 (defun  swearer() ; % SEMANTIC FUNCTION CALLED BY SWEAR INPUT %
   (prog ()
-    (setf SWEARNO (+ 1  SWEARNO))
+    (setf SWEARNO (+ 1 SWEARNO))
     (setf AJUMP  0.3)
     (when (= SWEARNO 5)
       (setf ENDE T)
@@ -146,8 +145,8 @@
 
 (defun  endroutine() ; % SEMANTIC FUNCTION CALLED BY EXIT OUTPUT SELECTION %
   (prog ()
-    (setf ENDE  T)
-    (when (and (>= FEAR 18.4) (or DELFLAG  (eq  FLARE 'INIT)))
+    (setf ENDE T)
+    (when (and (<= FEAR 18.4) (or DELFLAG (nequal FLARE 'INIT))) ; ^Z is eq?
       (setf AJUMP  0.1)
       (return (choose 'BYEOFF)))
     (return (CHOOSE 'BYE))
@@ -250,7 +249,7 @@
         (setf  A (CHRVAL (READ)))
         (when (or (eq A (CHRVAL 'Y)) (eq A (CHRVAL 'y))) (setf TRACEV T))
 	)
-      (when (and (not SUMEX)(not PTYJOB))
+      (if (and (not SUMEX)(not PTYJOB))
 	(terpri nil) 
 	(printstr "DO YOU WANT THE CORE DUMPED? [Y,N]") ;  % FOR SAVING CORE IF SYSTEM CRASHES %
 	(if (eq (READ) 'Y)
@@ -264,9 +263,9 @@
 	      NIL 
 	      (setf SAVE_DUMP NIL))
 	    )
-	  (setf SAVE_DUMP NIL)
+         )
+	 (setf SAVE_DUMP NIL)
 	)
-       )
       (setf SAVE_FILE T)
       (INITPARAMS2)
     )
@@ -295,7 +294,7 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
     (setf a (explodec L))
     (setf a (cdr (stringate2 a)))
     (setf a (cons '\" a))
-    (setf b (readlist a))
+    (setf b (readlist a))  ;; readlist make a string??? 
     (return b)
     )
   )
@@ -319,7 +318,7 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
     (setf a (time))
     (setf b (car (divide (* 10 (- A OLDTIME)) 166 )))
     (princ b) (printstr " TICS") (setf  OLDTIME a)
-    (setf a (speak))(setf b OLDSPEAK)
+    (setf a (speak))(setf b (- A OLDSPEAK))
     (PRINC b) (printstr " CONSES")(setf OLDSPEAK a)
     )
   )
@@ -332,9 +331,10 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
     (ten) (setf A (+ A N))  ; % -1 IS YESTERDAY, 0 TODAY, + 1 TOMORROW %
     (setf B (divide A 31)) (setf date (cdr (+ 1 B))) 
     (setf B (divide (car B) 12))(setf mo (cdr (+ 1 B)))
-    (setf YR (car (+ B 1964)))
-    (setf C '((31 .JANUARY)(28 .FEBRUARY)(31 .MARCH)(30 .APRIL)(31 .MAY)(30 .JUNE)
-         (31 .JULY)(31 .AUGUST)(30 .SEPTEMBER)(31 .OCTOBER)(30 .NOVEMBER)(31 .DECEMBER)))
+    (setf YR (+ (car B) 1964))
+
+    (setf C '((31 . JANUARY)(28 . FEBRUARY)(31 . MARCH)(30 . APRIL)(31 . MAY)(30 . JUNE)
+         (31 . JULY)(31 . AUGUST)(30 . SEPTEMBER)(31 . OCTOBER)(30 . NOVEMBER)(31 . DECEMBER)))
     (setf A 0)
     (loop for i from 1 to (- MO 1) do (setf A (+ A (car (nth i C)))))
     (loop for i from 1973 to YR do (setf A (+ A 365)))
@@ -351,19 +351,18 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 (defun  getdocname()
   (prog (a b c doc test name)
     (setf a SSENT)
-    (setf a (DELETE 'PD a))(setf a (DELETE 'COMMA a))
+    (setf a (paDELETE 'PD a))(setf a (paDELETE 'COMMA a))
     (setf b a)
     (loop do 
 	  (when (and (eq (car b) 'MY) (eq (cadr b) 'NAME) (eq (caddr b) 'IS))
-	    (setf c (cddr b)))
+	    (setf c (cdddr b)))
 	    until (or c (not (setf b (cdr b))))
 	    )
     (setf b a)
-    (when (not c)
+    (unless c
       (loop do 
 	    (when (and (eq (car b) 'I)(eq (cadr b) 'AM) 
-		       (or (eq (caddr b) 'DR)
-			   (eq (caddr b) 'DOCTOR)))
+		       (or (eq (caddr b) 'DR) (eq (caddr b) 'DOCTOR)))
 	      (setf c (cdddr b))
 	      (setf doc T))
 	      until (or c (not (setf b(cdr b)))))
@@ -371,19 +370,18 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
     (setf b a)
     (unless c 
       (loop do 
-	    (when (and (or (eq (car b) 'I\'m ) (eq (car b) 'IM))
-		       (or (eq (cadr b) 'DR)
-			   (eq (cadr b) 'DOCTOR)))
+	    (when (and (or (eq (car b) 'I\'m ) (eq (car b) 'IM)) ;;om may not  work 'I\'m is a symbol.
+		       (or (eq (cadr b) 'DR) (eq (cadr b) 'DOCTOR)))
 	      (setf c (cddr b))
 	      (setf doc T))
 	    until (or c (not (setf b (cdr b))))))
-    (when (or (eq c 'DR) (eq c 'DOCTOR)) (setf doc T) (setf c (cdr c))); somethin wierd
+    (when (or (eq c 'DR) (eq c 'DOCTOR)) (setf doc T) (setf c (cdr c)))
     (unless c (return nil))
     (setf name (list (car c)))
     (when (cdr c) 
       (setf test (cadr c))
       (unless (canona (list test)) (setf name (list (car c) (cadr c)))))
-    (when doc (setf name (const 'DOCTOR name)))
+    (when doc (setf name (cons 'DOCTOR name)))
     (return name)
     )
   )
@@ -423,6 +421,7 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 (defun  get_date_yes()  (get_date_arb2 -1)) ; % DATE,TIME FOR YESTERDAY %
 (defun  get_date_tom()  (get_date_arb2 1))  ; % DATE,TIME FOR TOMORROW %
 
+;; I don't know lsh is left shift half word?? and control data of jobs
 (defun  ptyjob() (greaterp (lsh (lsh (ttyuu) 6) -35) 0)); % RETURNS T IF A PTYJOB %
 (defun  ddjob()  (greaterp (lsh (lsh (ttyuu) 4) -35) 0)); % RETURNS T IF A DD JOB %
 
@@ -431,12 +430,12 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
     (setf a (timeuuh))
     (setf hour (car A))
     (setf min (cadr A))
-    (setf ahour (+ hour (car (divide min 30))))
+    (setf ahour (+ hour (car (divide min 30)))) ;;om (divide) maybe (quot quote) but why 30?
     (when (>= ahour 13)
       (setf ahour (- ahour 12))
       (when (= ahour 0) (setf ahour 12))
       (TEN)
-      (return (append '(IT\'S ABOUT) (list ahour " O" ) '(CLOCK) )) 
+      (return (append '(IT\'S ABOUT) (list ahour " O") '(CLOCK) )) 
       )
     )
   )
@@ -444,8 +443,8 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 (defun  timeuuh()
   (prog (a)
     (setf A (car (divide (timeuu) 3600)))
-    (setf A (divide A 60))
-    (return (list (car a) (cdr a))); % THIS RETURNS (HOUR MINUTE) %
+    (setf A (divide A 60)) 
+    (return (list (car a) (cdr a))); % THIS RETURNS (HOUR MINUTE) % ;om sure
     )
   )
 
@@ -463,11 +462,12 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 	(setf adj 'GOOD)
 	(when (or (assoc 'BAD inp)(assoc 'ODD INP)) (setf adj 'BAD)))
     (cond
-      ((and you adj) (setf found (if (or (and (eq adj 'GOOD) (not neg)) (and neg (eq adj 'BAD)))
+      ((and you adj) 
+        (setf found (if (or (and (eq adj 'GOOD) (not neg)) (and neg (eq adj 'BAD)))
 		    (choose 'POSADJ) 
 		    (choose 'NEGADJ)
 		    )))
-      ((and YOU (or (get CON 'SPECIAL) ADJ)) (setf found (choose 'SPECCONCEP)))
+      ((and YOU (or (get CON 'SPECIAL) ADJ)) (setf found (choose 'SPECCONCEPT)));; seems adj=nil
       (t (setf found (choose 'SENSITIVELIST))))
     (return found)
     )
@@ -476,7 +476,7 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 ;% LASTWORD CHANGES L INTO THE APPROPRIATE ENGLISH WORD TO ADD TO THE END OF THE OUTPUT %
 
 (defun  lastword (L)
-  (let (a w)
+  (prog (a w)
     (setf w L)
     (when (eq W 'SENSITIVELIST)
       (setf W T)
@@ -489,17 +489,17 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
       (when (setf A (assoc 'GOOD INPUTQUES))
 	(setf A (cdr A)))
       )
-    (when (eq w 'SPEC_CONCEPT) 
+    (when (eq w 'SPEC_CONCEPT)   ;; spec_concept is specconcept??
       (setf W T) 
       (if (setf a (assoc 'LOOKS INPUTQUES)) 
-	  (setf A (car (GET (car A) 'WORDS)))
+	  (setf A (car (GET (car A) 'WORDS)))  ;; why the word has words?? is it concept?
 	  (setf A 'LOOKS)))
     (setf a (cond
 	      (a (list a))
 	      ((or (eq w T)(not w)) '(PROBLEMS))
 	      ((atom w) (list w))
 	      (t w)))
-    a
+    (return a)
     )
   )
 
