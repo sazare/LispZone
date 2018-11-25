@@ -166,6 +166,6 @@
 (defvar ONEDIA nil)
 (defvar FILE12 nil)
 
+(defvar TAB "\t")
 
 (format t "end of specials.lisp~%")
-

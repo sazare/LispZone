@@ -214,6 +214,7 @@ if  flset.used = T then flset.type == 'institution  wdflat = (the (car(get flset
   else wdflag = (list (car (get flset 'words))))
   
 ///
-pmem.lisp p168
-
+pmem3.lisp
+- (eval どうするか
+　これはたくさんあるが、たぶん通したくないやつ
 
