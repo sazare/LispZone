@@ -74,7 +74,7 @@
 	(when RESULT 
 ;                   %   IF FLARE ALREADY BEING DISCUSSED, DISREGARD ANY
 ;                        VERY WEAK NEW FLARE   %
-             (if (and (NOT (eq FLARE 'INIT) (NOT (setf WT (greaterp (GET (GET NFLARE 'SET) 'WT) 1)))))
+             (if (and (NOT (nequal FLARE 'INIT) (NOT (setf WT (greaterp (GET (GET NFLARE 'SET) 'WT) 1)))))
 	       (setf RESULT NIL)
 	       (progn
 		 (setf FLARE NFLARE)
@@ -427,7 +427,7 @@
           (ANS (return ANS))
 	  ((setf ANS (SPECCONCEPT Q)) (RETURN ANS))
 ;                %   IF QUESTION NOT RECOGNIZED, TRY TO ANSWER ACCORDING TO CONTEXT   %
-	  ((and (neq FLARE 'INIT)(LULL)(setf ANS (FLSTMT (GET FLARE 'SET)))) (return ANS))
+	  ((and (nequal FLARE 'INIT)(LULL)(setf ANS (FLSTMT (GET FLARE 'SET)))) (return ANS))
 	  ((and DELFLAG (LULL) (setf ANS (DELSTMT))) (return ANS))
 ;	               %   WH- QUESTIONS   %
           ((member 'WHY Q) (setf ANS (CHOOSE 'WHY)))
@@ -463,7 +463,7 @@
 		 (CHOOSE 'ALREADYSAID))
 ;                %   LOOK AT CONTEXT OF CONVERSATION   %
 		((setf  ANS (SPECCONCEPT S)) ANS)
-		((and (neq FLARE 'INIT)
+		((and (nequal FLARE 'INIT)
 		      (LULL)  
 		      (setf ANS (FLSTMT (GET FLARE 'SET))))
 		 ANS)
@@ -485,7 +485,7 @@
 	(setf HURT  (max (- HURT 0.5) HURT0))
 	(if DELFLAG (setf FEAR (max (- FEAR 0.1) (+ FEAR0 5)))
 ;                   %   ADD 5 TO BASE VALUE OF FEAR IF DELUSIONS UNDER DISCUSSION   %
-          (if (neq FLARE 'INIT) (setf FEAR (max (- FEAR 0.2) (+ FEAR0 3)))
+          (if (nequal FLARE 'INIT) (setf FEAR (max (- FEAR 0.2) (+ FEAR0 3)))
 ;                   %   ADD 3 TO BASE VALUE OF FEAR IF FLARES UNDER DISCUSSION   %
           (setf FEAR (max (- FEAR 0.3)  FEAR0)))
           (setf MISTRUST (max (- MISTRUST 0.05) MISTRUST0)))

@@ -28,6 +28,7 @@
 
 (defun nequal (x y) (not (equal x y)))
 
+(defun gcgag (x) (if x (gc) (gc))) ; just ignore x
 (defun memq (x y) (member x y))
 (defun greaterp (x y) (> x y))
 (defun lsh (x y) (* x (expt 2 y))) ;; uncertain

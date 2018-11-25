@@ -2,25 +2,25 @@
 
 (defun experiment ()
   ;; EXPERIMENTS OF RAISING AND LOWERING SHAME
-  (unless (or EXPERIMENT (eq EXPERIMENT 'SEVEN))
-    (if (= 7 INPUTNO) (setf HURT (+ HURT 5)))
-    (if (= 17 INPUTNO) (setf HURT (- HURT 5)))
+  (prog(a)
+   (when (or (not EXPERIMENT) (not (eq EXPERIMENT 'SEVEN))) (return nil))
+   (when (= 7 INPUTNO) (setf HURT (+ HURT 5)))
+   (when (= 17 INPUTNO) (setf HURT (- HURT 5)))
   )
 )
 
 (defun paerror (mess L) ;; I dont want to use this. error_file go out of bound
-  (setf ?!ERROR (cons (error_file (list mess L PM2INPUT PMINPUT FILE1 BUG))
-	      ?!ERROR))
+  (setf ?!ERROR (const (error_file (list mess L PM2INPUT PMINPUT FILE1 BUG)) ?!ERROR))
   )
 
 (defun allowrun ()
   (prog (a)
 	(setf a (if SUMEX (sumexallow) (allow)))
-	(unless a (swapp)) ;  % NOT FROM SCHEDULER %
+	(unless a (swapp))     ;  % NOT FROM SCHEDULER %
 	(unless SUMEX (namep)) ; NAME THIS PROGRAM PARRY %
 	(if (and (not SUMEX) (= A 9)) (setf ONEDIA nil) (setf ONEDIA T))
-	(if (>= a 2) (setf LOWMAN T) (setf LOWMAN nil))
-	(if (or (= a 1) (= a 3)) (setf TRACEVFLAG nil)(setf TRACEVFLAG T))
+	(if (<= a 2) (setf LOWMAN T) (setf LOWMAN nil))
+	(if (or (= a 1) (= a 3)) (setf TRACEVFLAG nil) (setf TRACEVFLAG T))
 	)
   )
 
@@ -34,7 +34,7 @@
     (inc nil nil)
     (eval (list 'OUTPUT DIAFILEARE 'QPARRY))
     (outc T nil) (print 0) (print flag) (outc nil T) ; %RESET FILE %
-    (when (= status 0) (sleep 10)(exit) (car nil)) ;;; ?? want to error ???
+    (when (= status 0) (sleep 10)(exit) (car nil)) ;;; ?? (car nil) make nothing.
     (return status)
     )
   )
@@ -53,13 +53,12 @@
 	(setf va nil) ;% VA IS FOR STARTING A PARRY WITHOUT INITIAL QUESTIONS %
 	(unless va (initparams) (init))
 	(when va (INITPARAMS1) (INITPARAMS2) (INIT))
-	(if SAVE_FILE 
-	  (INIT_FILE (with-output-to-string (str)
-		       (format str "~a" (if va 'VA else ""))
-		       (format str 
-			       ", TRACEV = ~a, WINDOWS = ~a, PARANOIA = ~a"
-			       TRACEV WINDOWS (IF WEAK THEN 'WEAK ELSE IF HURT=0 THEN 'MILD ELSE 'STRONG) )
-		       )))
+	(when SAVE_FILE 
+	  (INIT_FILE (format nil 
+			       "~a , TRACEV = ~a, WINDOWS = ~a, PARANOIA = ~a"
+			       (cond (va 'VA)(T "")) TRACEV WINDOWS 
+                               (cond (WEAK 'WEAK) ((= HURT 0) 'MILD) (T 'STRONG) )
+		        )))
         (when WINDOWS (WININIT))
 	(parry)
 	)
@@ -105,7 +104,7 @@
 (defun twindow (N flag L) ;  % PRINTS OUT WINDOW STUFF FOR A TELETYPE %
   (prog (a)
 	(setf a (assoc  N 
-			'(      ( 2 . "Input:   " )
+			'(( 2 . "Input:   " )
 			  ( 3 . "Respelled:  " )
 			  ( 4 . "Canonical form:  " )
 			  ( 5 . "Segmented:  " )
@@ -155,14 +154,13 @@
 	  (setf B '(INTERVIEW HAS BEEN LONG ENOUGH))
 	  (addto 'PEXIT2 10)
 	  (setf ENDE T)
-	  (paerror (with-output-to-string (str)
-		   (format str "INPUTNO= ~a  SHORT OF SPACE ~a FS, FW ~a"
-			   INPUTNO (length (NUMVAL 13)) (length (NUMVAL 14)))))
+	  (paerror (format nil "INPUTNO= ~a  SHORT OF SPACE ~a FS, FW ~a"
+			   INPUTNO (length (NUMVAL 13)) (length (NUMVAL 14))))
 	  )
 
         (when  (and (not A) (setf B (GET L 'FX)) (ERRSET (setf B (EVAL B)) NIL)) (setf A B)) 
 	; % FX HAS A FEW KLUDGES TO NOT ALLOW SOME INPUTS %
-        (when (and L (not (get L 'UNIT)) (not A ) (setf A 'DONE)))
+        (when (and L (not (get L 'UNIT)) (not A )) (setf A 'DONE))
         (when (and (not A) (ASSOC 'SHIT INPUTQUES))
 	  (setf A (choose 'SWEARING)) 
 	  (setf BADINPUT T)
@@ -170,18 +168,22 @@
         (when (and (not A) (or (ASSOC 'CRAZY INPUTQUES)
 			       (ASSOC 'BAD INPUTQUES) 
 			       (ASSOC 'ODD INPUTQUES)))
-                (setf BADINPUT T) (setf B '(BAD ASSOCIATIONS WITH INPUT WORDS)))
+                (setf BADINPUT T) 
+                (setf B '(BAD ASSOCIATIONS WITH INPUT WORDS)))
         (setf C (- GIBBERISH OLDGIBB))(setf D (length SSENT))
 	;; some >= may be wrong
-	(when (and (not A) (or (and (>= C 5) (D >= 15))(and (>= C 3) (>= D 7)) (and (>= C 2) (>= D 3) )))
-	  (setf A (choose 'GIBBERISH))
+	(when (and (not A) 
+                   (or (and (>= C 5) (<= D 15))   ;;om  ^\ is <= 
+                       (and (>= C 3) (<= D 7))
+                       (and (>= C 2) (<= D 3))))
+	  (setf A (choose 'GIBBERISH))            ;; gibberish -- nonsence
 	  (setf B '(TOO MANY UNRECOGNIZED WORDS)))
 
         (when (>= GIBBERISH 20) (setf DO_SPELL nil))
-	(when (and (not A) (>= MISSPELLED 6) (>= (- MISSPELLED OLDMISS) 3))
+	(when (and (not A) (>= MISSPELLED 6) (>= (- MISSPELLED OLDMISS) 3));; misspell many, just recently
 	  (setf A (CHOOSE 'MISSPELLED))
           (setf B '(TOO MANY MISSPELLED WORDS)))
-	(cond ((equal SSENT (append PREV_OUTPUT '(PD))) (ADDTO 'PGAMES 5)) 
+	(cond ((equal SSENT (append PREV_OUTPUT '(PD))) (ADDTO 'PGAMES 5)) ;; PD is period. ??
 	      ((and PREV_SSENT  (eq (car PREV_SSENT) 'TWICE) (equal (cadr PREV_SSENT) SSENT)) (addto 'PGAMES 5))
 	      ((equal PREV_SSENT SSENT) (setf PREV_SSENT (list 'TWICE SSENT)))
 	      (t (setf PREV_SSENT SSENT)))
@@ -189,7 +191,8 @@
 	(setf OLDMISS MISSPELLED)
 	(unless b (setf b 'NORMAL))
 	(window 33 T B)
-        (when (eq A 'DONE)  (setf A nil)(return A)) ;  % WILL RETURN NIL IF ANAPH OR NORMAL %
+        (when (eq A 'DONE)(setf A nil))
+        (return A)   ;  % WILL RETURN NIL IF ANAPH OR NORMAL %
 	)
   )
 
@@ -198,12 +201,12 @@
 
 (defun apology ()
   (prog ()
-  (if (>= MISTRUST 9) (setf AJUMP 0.2)  (setf ANGER (-1 ANGER)))
-  (if (and (not (BL 'DHOSTILE)) (BL 'DDKNOW)) 
+    (if (>= MISTRUST 9) (setf AJUMP 0.2)  (setf ANGER (- ANGER 1)))
+    (if (and (not (BL 'DHOSTILE)) (BL 'DDKNOW)) 
 	    (return (CHOOSE 'SORRY))
             (return (CHOOSE 'ACCUSE)))
   )
-  )
+)
 
 (defun helper ()
   (if (or (bl 'DHOSTILE) (bl '?*DHELPFUL) (bl 'DDHARM))
@@ -222,7 +225,7 @@
   (progn 
     (setf ?!ANAPHLIST (setf ?!ANAPHLISTOLD nil))
     (cond (DELFLAG (delstmt))
-	  ((eq FLARE 'INIT) (flstmt (get FLARE 'SET)))
+	  ((nequal FLARE 'INIT) (flstmt (get FLARE 'SET)))
 	  ((eq INTENT 'PINTERACT) (choose 'UPSET))
 	  )
     )
@@ -246,13 +249,13 @@
   )
 
 (defun memsizeok()
-  (and (>= (length (NUMVAL 13)) 1500) (>= (LENGTH (NUMVAL 14) 300)))
+    T  ;;om  anyway T in this translation. memory should be enough.
+;  (and (>= (length (NUMVAL 13)) 1500) (>= (LENGTH (NUMVAL 14) 300)))
   )
-
 
 (defun opinion ()
   (prog (a)
-	(cond ((or (bl 'DDHARM)(BL 'DHOSTILE)(BL '?*DDHELP)) (setf a (CHOOSE 'HOSTILEREPLIES))a)
+	(cond ((or (bl 'DDHARM)(BL 'DHOSTILE)(BL '?*DDHELP)) (setf a (CHOOSE 'HOSTILEREPLIES)))
 	      ((or (BL '?*DTRUSTWORTHY)(BL '?*DHONEST)) (setf a (CHOOSE '?*DHONEST)))
 	      (T (loop for i in '(DABNORMAL DEXCITED DRATIONAL DHELPFUL DSOCIABLE) do
                 when (BL i) (setf A (CHOOSE i))
@@ -289,13 +292,13 @@
 		   (and (eq VERSION 'MILD)  (>= HURT 8)))
 	       (anddo (addto 'PPARANOIA 5) (anddo (PARANOIA) (setf INTENT 'PPARANOIA))))
 	      ((or (and FJUMP (>= FJUMP 0.01))  
-		      (and AJUMP (>= AJUMP 0.01))  
-		      (>= FEAR 14) OR (ANGER >= 14) 
-		      (eq STOPIC 'STRONGFEELINGS) 
-		      ACTION) 
+		   (and AJUMP (>= AJUMP 0.01))  
+		   (>= FEAR 14) 
+                   (>= ANGER 14) 
+		   (eq STOPIC 'STRONGFEELINGS) 
+		   ACTION) 
 	       (anddo (addto 'PSTRONGFEEL 5)
-		      (setf INTENT 'PSTRONGFEEL))
-	      )
+		      (setf INTENT 'PSTRONGFEEL)))
 	      ) 
 	(loop for I in '((FJUMP . FEAR)(AJUMP . ANGER)(HJUMP . SHAME))
 	      do
@@ -313,16 +316,16 @@
 (defun infemote (BEL L VAL) ;% L LOOKS LIKE ((HJUMP 0.5) ... )  %
   (loop for a in L do
 	(prog (b c d)
-        (setf B (car A))
-	(setf C (cadr A))
-        (when (eq B 'HJUMP) (setf PARBEL (cons BEL PARBEL)))
-	(when (and (eq B 'HJUMP) WEAK ) (setf C (/ C 2))) ;% IF WEAK PARANOIA THEN DONT LET HJUMP BE STRONG %
-        (when (NUMBERP VAL) (setf C (/ C 2))) ;% THIS CAME FROM ADDTO, NOT ASSERT -- WEAKEN THE EFFECT %
-        (setf D (ZERONIL (EVAL B)))
-        (when (>= C D) (PUTPROP B BEL 'INF))
-	(set b (max d c))
+          (setf B (car A))
+	  (setf C (cadr A))
+          (when (eq B 'HJUMP) (setf PARBEL (cons BEL PARBEL)))
+	  (when (and (eq B 'HJUMP) WEAK ) (setf C (/ C 2))) ;% IF WEAK PARANOIA THEN DONT LET HJUMP BE STRONG %
+          (when (NUMBERP VAL) (setf C (/ C 2))) ;% THIS CAME FROM ADDTO, NOT ASSERT -- WEAKEN THE EFFECT %
+          (setf D (ZERONIL (EVAL B)))
+          (when (>= C D) (PUTPROP B BEL 'INF))
+	  (set b (max d c))
 	)
-	)
+     )
   )
 
 (defun zeronil (L) (if (not L) 0 L))
@@ -331,8 +334,8 @@
   (prog (a)
 	(loop for i in INTLIST do 
 	      (when (>= (GET0 I 'NTRUTH) 5) (setf A (WINDOW 42  NIL I)))
-	      (when (or (not INTENT)(eq A 'PEXIT)(eq A 'PEXIT2)
-			(setf INTENT A)))
+	      (when (or (not INTENT)(eq A 'PEXIT)(eq A 'PEXIT2))
+			(setf INTENT A))
 	      (WINDOW 42 NIL (format nil " : ~a" INTENT)))
 	)
   )
@@ -348,7 +351,7 @@
 	(setf a (GET INTENT 'TH))
 	(setf PROVEL (append PROVEL A))
 	(PROVE)
-	(setf A (ERRSET (if I (eval I) NIL)))
+	(setf A (ERRSET (if I (eval (list I)) NIL)))
         (if (atom A)
 	  (progn (paerror  "IN DOINTENT BAD FN" I)  
 		 (setf A NIL))
@@ -362,12 +365,11 @@
 
 ;% THE FOLLOWING ARE INTENTION ROUTINES, ONE PER INTENTION %
 
-(defun pinteract () (when (eql FLARE 'INIT) (addto 'PHELP 5)))
+(defun pinteract () (when (nequal FLARE 'INIT) (addto 'PHELP 5)))
 (defun pgames () (anddo (choose 'GAMES) (addto 'PGAMES -2)))
 (defun pfacts () (anddo (choose 'MOVEON (addto 'PFACTS -2))))
 (defun pmafia ()
-  (if (>= FEAR 10)
-    (choose 'PANIC)
+  (if (>= FEAR 10) (choose 'PANIC)
     (if (BL 'DGAMES) 
       (andodo nil (setf ANGER (- ANGER 3)))
       (andodo (choose 'PROBE) (addto 'PMAFIA -2))))
@@ -389,7 +391,11 @@
 (defun pconfirm ()
   (if (and (bl 'NDELUSIONS)
 	   (not BADINPUT))
-    (anddo (choose 'PRAISE)(addto 'PSTOP 3)))
+    (anddo (choose 'PRAISE)(addto 'PSTOP 3))
+    (if (or (and (not BADINPUT) (get REACTTO 'UNIT))
+            (not REACTTO))
+        (anddo (choose 'FEELER) (anddo (addto 'PSTOP 2) (addto 'PCONFIRM -5))))
+    )
   )
 
 (defun pself () (anddo (choose 'IYOUME) (addto 'PSELF -3)))
@@ -415,21 +421,21 @@
 (defun pparanoia ()
   (prog (a)
 	(addto 'PARANOIA -5)
-	(when (>= HURT 10) (setf HURT (+ 10 (* (- HURT 10) (/ 3 5)))))
+	(when (>= HURT 10) (setf HURT (+ 10 (/ (* (- HURT 10)  3) 5))))
 	(setf a (assoc (get REACTTO 'CLASS)
 		       '((INSULT . PANGER)(CRAZY . AVOIDANCE)(THREAT . PANIC)(ATTACK . LIE)
 			 (FEELINGS . LIE)(WEAKINSULT . PPERS)(COMPLEMENT . PDISTANCE)
 			 (DISBELIEF . PBELIEVEREPLIES)(APOLOGY . PACCUSE))))
 	(unless a (setf a (assoc (carn (get REACTTO 'SF))
-				 '((HELPER.PCAUTION)(ALOOF.PALOOF)(ALOOF2.OPINION)))))
+				 '((HELPER . PCAUTION)(ALOOF . PALOOF)(ALOOF2 . OPINION)))))
 	(when a (setf a (cdr a)))
 
 	(when (and (not a) (eq STOPIC 'MAFIA))
 	  (setf a (if DELFLAG 'AVOIDANCE 'NOMAFIA)))
-	(when (and a (>= FEAR 14))
+	(when (and (not a) (>= FEAR 14))
 	  (setf a (if (eq TYPE 'Q) 'PTHREATQ 'PAFRAID))
 	  (addto 'PEXIT 1))
-	(when (not a) 
+	(unless a
 	  (setf a (if (>= HURT 10) 'ALIEN 'PHOSTILEREPLIES))
 	  (addto 'PEXIT 1))
 	(return (choose a))
@@ -443,12 +449,12 @@
 	(addto 'PSTRONGFEEL -5)
 	(addto 'PMAFIA -5)
 	(cond ((not (setf a (get REACTTO 'CLASS))) nil)
-	      ((setf b (assoc a '((INSULT.ANGER)(WEAKINSULT.PERS)(COMPLEMENT.DISTANCE)
-                (SENSATTITUDE.SENSREPLIES)(CRAZY.HOSTILEREPLIES)(THREAT.PANIC)
-                (DISBELIEF.BELIEVEREPLIES)(APOLOGY.ACCUSE)(LYING.BELIEVEREPLIES) ))) 
+	      ((setf b (assoc a '((INSULT . ANGER)(WEAKINSULT . PERS)(COMPLEMENT . DISTANCE)
+                (SENSATTITUDE . SENSREPLIES)(CRAZY . HOSTILEREPLIES)(THREAT . PANIC)
+                (DISBELIEF . BELIEVEREPLIES)(APOLOGY . ACCUSE)(LYING . BELIEVEREPLIES) ))) 
 	       (setf b (cdr b)))
 	      ((eq a 'DISTRUST) (setf b (if (>= (+ FEAR ANGER) 14) 'TURNOFF 'ALOOF))))
-	(when (and (>= ANGER 14) (>= FEAR 14)) (return (choose b)))
+	(when (and (<= ANGER 14) (<= FEAR 14)) (return (choose b)))
 	(when (and (not FJUMP)
 		   (not AJUMP)
 		   (not (memq STOPIC '(BYE MAFIA GAMES IYOUME FEELINGS STRONGFEELINGS))))

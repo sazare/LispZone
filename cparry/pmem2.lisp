@@ -82,7 +82,7 @@
                 (if (setf r (delref r)) 
 		  (setf found R)
 		  (setf found (DELSTMT))))
-        (when (and (not found) (eq FLARE 'INIT) (setf R (flareref SENT))) ; ^Z is eq??
+        (when (and (not found) (nequal FLARE 'INIT) (setf R (flareref SENT))) ; ^Z is eq??
 	  (setf found (flstmt r)))
         (unless found (setf found (keywd SENT SETLIST)))
         (unless found (setf found (SPECCONCEPT NIL)))
@@ -146,7 +146,7 @@
 (defun  endroutine() ; % SEMANTIC FUNCTION CALLED BY EXIT OUTPUT SELECTION %
   (prog ()
     (setf ENDE T)
-    (when (and (>= FEAR 18.4) (or DELFLAG (eq FLARE 'INIT))) ; ^Z is eq?
+    (when (and (<= FEAR 18.4) (or DELFLAG (nequal FLARE 'INIT))) ; ^Z is eq?
       (setf AJUMP  0.1)
       (return (choose 'BYEOFF)))
     (return (CHOOSE 'BYE))
