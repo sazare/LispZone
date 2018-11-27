@@ -15,7 +15,7 @@
   (prog ()
     (unless (lambdaname a) (return nil))
     (when (diskread a) (return T))
-    (paerror "BAD DISKREAD")
+    (paerror "BAD DISKREAD" "")
     )
   )
 
@@ -26,7 +26,7 @@
   (prog (a)
     (if (not (setf a (diskread2 name)) )
         (progn
-	  (paerror t "error in diskread ~a" name)
+	  (paerror t "error in diskread " name)
           (return nil))
         (return (car a)))
   )
@@ -77,17 +77,17 @@
     (setf truth (cadr x))
     (setf unit  (caddr x))
     (when (or (null x)(null (cdr x))(null (cddr x))(not (numberp truth)))
-      (paerror "B BAD INPUT ~a" x)
+      (paerror "B BAD INPUT " x)
       (return nil)
     )
-    (when (get name 'BONDVALUE) (paerror "BAD INPUT-DOUBLE ENTRY ~%" name))
+    (when (get name 'BONDVALUE) (paerror "BAD INPUT-DOUBLE ENTRY " name))
     (putprop name unit 'BONDVALUE)
     (setf x (cdr x))
     (loop while (setf x (cddr x)) do
        ;% PUT THEM ON THE PROPERTY LIST OF THE ^H NAME %
       (if (or (not (atom (car x))) (null (cdr x)))
          (progn
-           (paerror "BAD INPUT ~a~%" name)
+           (paerror "BAD INPUT " name)
            (return nil)
           )
           (putprop name (cadr x) (car x))))
@@ -115,14 +115,14 @@
              (progn 
 	      ; % PUT SENTENCES ON THE PROPERTY LIST %
 	      (when (or (NULL X) (NULL (cdr X)) (ATOM (cdr X)) (not (ATOM (car X))))
-		(paerror "E BAD INPUT ~a" UNIT)  
+		(paerror "E BAD INPUT " UNIT)  
 		(setf ERROR T)
 		(RETURN NIL))
 	      (PUTPROP UNIT (CADR X) (CAR X))
              )
 	until (or ERROR (not (setf X (CDDR X))))
 	)
-        (unless (GET UNIT 'NORMAL) (paerror "NO NORMAL SENTS ~a" UNIT))
+        (unless (GET UNIT 'NORMAL) (paerror "NO NORMAL SENTS " UNIT))
         (return unit)
         ;%-- REPLYR, ANTHEN, EXPRESS, SELSENTENCE, SAY ------%
 	)
@@ -185,7 +185,7 @@
 
 	; %  ONLY QUIT IF THERE IS NO RESP   %
         (when (and (null a) (null (setf a (get SEMANT 'RESP))))
-           (error "NO CLASS~a ~a " CLASS SEMANT)
+           (error (format nil "NO CLASS~a " CLASS) SEMANT)
 	   (return nil))
 	
 	; %SET UP ANAPHS FOR NEXT INPUT  %
