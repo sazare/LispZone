@@ -69,6 +69,7 @@
         (INIT_TO_FILE L)
 	)
   )
+)
 
 
 (defun init_to_file (L)
@@ -160,6 +161,7 @@
 	(OUTC NIL T)(INC NIL T)(INC CHANSAVE NIL)
 	)
   )
+)
 
 (defun error_file (A)
   (prog (FILCHAN FILENAME I)

@@ -2,7 +2,9 @@
 
 ;;;
 ;; different from original lambdaname. because cwchanged ^H to @@.
-(defun lambdaname (s) (and (>= (length (string s)) 3) (equal (subseq (string s) 0 2) "@@")))
+; (defun lambdaname (s) (and (>= (length (string s)) 3) (equal (subseq (string s) 0 2) "@@")))
+;; move lambdaname to primitive.lisp
+;; because it is called opar3.lisp
 
 ;; now replaced ^B to car, alphaname is incorrect
 ;; but noone call alphaname

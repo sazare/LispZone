@@ -29,6 +29,7 @@
           (paerror (format nil "~a TOP-LEVEL LISP EROR ~a " SSENT TRACE_MEM) !ANAPHLIST)
           (terpri)
           (printstr "WHAT DO YOU MEAN BY THAT")
+        )
       )
     )
   (format t "Good bye")
