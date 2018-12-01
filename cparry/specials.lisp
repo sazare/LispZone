@@ -21,8 +21,8 @@
 ;INPUTQUES       is a list of dotted pairs from the pattern matcher to the memory
 ;                        each pair is (canonical 5-letter atom . input word)
 
-
 (defvar ?!ANAPHLIST nil)
+(defvar !ANAPHLIST nil) ;; in parry() ...??
 (defvar ?!ANAPHLISTOLD nil)
 (defvar ?!ANAPHLISTNEW nil)
 (defvar ?!CLIST nil)
@@ -36,6 +36,8 @@
 (defvar ?!EXHAUST nil)
 (defvar ?!ERROR nil)
 
+(defvar STRUC nil)
+
 (defvar BASE 0)
 (defvar IBASE 0)
 (defvar TEN 10)
@@ -44,6 +46,11 @@
 (defvar DELALIST nil)
 (defvar DELNLIST nil)
 (defvar DELVLIST nil)
+
+(defvar RIGHT nil)
+
+
+(defvar paTYPE nil)
 
 (defvar CHOSEN nil)
 (defvar WDFLAG nil)
@@ -71,6 +78,8 @@
 (defvar EOF nil)
 (defvar FILE1 nil)
 (defvar FILE2 nil)
+(defvar FILE12 nil)
+(defvar FILCHAN nil)
 (defvar CHARNO 0)
 (defvar DIACHARNO 0)
 (defvar INPUTFILE nil)
@@ -98,6 +107,12 @@
 (defvar INTLIST nil)
 (defvar INTENT nil)
 (defvar PRINTALL nil)
+
+(defvar GIBBERISH nil)
+(defvar LOWMAN nil)
+(defvar MISSPELLED nil)
+(defvar PREV_SSENT nil)
+
 (defvar OLDGIBB nil)
 (defvar OLDMISS nil)
 (defvar LAMDA nil)
@@ -132,6 +147,8 @@
 
 (defvar LIVEFLARES NIL)
 (defvar DEADFLARES NIL)
+
+(defvar DELEND nil)
 
 (defvar WTS nil)
 (defvar FL nil)
@@ -175,6 +192,22 @@
 (defvar ONEDIA nil)
 (defvar FILE12 nil)
 
+(defvar PARA nil)
+(defvar SPECFNRA nil)
+
+(defvar ACTION nil)
+(defvar BUFFER nil)
+
+(defvar synonyms nil)
+(defvar spats nil)
+(defvar cpats nil)
+
+(defvar LEARNING nil)
+
 (defvar TAB "\t")
+(defvar CR "")
+(defvar LF "")
+(defvar EOF "")
+
 
 (format t "end of specials.lisp~%")

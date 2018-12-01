@@ -2,6 +2,16 @@
 ;% ************ THESE ARE ALL INPUT-OUTPUT ROUTINES *************%
 ;
 ;% takes a file name (or NIL for TTY) and assigns it to the input channel%
+;;;; stub
+(defun chseto (x y) (list x y))
+(defun outc (x y) (list x y))
+(defun at (x) x)
+(defun tyo (x) x)
+(defun tyi () T)
+(defun octal (x) x)
+(defun readch () T)
+
+;;;;
 
 (defun selectinput (AREA FILE)
   (IF FILE 
@@ -11,7 +21,7 @@
 	  (setf INCHAN (EVAL (list 'INPUT 'DSK\: FILE)))
 	  )
 	(INC NIL NIL)
-	(PRINTSTR "~a SELECTED FOR INPUT." file))
+	(PRINTSTR (format nil "~a SELECTED FOR INPUT." file)))
       (progn 
 	(PRINTSTR "TTY SELECTED FOR INPUT.")
 	(INC NIL T))
@@ -20,6 +30,7 @@
 
 (defun selectinputn (AREA FILE)
   (when FILE 
+    (list AREA)
     (setf INCHAN (EVAL (list 'INPUT INPUTFILEAREA FILE)))
     (INC NIL NIL))
   )
@@ -39,7 +50,7 @@
 	(when (eq A 'COMMENT)
 	    (loop do (setf A (READINC)) 
 		  until (or (eq A 'C?^V?) (eq A '?^V?))) ;;om what is this??
-            (setf A READINC() )
+            (setf A (READINC) )
 	)
 	(RETURN A)
 	)
@@ -60,14 +71,13 @@
 	(INC FILCHAN NIL)
 	(setf I (READ))
 	(setf FILE1 (cons (AT (format nil "P~a" I)) 'DIA))
-	(setf FILE2 (cons (AT (format nil "P=aA" I) 'DIA))
+	(setf FILE2 (cons (AT (format nil "P~aA" I)) 'DIA))
         (INC NIL NIL)
 	(eval (list 'OUTPUT DIAFILEAREA '(PAR2.FIL)))
 	(OUTC T NIL)
 	(PRINT (+ I 1))
         (OUTC NIL T)
         (INIT_TO_FILE L)
-	)
   )
 )
 
@@ -77,7 +87,7 @@
 	(setf FILCHAN (EVAL (list 'OUTPUT DIAFILEAREA FILE1)))
 	(OUTC FILCHAN NIL)
 	(PRINTSTR (format nil "~a      " L))
-	(PRINC)(TERPRI)  ;; ??? EOL
+	(TERPRI)(princ EOF)  ;; ??? EOL
 	(OUTC NIL T)
 	(when (and (not SUMEX) (not ONEDIA))
 	  (setf FILCHAN (EVAL (list 'OUTPUT DIAFILEAREA FILE2)))
@@ -105,6 +115,7 @@
 	(setf FILCHAN (EVAL (list 'INOUT DIAFILEAREA FILE1))) 
 	(OUTC FILCHAN NIL)
 	(CHSETO FILCHAN  DIACHARNO);
+
 	(BUFFER T)(PRINTSTR L)(PRINC M)(PRINC TAB)(PRINC N)(PRINTSTR(TIMESTAT))(TERPRI NIL)(BUFFER NIL)
 	; % THIS IS TO CORRECT A BUG IN CHSETO WHICH SETS IT TO A MINUS NUMBER
         ;   IF IT HITS A RECORD BOUNDARY EXACTLY  %
@@ -139,7 +150,7 @@
   )
 
 (defun to_file2 (L M N)
-  (prog (F CH) ;         % FILE12 HAS THE CURRENT GOOD FILE %
+  (prog (F CH) ;% FILE12 HAS THE CURRENT GOOD FILE %
 	(setf F FILE12)
 	(setf FILE12 (IF (equal FILE12 FILE1) FILE2 FILE1)) ;% SWITCH NAMES %
 	(setf CHANSAVE (INC NIL NIL))
@@ -148,20 +159,20 @@
 	(setf INCHAN (EVAL (list 'INPUT DIAFILEAREA F)))
         (INC INCHAN NIL)
 	(BUFFER T)
-	(PRINC (format nil "~a " INPUTNO) (READ) ;% READ THE NUMBER AND THROW IT AWAY %
-        (loop do NIL 
+	(PRINC INPUTNO) (READ) ;% READ THE NUMBER AND THROW IT AWAY %
+        (loop do  (list t)
            until (and (eq (TYO (TYI)) (OCTAL 45) )
-                 (or (ATOM (setf CH (ERRSET(readch) NIL)))
-		     (and (PRINC (CAR CH)  NIL) )
-	      )
+                      (or (ATOM (setf CH (ERRSET(readch) NIL)))
+		          (and (PRINC (CAR CH))  NIL) )
+	         )
            )
-        )
 	(BUFFER T)(PRINTSTR L)(PRINC M)(PRINC TAB)(PRINTSTR N)(TERPRI NIL)(BUFFER NIL)
 	(terpri nil) (PRINC EOF)
 	(OUTC NIL T)(INC NIL T)(INC CHANSAVE NIL)
-	)
   )
 )
+
+
 
 (defun error_file (A)
   (prog (FILCHAN FILENAME I)

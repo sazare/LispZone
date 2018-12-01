@@ -77,6 +77,7 @@
 
 (defun skeywd (type sent)
   (prog (found r)
+        (list type) ;; not used
         ;;    % CHECK FOR DELN OR FLARE WDS IN INPUT %
         (when (and DELFLAG  (setf r (delcheck SENT)))
                 (if (setf r (delref r)) 
@@ -95,7 +96,7 @@
 ;        IS ON THE SAME TOPIC AS THE PREVIOUS INPUT %
 
 (defun keywd(inp setlist)
-  (prog (result a)
+  (prog (set result a)
     (loop for set in (get 'SETLIST 'SETS) do 
 	  (loop for word in (get set 'words) do
 		(when (assoc word inp) (setf result set)) 
@@ -210,7 +211,7 @@
 	(printstr "FILE=") 
 	(setf A (READ))
 	(setf INPUTFILE A)
-	(BILLP) )
+	(billp) )
       (terpri nil) 
       (return nil)
      )
@@ -250,19 +251,21 @@
         (when (or (eq A (CHRVAL 'Y)) (eq A (CHRVAL 'y))) (setf TRACEV T))
 	)
       (if (and (not SUMEX)(not PTYJOB))
-	(terpri nil) 
-	(printstr "DO YOU WANT THE CORE DUMPED? [Y,N]") ;  % FOR SAVING CORE IF SYSTEM CRASHES %
-	(if (eq (READ) 'Y)
-	  (progn 
-	    (terpri nil) 
-	    (printstr "NAME FOR THE DUMP FILE?[6 CHARS]") 
-	    (setf A (READ))
-	    (setf SAVE_DUMP  A) 
-	    (setf  A (EXPLODE A))
-	    (if (and (eq (car A) 'H) (eq (cadr A) 'A)  (eq (caddr A) 'R))
-	      NIL 
-	      (setf SAVE_DUMP NIL))
+        (progn 
+	  (terpri nil) 
+          (printstr "DO YOU WANT THE CORE DUMPED? [Y,N]") ;  % FOR SAVING CORE IF SYSTEM CRASHES %
+	  (if (eq (READ) 'Y)
+	    (progn 
+	      (terpri nil) 
+	      (printstr "NAME FOR THE DUMP FILE?[6 CHARS]") 
+	      (setf A (READ))
+	      (setf SAVE_DUMP  A) 
+	      (setf  A (EXPLODE A))
+	      (if (and (eq (car A) 'H) (eq (cadr A) 'A)  (eq (caddr A) 'R))
+	        NIL 
+	        (setf SAVE_DUMP NIL))
 	    )
+           )
          )
 	 (setf SAVE_DUMP NIL)
 	)
@@ -309,13 +312,13 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
         ; SPECIAL OLDTIME, OLDSPEAK, ANALFLAG; 
   (prog (a b)
     (unless flag 
-      (setf OLDTIME (time))
+      (setf OLDTIME (time nil))
       (setf OLDSPEAK (speak))
       (setf ANALFLAG NIL)
       (RETURN nil)
       )
     (unless ANALFLAG (RETURN nil))
-    (setf a (time))
+    (setf a (time nil))
     (setf b (car (divide (* 10 (- A OLDTIME)) 166 )))
     (princ b) (printstr " TICS") (setf  OLDTIME a)
     (setf a (speak))(setf b (- A OLDSPEAK))
@@ -329,8 +332,8 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
   (prog (a b c yr mo date day)
     (setf A (dateuu))
     (ten) (setf A (+ A N))  ; % -1 IS YESTERDAY, 0 TODAY, + 1 TOMORROW %
-    (setf B (divide A 31)) (setf date (cdr (+ 1 B))) 
-    (setf B (divide (car B) 12))(setf mo (cdr (+ 1 B)))
+    (setf B (divide A 31)) (setf date (+ (cdr B) 1)) 
+    (setf B (divide (car B) 12))(setf mo (+ (cdr B) 1))
     (setf YR (+ (car B) 1964))
 
     (setf C '((31 . JANUARY)(28 . FEBRUARY)(31 . MARCH)(30 . APRIL)(31 . MAY)(30 . JUNE)
@@ -451,8 +454,9 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
 (defun  specconcept (L)
   ; % USED FOR GENERAL IYOUME INPUT WHICH THE PATTERN MATCHER DIDNT RECOGNIZE %
   (prog (con you neg found adj inp)
-      (setf inp INPUTQUES)
-      (loop for word in inp do
+    (list L)
+    (setf inp INPUTQUES)
+    (loop for word in inp do
 	  (when (member (get (car word) 'SET) SENSITIVELIST) (setf con (car word)))
 	  until con)
     (unless con (return nil))

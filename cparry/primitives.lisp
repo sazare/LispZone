@@ -29,12 +29,16 @@
   )
 
 (defun nequal (x y) (not (equal x y)))
+(defun neq (x y) (not (eq x y)))
 
 (defun gcgag (x) (if x (gc) (gc))) ; just ignore x
+(defun bakgag (x) x)
+(defun nouuo (x) x)
+
 (defun memq (x y) (member x y))
 (defun greaterp (x y) (> x y))
 (defun lsh (x y) (* x (expt 2 y))) ;; uncertain
-(defun ttyuu (x) x);; uncertain
+(defun ttyuu () );; uncertain
 (defun divide (x y) (floor x y))
 
 (defun paerror (x y) (format t "~a ~a" x y))
@@ -65,6 +69,36 @@
 
 ;; different from original lambdaname. because cwchanged ^H to @@.
 (defun lambdaname (s) (and (>= (length (string s)) 3) (equal (subseq (string s) 0 2) "@@")))
+
+(defun numval (x) x)
+(defun runtim (v) v)
+(defun readlist (x) x)
+
+(defun synnym (x) (progn x (setf synonyms (read-file "data/synonm.alf"))))
+(defun spat (x) (progn x (setf spats (read-file "data/spats.sel"))))
+(defun cpat (x) (progn x (setf cpats (read-file "data/cpats.sel"))))
+(defun initfn (x) x)
+(defun DSKLOC (x) x)
+
+(defun allow () )
+(defun namep () )
+
+(defun timeuu () )
+(defun dateuu () )
+(defun speak () )
+
+(defun explodec (x) x)
+(defun explode (x) x)
+(defun charval (x) x)
+(defun billp () )
+
+(defun canonize (x) x)
+
+(defun paerror (mess L) ;; I dont want to use this. error_file go out of bound
+  (setf ?!ERROR (cons (error_file (list mess L PM2INPUT PMINPUT FILE1 BUG)) ?!ERROR))
+  )
+
+(defun chseti (x y) (list x y))
 
 (format t "end of loading primitives.lisp~%")
 

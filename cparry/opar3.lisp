@@ -53,7 +53,7 @@
 ;% CALLED BY FLAREREF, ASCAN  %
 
 (defun checkflare (INP FLARELIST FLAG)
-  (prog (NFLARE WORD FSET WT RESULT W)
+  (prog (NFLARE FSET WT RESULT W)
 
                 ;%   DISTINGUISH FLARES FOUND WITHIN THE STATEMENT (NFLARE)
                 ; FROM MOST RECENT FLARE (FLARE)   %
@@ -65,9 +65,9 @@
 ;        %   FOR EXAMPLE, USE THE PATTERN OR THE WORDS THAT MATCHED THE PATTERN  %
 
         (loop for word in INP do
-	      (if (and (member (setf FSET (GET (CAR WORD) 'SET)) (FLARELIST))
+	      (if (and (member (setf FSET (GET (CAR WORD) 'SET)) FLARELIST)
 		       (not (get (cdr WORD) 'USED)))
-		(when (greaterp (get FSET 'WT)(get (get NFRAME 'SET) 'WT))
+		(when (greaterp (get FSET 'WT)(get (get NFLARE 'SET) 'WT))
 		  (prog2 (setf NFLARE (CAR WORD))
 			 (setf RESULT T)
 			 (setf W (CDR WORD))))))
@@ -193,6 +193,7 @@
   (progn 
     (when (checkflare ANS LIVEFLARES T) (putprop (GET FLARE 'SET) T 'USED))
     (when (member 'MAFIA ANS) 
+      q ; for q was not used warning
       (setf DELFLAG T)
       (setf FLARE 'INIT)
       (setf TOPIC 'DELUSIONS))
@@ -224,6 +225,8 @@
 ;          % CALLED BY DELSTMT, SPECQUES  %
 (defun choosedel (type)
   (prog (SEMANT)
+        (list type) ;; not used
+        type ;; for type is not used warning
 	(unless (setf SEMANT (GET 'DELNSET 'STORY)) (return NIL))
 	(return (car SEMANT))
 	)
@@ -279,7 +282,7 @@
 ;            TO NEXT HIGHER FLARE IN PATH   %
 ;% CALLED BY FLMOD  %
 (defun fixptrs (FLSET)
-  (prog (CONCEPT)
+  (prog () 
 	(loop for CONCEPT in (append LIVEFLARES DEADFLARES) do
 	      (if (eq (GET CONCEPT 'NEXT) FLSET)
 		(putprop CONCEPT (get FLSET 'NEXT) 'NEXT))
@@ -398,7 +401,7 @@
 ;%
 ;MEMBER3         CHECKS IF ATOMS ARE IN INPUT -- INPUT IS A LIST OF DOTTED PAIRS  %
 (defun member3 (WLIST L)
-  (prog (WORD PAIR)
+  (prog (PAIR) ;; WORD
 	(when (atom WLIST) (setf WLIST (list WLIST)))
 	(loop for word in WLIST do
 	      (setf PAIR (assoc WORD L))
@@ -416,7 +419,7 @@
 ;          AND CALLS FOR AN APPROPRIATE REPLY   %
 ;% CALLED BY ANSWER  %
 (defun miscq (Q)
-  (prog (QWORD ANS CONCEPT)
+  (prog (ANS) ;; QWORD CONCEPT
 ; %   CHECK FOR QUESTION ABOUT EXTERNAL WORLD   %
 	(when
 	  (member 'HOW Q)
@@ -484,16 +487,18 @@
 ;                %   ACCOUNT FOR NORMAL DROP IN EACH VARIABLE   %
 	(setf ANGER (max (- ANGER 1) ANGER0))
 	(setf HURT  (max (- HURT 0.5) HURT0))
-	(if DELFLAG (setf FEAR (max (- FEAR 0.1) (+ FEAR0 5)))
+	(if DELFLAG 
+          (setf FEAR (max (- FEAR 0.1) (+ FEAR0 5)))
 ;                   %   ADD 5 TO BASE VALUE OF FEAR IF DELUSIONS UNDER DISCUSSION   %
-          (if (nequal FLARE 'INIT) (setf FEAR (max (- FEAR 0.2) (+ FEAR0 3)))
+          (if (nequal FLARE 'INIT) 
+            (setf FEAR (max (- FEAR 0.2) (+ FEAR0 3)))
 ;                   %   ADD 3 TO BASE VALUE OF FEAR IF FLARES UNDER DISCUSSION   %
-          (setf FEAR (max (- FEAR 0.3)  FEAR0)))
-          (setf MISTRUST (max (- MISTRUST 0.05) MISTRUST0)))
-	(when TRACEV (PRINTVARS)
-	  (setf FJUMP NIL)
-	  (setf AJUMP NIL)
-	  (setf HJUMP NIL))
+            (setf FEAR (max (- FEAR 0.3)  FEAR0))))
+        (setf MISTRUST (max (- MISTRUST 0.05) MISTRUST0))
+	(when TRACEV (PRINTVARS))
+	(setf FJUMP NIL)
+	(setf AJUMP NIL)
+	(setf HJUMP NIL)
 	)
   )
 
@@ -511,5 +516,5 @@
 
 
 
-(format t "end of loading opar3.lisp")
+(format t "end of loading opar3.lisp~%")
 
