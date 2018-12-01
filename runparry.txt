@@ -1,5 +1,13 @@
 usage
 
+tiny parry
+1. (load "loadmtp.lisp")
+    in loadmtp.lisp, (load loadall.lisp) twice. explicit undefined by order.
+2. (mtp)
+3. I am doctor Yue
+4. bye ;at end
+
+old parry
 1. (load "loadall.lisp")
 2. if you check the undefineds, once more (load "loadall.lisp")
 3. (repl)

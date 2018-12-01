@@ -1,3 +1,5 @@
+This file contains the general usage of sbcl.
+
 1. (load "file") solved my initial problem below.
   1. add the line to .bash_profile or .bashrc
   alias sbcl='/usr/local/bin/sbcl --userinit ~/init.lisp'
