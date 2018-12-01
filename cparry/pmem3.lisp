@@ -175,23 +175,24 @@
 
 
 (defun error_file (A)
-  (prog (FILCHAN FILENAME I)
-	(TEN)
-	(setf CHANSAVE (INC NIL NIL))
-	(setf FILCHAN (eval (list 'INPUT DIAFILEAREA '(ERR.FIL))))
-	(INC FILCHAN NIL)
-	(setf FILENAME (AT (format nil "P~a" (setf I (READ())))))
-	(INC CHANSAVE NIL)
-	(EVAL (list 'OUTPUT DIAFILEAREA '(ERR.FIL)))
-	(OUTC T NIL)
-	(PRINT (+ I 1))
-	(OUTC NIL T)
-
-	(OUTC (EVAL (list 'OUTPUT DIAFILEAREA (cons FILENAME 'ERR ) )) NIL)
-        (PRINT A);
-	(OUTC NIL T)
-	(return a)
-	)
+  a
+;  (prog (FILCHAN FILENAME I)
+;	(TEN)
+;	(setf CHANSAVE (INC NIL NIL))
+;	(setf FILCHAN (eval (list 'INPUT DIAFILEAREA '(ERR.FIL))))
+;	(INC FILCHAN NIL)
+;	(setf FILENAME (AT (format nil "P~a" (setf I (READ())))))
+;	(INC CHANSAVE NIL)
+;	(EVAL (list 'OUTPUT DIAFILEAREA '(ERR.FIL)))
+;	(OUTC T NIL)
+;	(PRINT (+ I 1))
+;	(OUTC NIL T)
+;
+;	(OUTC (EVAL (list 'OUTPUT DIAFILEAREA (cons FILENAME 'ERR ) )) NIL)
+;        (PRINT A);
+;	(OUTC NIL T)
+;	(return a)
+;	)
   )
 
 
