@@ -21,7 +21,7 @@
 ;OPARINITIALIZE  READS IN RDATA, SETS ALL VARIABLES IN THIS FILE
 ;                MUST BE DONE WHEN MAKING A NEW CORE IMAGE OF PARRY  %
 (defun oparinitialize ()
-  (progn 
+  (prog (x) 
     (eval '(INC (INPUT (PAR BLF) RDATA) NIL)) ;;; this may be infix notation...
     (loop while (NOT (ATOM (setf X (ERRSET (READ) T) )))do
 	  (eval (car x))
@@ -74,7 +74,8 @@
 	(when RESULT 
 ;                   %   IF FLARE ALREADY BEING DISCUSSED, DISREGARD ANY
 ;                        VERY WEAK NEW FLARE   %
-             (if (and (NOT (nequal FLARE 'INIT) (NOT (setf WT (greaterp (GET (GET NFLARE 'SET) 'WT) 1)))))
+             (if (and (NOT (nequal FLARE 'INIT)) 
+                      (NOT (setf WT (greaterp (GET (GET NFLARE 'SET) 'WT) 1))))
 	       (setf RESULT NIL)
 	       (progn
 		 (setf FLARE NFLARE)

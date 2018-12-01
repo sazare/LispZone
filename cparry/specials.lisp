@@ -36,6 +36,15 @@
 (defvar ?!EXHAUST nil)
 (defvar ?!ERROR nil)
 
+(defvar BASE 0)
+(defvar IBASE 0)
+(defvar TEN 10)
+(defvar EIGHT 8)
+
+(defvar DELALIST nil)
+(defvar DELNLIST nil)
+(defvar DELVLIST nil)
+
 (defvar CHOSEN nil)
 (defvar WDFLAG nil)
 (defvar REACTTO nil)

@@ -155,7 +155,7 @@
 	  (addto 'PEXIT2 10)
 	  (setf ENDE T)
 	  (paerror (format nil "INPUTNO= ~a  SHORT OF SPACE ~a FS, FW ~a"
-			   INPUTNO (length (NUMVAL 13)) (length (NUMVAL 14))))
+			   INPUTNO (length (NUMVAL 13)) (length (NUMVAL 14))) "")
 	  )
 
         (when  (and (not A) (setf B (GET L 'FX)) (ERRSET (setf B (EVAL B)) NIL)) (setf A B)) 

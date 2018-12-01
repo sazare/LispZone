@@ -44,6 +44,29 @@
 
 (setupsym symlist)
 
+(defvar synonym (read-file "data/synonm.alf"))
+
+(defun setupsym2 (symlist)
+  (loop for symp in symlist do
+    (setf (get (car symp) 'synonym) (cadr symp))
+  )
+)
+
+(setupsym2 synonym)
+;(eq (get 'whenever 'synonym) 'when)
+
+(defun input-line ()  
+  (with-input-from-string (ss (read-line))
+    (prog (buf se )
+      (loop while (setq se (read ss nil)) 
+	do 
+           (push se buf)
+      )
+      (return (reverse buf))
+    )
+  )
+)
+
 (defun ask ()
 ;;  (format t "input: ")(force-output t) ;; dont work prompt
   (input-line)
@@ -51,7 +74,7 @@
 )  
 
 (defun proc (word)
-  (format t ":~a~%" word)
+  (format t ":~a|~%" word)
 )
 
 
@@ -76,7 +99,7 @@
   (prog (word)
     (loop 
       (setf word (getword))
-      (when (eq (car word) 'end) (format t "bye~%")(return))
+      (when (eq (car word) 'bye) (format t "bye~%")(return))
       (proc word)
     )
   )
@@ -85,8 +108,6 @@
 ;
 ;(loop until (null (setf ii (read))) do(print ii))
 ;
-(defvar dd "I am a doctor .")
-(defvar dq "Am I a doctor ?")
 
 (defun separ (dat)
  (prog (pb pa ate que)
@@ -101,17 +122,9 @@
  )
 ) 
 
-(defun input-line ()  
-  (with-input-from-string (ss (read-line))
-    (prog (buf se)
-      (loop while (setq se (read ss nil)) 
-	do (push se buf)) 
-      (return (reverse buf))
-    )
-  )
-)
+(defvar dd "I am a doctor .")
+(defvar dq "Am I a doctor ?")
 
 
-
-
+(format t "end of loading replpar.lisp~%")
 

@@ -1,5 +1,7 @@
 (load "setting.lisp")
 
+(defun nyi() (format t "NOT YET IMPLEMENT"))
+
 (defvar *aodefplist* '())
 (defvar *aoputplist* '())
 
@@ -60,6 +62,9 @@
   )
   )
 )
+
+;; different from original lambdaname. because cwchanged ^H to @@.
+(defun lambdaname (s) (and (>= (length (string s)) 3) (equal (subseq (string s) 0 2) "@@")))
 
 (format t "end of loading primitives.lisp~%")
 

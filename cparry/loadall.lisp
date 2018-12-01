@@ -2,9 +2,9 @@
 ;(in-package :mad.t.parry)
 
 (load "setting.lisp")
+(load "stub.lisp")
 (load "primitives.lisp")
 
-(load "stub.lisp")
 (load "specials.lisp")
 
 (load "rdata.lisp")

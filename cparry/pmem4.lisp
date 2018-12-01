@@ -7,7 +7,7 @@
 
 (defun  initfb() 
   (progn 
-    (EVAL '(DSKIN(RANDOM.LAP)))
+    (EVAL '(DSKIN (quote RANDOM.LAP)))
     (setf LAMDA 8)
     (initf)
     (initb)
@@ -25,10 +25,11 @@
     (format t "READY:~%")
     (loop 
       (let ((ind nil))
-	(format t "> ~0%") (force-output t)
-	(setf ind (read-line))
-	(if (equal ind "bye") (return))
-	(ERRSET (parry2 ind) nil)
+	(unless (ERRSET (parry2 ind) nil)
+          (paerror (format nil "~a TOP-LEVEL LISP EROR ~a " SSENT TRACE_MEM) !ANAPHLIST)
+          (terpri)
+          (printstr "WHAT DO YOU MEAN BY THAT")
+        )
       )
     )
   (format t "Good bye")
@@ -67,42 +68,50 @@
 ;;;    - when ende is t is end, modifvar() seems not important
 
 (defun parry2 (ind)
-  (let (a b)
-    (when save_dump (savejob save_dump 'sav))
+  (prog (a b)
+    (setf bug 0)
+    (when SAVE_DUMP (savejob save_dump 'sav))
       ;; Program will start here again if system clashes
+
     (unless (not_last_input) 
       (terpri)
-      (format t "READY:")
-      (force-output t)
+      (princ "READY:")
       )
+    (setf bug 0)
     (experiment)
-    (setf a (testm)) 
+    (setf bug 1)
+    (setf a (errset (testm) nil)) 
     (if (atom a) 
-      (format t "Pattern match error")
+      (format t  "Pattern match error ~a" (list next_char ssent inputques))
+      (err nil)
       )
+    (setf bug 3)
     (setf a (car a))
     (setf PM2INPUT PMINPUT)
     (setf PMINPUT a)
     (if (= (length SSENT) 1)
       (setf a (choose 'silence)))
     (analyze t)
-    (if (not (lambdaname a)) (setf a nil))
-    (if (and a (atom a) (setf b (get a 'meqv)))
+    (unless (lambdaname a) (setf a nil))
+    (when (and a (atom a) (setf b (get a 'meqv)))
       (setf a b))
     (setf REACTINPUT a)
     (window 9 T a)
     (readlambda a) (window 9 nil (get a 'bondvalue))
-    (if (not (react (list a (q ssent) ssent)))
-      (format t "error in react ~a" ssent)
+    (setf bug 4)
+    (unless (errset (react (list a (q ssent) ssent)))
+      (paerror ssent " error in react")
+      (err nil)
       )
-    (if ende 
-      (progn 
+    (setf bug 70)
+    (when ende 
 	(setf tracev (not tracev))
         (modifyvar)
 	(winxit)
 	(swapp)
 	(exit)
-	))
+	)
+    (setf bug 80)
     )
   )
 
@@ -110,13 +119,13 @@
   (let ()
     (eight)
     (nouud T)
-    (dparinitialize)
-    (setupstl)
+    (oparinitialize) ; initializes opar3
+    (setupstl) ;; setup story
     (setf INPUTFILEAREA '(1 3))
     (setf DIAFILEAREA '(DIA KMC))
     (gcgag nil)
     (changel 'CHANGE)
-    (setf DELNO 0)
+    (setf DELNO (setf bug 0))
     (setf OLDMISS 0)
     (setf OLDGIBB 0)
     (setf INPUTNO 0)
@@ -136,7 +145,7 @@
         ;%       SUPPRESS NON-VERBALS HERE       %
         (setf BUG ⇦  43)
 	(when (and SUPPRESS SENT (not (ATOM (car SENT)))) (setf SENT (cdr SENT)))
-	(setf SENT  (IF SENT (STRINGATE SENT) " "))
+	(setf SENT (IF SENT (STRINGATE SENT) " "))
 	(TERPRI NIL)
 	(PRINTSTR  SENT)
 	(setf ISENT INPUTSSENT)
@@ -146,25 +155,28 @@
 				   (car ISENT))))
 	(setf N (list PMINPUT (GET REACTINPUT 'BONDVALUE) TRACE_MEM NEWPROVEN INTENT))
 	(setf BUG 45)
+
 	(when SAVE_FILE 
-         (unless (ERRSET (TO_FILE ISENT SENT N) NIL)
-	   (ERROR DIACHARNO (format nil "ERROR IN TO_FILE~a~a" ISENT SENT))))
+          (unless (ERRSET (TO_FILE ISENT SENT N) NIL)
+	   (paERROR DIACHARNO (format nil "ERROR IN TO_FILE ~a ~a" ISENT SENT))))
 	(setf BUG 46)
 	(setf INPUTSSENT NIL)
 	)
   )
 
-(defun pmin()  pminitialize())
+(defun pmin()  (pminitialize))
 
 (defun dosf (L) ;% THIS DOES THE SEMANTIC FN (PROTECTED BY ERRSET) AND RETURNS A LAMBDA OUTPUT %
   (prog (a b)
 	(IF (ATOM (setf B (ERRSET (IF (and (LAMBDANAME L)  
 					   (setf A (GET L 'SF))
-					   (setf A (EVAL A))) A)  NIL)))
-	    (ERROR "BAD SF" (list L B))
+					   (setf A (EVAL A))) A) NIL)))
+	    (paERROR "BAD SF~a" (list L B))
 	    (progn
 	      (setf B (car B))
-	      (IF (not (LAMBDANAME B)) (setf ?!OUTPUT B) (setf B NIL))
+	      (unless (LAMBDANAME B) 
+                (setf ?!OUTPUT B) 
+                (setf B NIL))
 	      (return B))
 	    )
 	)
@@ -193,17 +205,19 @@
   )
 
 ;% ANGERFEARMODE  %
-(defun not_last_input () (NOT (or (EQ NEXT_CHAR CR) (EQ NEXT_CHAR LF) ))) 
+(defun not_last_input () (NOT (or (EQ NEXT_CHAR CR) (EQ NEXT_CHAR LF) )))
 
 ;% ANGERFEARMODE RESPONDS TO HIGH ANGER AND FEAR LEVELS IF NO SPECIFIC EMOTIONS ARE AFFECTED %
 (defun angerfearmode (topic)
-  (if (or (memq topic (get 'FLARELIST 'SETS))
-	  (memq topic '(MAFIA BYE IYOUME STRONGFEELINGS FEELINGS GAMES))
+  (prog ()
+    (when (or (memq topic (get 'FLARELIST 'SETS))
+  	      (memq topic '(MAFIA BYE IYOUME STRONGFEELINGS FEELINGS GAMES))
 	  )
-    nil
+          nil)
+    (setf bug 14)
     (if (>= FEAR 14) (fearmode) (angermode))
-    )
   )
+)
 
 (defun angermode ()
   (if (>= ANGER 17.5) 
@@ -213,23 +227,14 @@
   )
 
 (defun fearmode ()
-  (if (>= FEAR 18.4)
-    (progn
-      (setf ENDE t)
-      (choose 'exit)
-      )
+  (cond ((>= FEAR 18.4) (setf ENDE t) (choose 'exit))
       ;DISTINGUISH BETWEEN QUESTIONS AND STATEMENTS OF 'OTHER 
-    (if (and (not (bl 'DDHARM))
-	     (bl 'DHELPFUL)
-	     (not (bl 'DMAFIA)))
-      (PROGN
-	(decf FEAR)
-	nil
-	)
-      (if (equal STYLE 'Q)
-	(choose 'THREATQ)
-	(choose 'AFRAID))
-      )
+        ((and (not (bl 'DDHARM))
+	      (bl 'DHELPFUL)
+	      (not (bl 'DMAFIA)))
+	    (decf FEAR)
+	    nil)
+      ((eq STYLE 'Q) (choose 'THREATQ) (choose 'AFRAID))
     )
   )
 
@@ -239,8 +244,8 @@
   (prog ()
 	(unless STPIC (return nil))
         (when (memq STOPIC '(ANAPH FACTS STRONGFEELINGS GREETINGS)) (return nil))
-        (when (eql STOPIC OLDTOPIC) (return nil))
-        (setf NEWTOPICNO (+1 NEWTOPICNO))
+        (when (eq STOPIC OLDTOPIC) (return nil))
+        (setf NEWTOPICNO (+ NEWTOPICNO 1))
         (setf OLDTOPICS (cons OLDTOPIC OLDTOPICS))
         (setf OLDTOPIC STOPIC)
 	)
@@ -259,7 +264,7 @@
     )
   )
 
-(defun addh(L) (for i in L do (setf HLIST (CONS I HLIST))))
+(defun addh(L) (loop for i in L do (setf HLIST (CONS I HLIST))))
 
 ; % REACT2  CALLS REPLYR WITH APPROPRIATE ARGUMENTS AND ENTERS THE INPUT ON THE CONVERSATION LIST %
 
@@ -274,7 +279,7 @@
 	  (andthen (list 'OUT nil))
           (return T))
 	(unless (diskread B) 
-	  (error "REACT2 ERROR BAD DISKREAD" B)
+	  (paerror "REACT2 ERROR BAD DISKREAD " B)
 	  (return nil))
 	(andthen (list 'IN B))
 	(return (replyr B))
@@ -285,7 +290,8 @@
 (defun react3 (P STRUC SENT) ;% IF NO !OUTPUT FROM REACT2 THEN DO THIS %
   (prog (A B)
 	(setf B (CARN P))
-	(unless ?!EXHAUST (ERROR (list P STRUC SENT) "BAD INPUT IN REACT3"))
+
+	(unless ?!EXHAUST (paERROR  "~a BAD INPUT IN REACT3" (list P STRUC SENT)))
 	; %  REPETITIOUS INPUT AND EXHAUSTED REPLIES      %
         (when (and (eq TRACE_MEM 'OK) 
 		   (not (eq STOPIC 'STRONGFEELINGS))
@@ -295,6 +301,7 @@
           (PUTPROP B T 'REPEAT)
 	  (unless A (setf A (CHOOSE 'REPEAT) )))
 	(when (and A (REACT2 A))(RETURN A))
+
 	(setf A (GET_STORY))
 	(when (and A (REACT2 A)) (RETURN A))
 	(unless (setf A (EXHAUSTER)) (setf A (CHOOSE 'EXHAUST)))
@@ -314,7 +321,7 @@
 	(setf BUG 11)
 	(when (and (eq INPUTNO 2) (not ERRNAME))
 	  (setf ERRNAME T) ;   % SAVE A POINTER TO THE DIA FILE %
-	  (ERROR (format nil (IF (PTYJOB) " PTYJOB~a" " ~a") 
+	  (paERROR (format nil (IF (PTYJOB) " PTYJOB~a" " ~a") 
 			 (IF (not SAVE_FILE) " NSAVED" " ")) NIL)
 	  )
 	(setf BUG 12)
@@ -324,11 +331,14 @@
 	(WINDOWSET 2)
 	(WINDOW 51 T (GET STRUC 'TOPIC))
 	(when (setf A (GET STRUC 'UNIT)) (WINDOW 52 T A))
+
 	(WINDOW 31 T 'PREPROCESS)
 	(setf REACTTO (CHECKINPUT STRUC)) ;% PREPROCESS THE INPUT %
 	(when (and REACTTO (not (READLAMBDA REACTTO))) (setf REACTTO (setf STRUC NIL)))
 	(setf BUG 14)
-	(IF (and (not REACTTO) STRUC) (or
+
+	(IF (and (not REACTTO) STRUC) 
+              (or
                 (when (setf REACTTO (SPECFN STRUC)) (setf TRACE_MEM 'SPECIALANAPH) ;% LOOK FOR ANAPHORA %
                         (setf SPECFNNO (+ SPECFNNO 1)))
 		(when (setf REACTTO (MEMFIND STRUC)) (setf TRACE_MEM 'OK)) ;% LOOK UP NORMAL INPUT %
@@ -338,67 +348,79 @@
 	(setf BUG 15)
 	(when (and (not REACTTO)(not DELFLAG)(setf REACTTO (SKEYWD STYPE INPUTQUES)))
 	    (setf TRACE_MEM 'KEYWORD))
+
 	(unless (READLAMBDA REACTTO) (setf REACTTO NIL))
+
 	(setf BUG 16)
 	(ANALYZE T)
+
 	(setf STOPIC (CARN (GET STRUC 'TOPIC)))
 	(TOPICANALYZE) ; % ANALYZE THE CURRENT TOPIC %
 	(WINDOW 31 T 'INFERENCES)
-        (unless (ERRSET (INFERENCE) NIL) (ERROR "INFERENCE ERROR" PROVEL))
+        (unless (ERRSET (INFERENCE) NIL) (paERROR "INFERENCE ERROR" PROVEL))
 	(WINDOW 31 T 'AFFECTS)
-	(unless (ERRSET (AFFECT) NIL) (ERROR "AFFECT ERROR" ACTION))
+	(unless (ERRSET (AFFECT) NIL) (paERROR "AFFECT ERROR" ACTION))
 	(WINDOW 31 T 'INTENTIONS)
-	(unless (ERRSET (setf FOUND (DOINTENT) NIL)) (ERROR "DOINTENT" INTENT))
+	(unless (ERRSET (setf FOUND (DOINTENT) NIL)) (paERROR "DOINTENT" INTENT))
 	(IF FOUND (setf TRACE_MEM 'INTENT))
 	(WINDOW 31 T 'ACTIONS)
 	(setf BUG 17)
 	(when (and (not FOUND) REACTTO) (setf FOUND REACTTO))
+
 	; % IF THERE IS NOTHING IN FOUND, THEN WE HAVE TO PUNT AND TAKE A MISCELLANEOUS RESPONSE %
+
 	(unless FOUND 
-	  (progn (IF (eq STYPE 'Q) (setf FOUND (MISCQ SENT)) (setf FOUND (MISCS SENT)))
-		 (setf MISCNO (+ MISCNO 1))
-		 (when (and (not TRACE_MEM) FOUND) (setf TRACE_MEM 'NO_PATTERN)))
-	  )
+	  (IF (eq STYPE 'Q) (setf FOUND (MISCQ SENT)) (setf FOUND (MISCS SENT)))
+	  (setf MISCNO (+ MISCNO 1))
+	  (when (and (not TRACE_MEM) FOUND) (setf TRACE_MEM 'NO_PATTERN)))
         (setf BUG 18)
 
         (unless (READLAMBDA FOUND) (setf FOUND NIL))
 	(setf BUG 20)
+
 	(setf REACTTO FOUND)(setf B NIL)
 	; % DO SEMANTIC FUNCTION, RESULT WILL BE EITHER @@NAME OR ACTUAL SENTENCE %
         (setf FOUND (IF (setf B (DOSF FOUND)) (IF (setf A (DOSF B)) A B ) FOUND))
 	(setf BUG 22)
-        (IF (NOT_LAST_INPUT) (RETURN NIL))
+
+        (when (NOT_LAST_INPUT) (RETURN NIL))
 	; % QUIT HERE IF THERE IS ANOTHER INPUT SENTENCE ON THE INPUT LINE %
 	(ANALYZE T)
+
         (when (eq (CARN (GET FOUND 'TOPIC)) 'MAFIA) (setf DELNO (+ DELNO 1))); % RECORD NUMBER OF DELUSION STMTS %
 	(REACT2 FOUND);  % GET THE ENGLISH SENTENCE INTO ?!OUTPUT %
 	(setf BUG 30)
+
 	(unless ?!OUTPUT (setf FOUND2 (REACT3 FOUND STRUC SENT))) ;% TRY AGAIN TO GET ENGLISH OUTPUT %
+
 	(setf BUG 35)
 	(setf ?!ANAPHLISTOLD ?!ANAPHLIST)(setf ?!ANAPHLIST ?!ANAPHLISTNEW) ;% UPDATE ANAPHLIST %
+
 	(when (and ?!OUTPUT (car ?!OUTPUT)) ;% RESCAN OUTPUT FOR FLARE AND DELUSIONAL WORDS %
            (when (ATOM (ERRSET (ASCAN (CANONA ?!OUTPUT) NIL) NIL)) 
-                (ERROR (format nil "ASCAN~a" ?!OUTPUT) FOUND)))
+                   (paERROR (format nil "ASCAN~a" ?!OUTPUT) FOUND)))
 	(setf BUG 40)
+
 	(setf ?!LAST_OUTPUT FOUND)
 	(ANALYZE T);
 	(setf BUG 42)
 	(WINDOW 31 T 'OUTPUT)(setf PREV_OUTPUT ?!OUTPUT)
 	(WINDOW 49 T (IF (ATOM (car ?!OUTPUT) ?!OUTPUT (cdr ?!OUTPUT ))))
 	(when (ATOM (ERRSET (REACTPRINT ?!OUTPUT) NIL)) ;% PRINT OUTPUT TO TTY AND DIA FILE %
-	  (ERROR (format nil "REACTPRINT~a~a" INPUTSSENT ?!OUTPUT) FOUND))
+	  (paERROR (format nil "REACTPRINT~a~a" INPUTSSENT ?!OUTPUT) FOUND))
 	(setf INPUTSSENT NIL)
 	(setf BUG 48)
 	(IF (ATOM (ERRSET (progn
 			    (HISTORY NIL)          ;% REMEMBER CURRENT THINGS FOR HISTORY %
 			    (MODIFVAR)(TERPRI NIL) ;% UPDATE EMOTION VARIABLES %
 			    (IF WINDOWS (WPRINTVARS))
+
 			    ; %  UPDATE STORY LISTS %
 			    (when (and (LAMBDANAME ?!LAST_OUTPUT) (setf A (GET ?!LAST_OUTPUT 'STORYNAME))) 
 			      (DELETEP A ?!LAST_OUTPUT 'STORY))
 			    (when (and (LAMBDANAME FOUND2) (setf A (GET FOUND2 'STORYNAME)))
 			      (DELETEP A FOUND2 'STORY))) NIL))
-	    (ERROR "ERROR FROM BOTTOM OF REACT" FOUND))
+	    (paERROR "ERROR FROM BOTTOM OF REACT" FOUND))
 
 	(ANALYZE T)
 	(setf BUG 50)
@@ -417,6 +439,8 @@
     )
   )
 
+
+;% FORMAT OF INPUT: ( <BELNAME> <NUMBER> <CLASS> <OPTIONAL OPPOS NAME> <NUMBER> ) %
 
 (defvar *INTLIST* NIL)
 
@@ -463,6 +487,9 @@
 (defun readbel ()
   (make-bels (read-bel))
   )
+
+
+;% FORMAT OF INPUT: ( <INF NAME> <CONSEQ> <LIST OF ANTECEDENTS> ) %
 
 (defun read-inf ()
   (let (inf)
@@ -522,18 +549,19 @@
 
 (defun assert2 (B) ;% ASSERT A NEW BELIEF, AND FIND ALL THEOREMS IN WHICH IT IS THE ANTECEDENT %
   (prog (A)
-	(IF (setf A (GET B 'EMOTE)) (INFEMOTE B A T))
+	(when (setf A (GET B 'EMOTE)) (INFEMOTE B A T))
 	(setf A (GET B 'OPPOS))
 	(when (GET B 'TRUTH) (RETURN T))
 	(when (and A (GET A 'TRUTH)) ;% OPPOSITE BELIEF ALREADY TRUE %
 	  (IF PRINTALL (PRINTSTR "CONTRADICTION : TRYING TO ASSERT ~a" B) )
-	  (return T))
+	  (return T)
+        )
         (WINDOW 37 NIL B)
 	(PUTPROP B T 'TRUTH) ;% ASSERT %
 	(when A (PUTPROP A NIL 'TRUTH)) ;% UNASSERT THE OPPOSITE BELIEF %
 	(when (setf A (GET B 'TH)) (setf PROVEL (append PROVEL A))) ;% FIND THEOREMS %
-	(setf PROVEN (CONS B PROVEN)) ;% RECORD THIS BELIEF %
-	(setf NEWPROVEN (CONS B NEWPROVEN))
+	(setf PROVEN (cons B PROVEN)) ;% RECORD THIS BELIEF %
+	(setf NEWPROVEN (cons B NEWPROVEN))
 	)
   )
 
@@ -589,14 +617,14 @@
 
 (defun  evaluate (I) ;% EVALUATE AN ANTECEDENT "I" %
   (cond ((ATOM I) ;% EITHER AN INPUT WHICH IS STATED, OR A BELIEF WHICH IS TRUE %
-    (cond ((LAMBDANAME I) (STATED I)) (T (BL I))))
+          (if (LAMBDANAME I) (STATED I) (BL I)))
 	((eq (car I) 'NOT) (NOT (BL (cadr I))))
 	(T (EVAL I)) ) ;% ELSE A FUNCTION FOR LISP TO EVALUATE %
   )
 
-(defun BL (b)
+(defun BL (b) ; % RETURNS T IF BELIEF B IS TRUE, OR INTENTION B IS OVER ITS THRESHHOLD %
   (if (not (atom b)) 
-    (progn (format t "BL not ATOM ~a" b) NIL)
+    (progn (paerror "BL not ATOM " b) NIL)
     (if (eq (get b 'class) 'INN) 
       (>= (get b 'ntruth) 5)
       (get b 'truth)
@@ -613,7 +641,7 @@
 	(setf NEWPROVEN NIL)
 	(setf PARA (GREATERP MISTRUST 7)) ;% PARANOID PARAMETER -- MAKES SOME BELIEFS POSSIBLE %
 	(IF (eq STOPIC 'GREETINGS) (setf SPECFNNO (+ SPECFNNO 1)))
-	(setf SPECFNRA (* 100 (/ SPECFNNO INPUTNO)))
+	(setf SPECFNRA (/ (* 100 SPECFNNO) INPUTNO))
         (setf PROVEL '(IF730 IF740 IF750 IF760 IF770 IF350 IF380 IF566 IF884  ;% TRY THESE EVERY TIME %
                 ;%       IF205 IF210 %     
 		IF225))
