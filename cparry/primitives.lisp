@@ -41,7 +41,7 @@
 (defun ttyuu () );; uncertain
 (defun divide (x y) (floor x y))
 
-(defun paerror (x y) (format t "~a ~a" x y))
+;(defun paerror (x y) (format t "~a ~a" x y))
 
 (defun read-file(fname)
     (with-open-file (in fname :direction :input)
