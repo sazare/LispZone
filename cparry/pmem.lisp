@@ -28,7 +28,7 @@
   (prog (a)
     (if (not (setf a (diskread2 name)) )
         (progn
-	  (paerror t "error in diskread " name)
+	  (paerror "error in diskread " name)
           (return nil))
         (return (car a)))
   )
@@ -100,11 +100,11 @@
 (defun eng (x)
   (prog (unit error)
 	(when (or (null x) (null (cdr x))(null (cddr x)))
-	  (paerror paerror "E BAD INPUT~a" X)
+	  (paerror "E BAD INPUT~a" X)
 	  (return nil))
 	(setf UNIT (CAR X))
 	(when (or (GET UNIT 'NORMAL)  (GET UNIT 'EMBQ))
-	  (paerror("BAD INPUT-DOUBLE ENTRY ~a" UNIT)))
+	  (paerror "BAD INPUT-DOUBLE ENTRY ~a" UNIT))
 	(setf X (CDR X))
 	(when (eq (CAR X) 'ANAPH)
 	  (setf X (CDR X)) ;% PUT ANAPH ON PROPERTY LIST %
@@ -270,7 +270,7 @@
   )
 
 
-(defun parandom(N) 1) ;  % GETS REPLACE BY RANDOM.LAP, LOADED IN AFTER THIS FUNCTION %
+(defun parandom(N) (list n) 1) ;  % GETS REPLACE BY RANDOM.LAP, LOADED IN AFTER THIS FUNCTION %
 
 ;% SPECFN CALLS THE SPECIAL FN IF THERE IS ONE %
 
@@ -295,6 +295,7 @@
 
 (defun go_on(L F)
   (prog (a)
+        (list L) ;;; dont used
 	(unless a (setf a (GET_ANAPH 'GO_ON)))
 	(unless a (setf a (GET_STORY)))
 	(when (and A F) (ANDTHEN (list 'IN (GET 'GO_ON 'UNIT))))
@@ -314,6 +315,7 @@
 
 (defun genl (L F ANAPH) ;% TRY THE ANAPH, ELSE TRY GO_ON  %
   (prog (a)
+        (list f) ;;; dont used
 	(setf a nil)
         (unless A (setf A (GET_ANAPH ANAPH)))
 	(unless A (setf A (GO_ON L NIL)))
@@ -372,16 +374,18 @@
 
 (defun  who (L F)
   (prog (a)
+        (list f) ;; dont used
 	(setf a nil)
         (setf A (get_anaph 'WHO))
 	(if (LAMBDANAME A) (RETURN A) (setf A NIL))
-	(unless a (stf A (GO_ON L NIL)))
+	(unless a (setf A (GO_ON L NIL)))
 	(RETURN A)
 	)
   )
 
 (defun  what (L F)
   (prog (a)
+        (list f) ;; dont used
         (setf A (GET_ANAPH 'WHAT))
 	(if (and L (equal (cadr (GET A 'BONDVALUE)) (car L))) T (setf A NIL))
 	(unless A (setf A (GO_ON L T)))
@@ -412,17 +416,15 @@
 	(PUTPROP 'SENSITIVELIST  A  'WORDS);; now sensitivelist.words directly points all words
 	(setf A (cons 'DELNSET (append (GET 'FLARELIST 'SETS) (GET 'SETLIST 'SETS) )))
 	(loop for I in A do ;% I IS THE NAME OF A FLARESET %
-	      for J in (GET I 'STORY) do ;because flareset's i only have story 
-	      (progn ;% J IS A @@-NAME % ;;; I dont know omura
-                (setf B J)
-		(if B (PUTPROP B I 'STORYNAME) 
-		  (progn 
-		    (setf C NIL) 
-		    (print J)
-		    )
-		  )
-		)
-	      )
+	      (loop for J in (GET I 'STORY) do ;because flareset's i only have story 
+	         ;;;% J IS A @@-NAME % ;;; I dont know omura
+                   (setf B J)
+		   (when B (PUTPROP B I 'STORYNAME) 
+		      (setf C NIL) 
+		      (print J)
+		   )
+              )
+	)
         (RETURN (IF C '(SET UP OK) '(SET UP BAD) ))
 	)
   )

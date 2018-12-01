@@ -1,5 +1,22 @@
 ;% THIS FILE HAS FUNCTIONS FOR THE WINDOW FEATURE      %
 
+;;; stub
+(defun begin (x) x)
+(defun winsup (x) x)
+(defun winopn (x y z w h) (list x y z w h))
+(defun winlbl (x y) (list x y))
+(defun windis (&rest x) x)
+(defun winsiz (x y) (list x y))
+(defun winsil (x &rest y) (list x y))
+(defun winrel (x) x)
+(defun winxit ())1
+(defun strp (x) x)
+(defun str (x) x)
+(defun intest ())
+(defun winout (x y z) (list x y z))
+
+;;;;
+
 (defun PMCLR()
   (prog ()
 	(WINSUP T)
@@ -40,8 +57,9 @@
     )
   )
 
+
 (defun WINHELP()
- 	PRINTSTR(
+ 	(PRINTSTR
 "NEW EASIER WINDOW COMMANDS:
     ESC I   IS A BINARY SWITCH TO HALT AND CONTINUE PROCESSING 
    YOU ARE NOW HALTED. TYPE  ESC I  TO CONTINUE.  " )
@@ -59,9 +77,10 @@
     )
   )
 
-(defun TWINDOW (NFLAGL) ;% PRINTS OUT WINDOW STUFF FOR A TELETYPE %
+
+(defun TWINDOW (N FLAG L) ;% PRINTS OUT WINDOW STUFF FOR A TELETYPE %
   (prog (A)
-	(setf A ASSOC ( N '(	( 2 . "Input:	" )
+	(setf A (ASSOC  N '(	( 2 . "Input:	" )
 			( 3 . "Respelled:  " )
 			( 4 . "Canonical form:  " )
 			( 5 . "Segmented:  " )
@@ -73,7 +92,7 @@
 			( 40 . "Emotions:  " )
 			( 42 . "Intentions:  " )
 			( 44 . "Action:  " )		) ))
-	(when (and A (or FLAG (N=36) (N=42))) (PRINC (CDR A)) (PRINTSTR L))
+	(when (and A (or FLAG (= N 36) (= N 42))) (PRINC (CDR A)) (PRINTSTR L))
 	)
   )
 
@@ -82,7 +101,7 @@
 (defun PMWIN()
   (prog (SENTL)
 	(WINSUP T)
-	(SENTL 76 TEN )
+	(setf SENTL 76 )(TEN)
 	(WINSIL 30)
 	(WINSIZ 4 2)
 
@@ -129,7 +148,7 @@
   )
 
 (defun MMWIN()
-  (prog (SENTLHSENTL)
+  (prog (SENTL HSENTL)
 	(WINSUP T)
 	(setf SENTL 76)
 	(setf HSENTL 36)
@@ -171,9 +190,10 @@
 	)
 
 (defun MMWIN2();
-	(BEGIN  WINSUP T)
+	(BEGIN  (WINSUP T))
 	(WINOPN 31 9 0 16 3)
 	(WINLBL 31 'PROCESS)
 	(WINOPN 32 0 3 38 3)
 	(WINLBL 32 "INPUT STRUCTURE")
 	)
+

@@ -1,0 +1,7 @@
+usage
+
+1. (load "loadall.lisp")
+2. if you check the undefineds, once more (load "loadall.lisp")
+3. (repl)
+4. input words
+

@@ -1,17 +1,21 @@
 ;; pmem5.lisp
 
+
+;;;;
+
 (defun experiment ()
   ;; EXPERIMENTS OF RAISING AND LOWERING SHAME
   (prog(a)
+   (list a) ;; dont used
    (when (or (not EXPERIMENT) (not (eq EXPERIMENT 'SEVEN))) (return nil))
    (when (= 7 INPUTNO) (setf HURT (+ HURT 5)))
    (when (= 17 INPUTNO) (setf HURT (- HURT 5)))
   )
 )
 
-(defun paerror (mess L) ;; I dont want to use this. error_file go out of bound
-  (setf ?!ERROR (const (error_file (list mess L PM2INPUT PMINPUT FILE1 BUG)) ?!ERROR))
-  )
+;(defun paerror (mess L) ;; I dont want to use this. error_file go out of bound
+;  (setf ?!ERROR (cons (error_file (list mess L PM2INPUT PMINPUT FILE1 BUG)) ?!ERROR))
+;  )
 
 (defun allowrun ()
   (prog (a)
@@ -32,7 +36,7 @@
     (setf flag (read))
     (when (eq status 'OK) (inc nil T) (return flag))
     (inc nil nil)
-    (eval (list 'OUTPUT DIAFILEARE 'QPARRY))
+    (eval (list 'OUTPUT DIAFILEAREA 'QPARRY))
     (outc T nil) (print 0) (print flag) (outc nil T) ; %RESET FILE %
     (when (= status 0) (sleep 10)(exit) (car nil)) ;;; ?? (car nil) make nothing.
     (return status)
@@ -87,7 +91,7 @@
 (defun timestat () ;% THIS KEEPS THE TIME FOR NET AND NONNET JOBS %
   (list (if LOWMAN 'NET 'NONNET) (runtim T)))
 
-(defun anddo (L M) L)
+(defun anddo (L M) M L)
 
 (defun window (N F L)
   (prog ()
@@ -96,10 +100,8 @@
 	  (return L))
 	)
   )
-
 (defun windowsset (n) n)
-
-(defun window_print (A B C D) nil)
+(defun window_print (A B C D) (list a b c d))
 
 (defun twindow (N flag L) ;  % PRINTS OUT WINDOW STUFF FOR A TELETYPE %
   (prog (a)
@@ -214,12 +216,13 @@
   )
 
 (defun knower ()
-  (cond ((or (BL 'DDHARM)(BL 'DHOSTILE)(BL '?*DDHELP) (choose 'HOSTILEREPLIES))
+  (cond ((or (BL 'DDHARM)(BL 'DHOSTILE)(BL '?*DDHELP)) (choose 'HOSTILEREPLIES))
         ((or (BL '?*DTRUSTWORTHY) (BL '?*DHONEST)) (CHOOSE '?*DHONEST))
         ((BL 'DDHELP)(CHOOSE 'DDHELP))
         ((BL 'DEXCITED)(CHOOSE 'DEXCITED))
         ((BL '?*DINITIATING)(CHOOSE 'DBAD))
-	(T nil))))
+	(T nil))
+)
 
 (defun leadin ()
   (progn 
@@ -241,7 +244,8 @@
 
 (defun namecheck()
   (prog (a)
-	(when (and (not (setf a assoc('NAME INPUTQUES))) (setf A (assoc 'YOU INPUTQUES))
+	(when (and (not (setf a (assoc 'NAME INPUTQUES))) 
+                   (setf A (assoc 'YOU INPUTQUES))
 		   (eq (cdr A) 'YOUR))
 	  (return (CHOOSE 'DONTREMEMBER))
 	  )
@@ -257,8 +261,8 @@
   (prog (a)
 	(cond ((or (bl 'DDHARM)(BL 'DHOSTILE)(BL '?*DDHELP)) (setf a (CHOOSE 'HOSTILEREPLIES)))
 	      ((or (BL '?*DTRUSTWORTHY)(BL '?*DHONEST)) (setf a (CHOOSE '?*DHONEST)))
-	      (T (loop for i in '(DABNORMAL DEXCITED DRATIONAL DHELPFUL DSOCIABLE) do
-                when (BL i) (setf A (CHOOSE i))
+	      (T (loop for i in '(DABNORMAL DEXCITED DRATIONAL DHELPFUL DSOCIABLE) 
+                do (when (BL i) (setf A (CHOOSE i)))
 		until a )))
         (return a)
 	)
@@ -280,7 +284,7 @@
 ;          THE TOPIC, AND CURRENT BELIEFS %
 
 (defun affect ()
-  (prog (a b)
+  (prog (a) ; b)
         (setf ACTION NIL)
 	(setf INTENT NIL)
         (when (member (get STOPIC 'SET) SENSITIVELIST) (setf AJUMP  0.2))
@@ -367,18 +371,22 @@
 
 (defun pinteract () (when (nequal FLARE 'INIT) (addto 'PHELP 5)))
 (defun pgames () (anddo (choose 'GAMES) (addto 'PGAMES -2)))
-(defun pfacts () (anddo (choose 'MOVEON (addto 'PFACTS -2))))
+(defun pfacts () (anddo (choose 'MOVEON) (addto 'PFACTS -2)))
 (defun pmafia ()
-  (if (>= FEAR 10) (choose 'PANIC)
-    (if (BL 'DGAMES) 
-      (andodo nil (setf ANGER (- ANGER 3)))
-      (andodo (choose 'PROBE) (addto 'PMAFIA -2))))
+  (anddo 
+    (if (>= FEAR 10) 
+      (choose 'PANIC)
+      (if (BL 'DGAMES) 
+        (anddo nil (setf ANGER (- ANGER 3)))
+        (choose 'PROBE)))
+    (addto 'PMAFIA -2))
   )
+
 (defun phelp ()
   (if DELFLAG
     (addto 'PTELL 5)
     (when (and (eq FLARE 'INIT) 
-	     (or (get STRUCT 'UNIT) (not REACTTO) (eq 'LEADIN (get REACTTO 'CLASS))))
+	     (or (get STRUC 'UNIT) (not REACTTO) (eq 'LEADIN (get REACTTO 'CLASS))))
       (addto 'PHELP -5)
       (flarelead (chooselead ))
       )
@@ -402,10 +410,10 @@
 (defun pexit () (anddo (choose 'OPINION) (addto 'PEXIT2 10)))
 (defun pexit2 () 
   (anddo (choose (cond 
-	    ((>= ANGER 9) 'MADEXIT)
-	    ((>= FEAR 9) 'FEAREXIT)
-	    ((not (MEMSIZEOF)) 'TIRED)
-	    (T 'EXIT))a)
+	          ((>= ANGER 9) 'MADEXIT)
+	          ((>= FEAR 9) 'FEAREXIT)
+	          ((not (memsizeok)) 'TIRED)
+	          (T 'EXIT)))
 	 (setf ENDE T))
   )
 
@@ -413,7 +421,7 @@
   ;% RETURNS T IF THERE IS A LULL IN THE CONVERSATION %
   ;% IF MISC IS USED AND LULL(), THEN WILL JUMP BACK TO FLARES OR DELNS %
   (cond ((or (eq OLDTOPIC 'ANAPH) (eq OLDTOPIC 'IYOUME)) T)
-	((>= (length SSENT 10) ) nil)
+	((>= (length SSENT) 10) nil)
 	(T (eq 1 (parandom 2)))
 	)
   )
@@ -433,7 +441,7 @@
 	(when (and (not a) (eq STOPIC 'MAFIA))
 	  (setf a (if DELFLAG 'AVOIDANCE 'NOMAFIA)))
 	(when (and (not a) (>= FEAR 14))
-	  (setf a (if (eq TYPE 'Q) 'PTHREATQ 'PAFRAID))
+	  (setf a (if (eq paTYPE 'Q) 'PTHREATQ 'PAFRAID))
 	  (addto 'PEXIT 1))
 	(unless a
 	  (setf a (if (>= HURT 10) 'ALIEN 'PHOSTILEREPLIES))
@@ -463,7 +471,7 @@
 	)
   )
 
-(defun paranoid ()
+(defun paranoia ()
   (prog (a)
 	(paassert '?*DTRUSTWORTHY)
 	(loop for i in PARBEL do
@@ -480,7 +488,6 @@
 	(setf PARBEL nil)
 	)
   )
-
 
 
 (format t "end of loading pmem5.lisp~%")

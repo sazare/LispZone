@@ -1,7 +1,14 @@
 ;; this from pmem4
+;;;; stub
+
+(defun pminitialize ())
+(defun buffer (x) (format t "buffer:~a~%" x))
+(defun nouud (x) x)
+
+
+;;;;
 
 ;% THIS IS ALL THE TOP-LEVEL GOODIES PLUS INFERENCE %
-
 
 (defun  init() (selectinputn '(PAR BLF) INPUTFILE))
 
@@ -15,6 +22,7 @@
   )
 
 (defun  testm () (test_pattern))
+
 ;(defun  lambdaname (L) (equal (chrval L) LAMDA))
 ;;; lambdaname is defined in pmem.lisp
 
@@ -69,6 +77,7 @@
 
 (defun parry2 (ind)
   (prog (a b)
+    (list ind) ;; for error defined but not used
     (setf bug 0)
     (when SAVE_DUMP (savejob save_dump 'sav))
       ;; Program will start here again if system clashes
@@ -143,7 +152,7 @@
   (prog (SENT ISENT N)
 	(setf SENT  L)
         ;%       SUPPRESS NON-VERBALS HERE       %
-        (setf BUG ⇦  43)
+        (setf BUG  43)
 	(when (and SUPPRESS SENT (not (ATOM (car SENT)))) (setf SENT (cdr SENT)))
 	(setf SENT (IF SENT (STRINGATE SENT) " "))
 	(TERPRI NIL)
@@ -165,6 +174,7 @@
   )
 
 (defun pmin()  (pminitialize))
+
 
 (defun dosf (L) ;% THIS DOES THE SEMANTIC FN (PROTECTED BY ERRSET) AND RETURNS A LAMBDA OUTPUT %
   (prog (a b)
@@ -242,7 +252,7 @@
 ;% TOPICANALYZE  RECORDS THE NUMBER OF OLD TOPICS, CHANGED TOPICS, AND THE PREVIOUS TOPIC %
 (defun topicanalyze ()
   (prog ()
-	(unless STPIC (return nil))
+	(unless STOPIC (return nil))
         (when (memq STOPIC '(ANAPH FACTS STRONGFEELINGS GREETINGS)) (return nil))
         (when (eq STOPIC OLDTOPIC) (return nil))
         (setf NEWTOPICNO (+ NEWTOPICNO 1))
@@ -269,7 +279,7 @@
 ; % REACT2  CALLS REPLYR WITH APPROPRIATE ARGUMENTS AND ENTERS THE INPUT ON THE CONVERSATION LIST %
 
 (defun react2 (B)
-  (prog (a) 
+  (prog () ;(a) 
 	(setf ?!EXHAUST nil)
         (unless (LAMBDANAME B) 
 	  (paerror "NONLAMBDA INTO REACT2" B)
@@ -361,7 +371,7 @@
 	(WINDOW 31 T 'AFFECTS)
 	(unless (ERRSET (AFFECT) NIL) (paERROR "AFFECT ERROR" ACTION))
 	(WINDOW 31 T 'INTENTIONS)
-	(unless (ERRSET (setf FOUND (DOINTENT) NIL)) (paERROR "DOINTENT" INTENT))
+	(unless (ERRSET (setf FOUND (DOINTENT)) NIL) (paERROR "DOINTENT" INTENT))
 	(IF FOUND (setf TRACE_MEM 'INTENT))
 	(WINDOW 31 T 'ACTIONS)
 	(setf BUG 17)
@@ -405,7 +415,7 @@
 	(ANALYZE T);
 	(setf BUG 42)
 	(WINDOW 31 T 'OUTPUT)(setf PREV_OUTPUT ?!OUTPUT)
-	(WINDOW 49 T (IF (ATOM (car ?!OUTPUT) ?!OUTPUT (cdr ?!OUTPUT ))))
+	(WINDOW 49 T (IF (ATOM (car ?!OUTPUT)) ?!OUTPUT (cdr ?!OUTPUT )))
 	(when (ATOM (ERRSET (REACTPRINT ?!OUTPUT) NIL)) ;% PRINT OUTPUT TO TTY AND DIA FILE %
 	  (paERROR (format nil "REACTPRINT~a~a" INPUTSSENT ?!OUTPUT) FOUND))
 	(setf INPUTSSENT NIL)
@@ -503,14 +513,13 @@
     (loop 
       for a in infs
       do
-;      (format t "a=~a~%" a)
       (if (memq (car a) '(TH2 EMOTE))
 	  (loop for i in (cddr a) do 
 		(when (atom i) (setf (get i (car a)) (cons (cadr a) (get i (car a))))))
 	  (prog ()
 	    (setf b a)
 	    (when (get (car a) 'theorem) 
-		(format t "~%duplicate inf: ~a" (car a)(force-output t)))
+		(format t "~%duplicate inf: ~a" (car a))(force-output t))
 ;	    (format t "(car a) = ~a~%" (car a))
 	    (setf (get (car a) 'theorem) (cons (cadr a) (caddr a)))
 ;	    (format t "carn(cadr a) = ~a~%" (carn (cadr a)))
@@ -553,7 +562,7 @@
 	(setf A (GET B 'OPPOS))
 	(when (GET B 'TRUTH) (RETURN T))
 	(when (and A (GET A 'TRUTH)) ;% OPPOSITE BELIEF ALREADY TRUE %
-	  (IF PRINTALL (PRINTSTR "CONTRADICTION : TRYING TO ASSERT ~a" B) )
+	  (when PRINTALL (PRINTSTR (format nil "CONTRADICTION : TRYING TO ASSERT ~a" B) ))
 	  (return T)
         )
         (WINDOW 37 NIL B)
@@ -591,8 +600,7 @@
   )
 
 (defun prove () ;% DO PROVE2 REPEATEDLY ON PROVEL, THE LIST OF THEOREMS TO BE PROVED %
-  (loop while PROVEL do (PROVE2 (car PROVEL) (prog2 (setf PROVEL (cdr PROVEL))))
-	)
+  (loop while PROVEL do (prog2 (car PROVEL) (setf PROVEL (cdr PROVEL))))
   )
 
 ;% TH IS A THEOREM NAME FROM THE TOP OF PROVEL %
@@ -608,7 +616,7 @@
 	(loop for I In (cdr A) do
 	      (setf B (and B  (EVALUATE I)))) ;% TRY EACH ANTECEDENT AND "AND" THEM TOGETHER %
 	(when B 
-	  (IF PRINTALL (PRINTSTR (format "~a PROVEN" C) ))
+	  (IF PRINTALL (PRINTSTR (format nil "~a PROVEN" C) ))
 	  (POSIT C)
 	  (WINDOW 36 T A))
 	)
