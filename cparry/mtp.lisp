@@ -1,18 +1,5 @@
 ;;; UI layer of MTP
 
-
-;;; test version of synonym
-;(defvar inputq nil)
-;(defvar symlist '((be am is are were was) (do does did) (see find look)))
-;(defun setupsym (symlist)
-;  (loop for syms in symlist do
-;    (loop for word in syms do
-;      (setf (get word 'synonym) (car syms))
-;    )
-;  )
-;)
-;(setupsym symlist)
-
 ;;; here is the starting
 (defvar synonym (read-file "data/synonm.alf"))
 (defvar inputq nil)
@@ -40,9 +27,7 @@
 
 (defun ask ()
 "I would like to prompt and read your input. But not prompt yet."
-;;  (format t "input: ")(force-output t) ;; dont work prompt
   (input-line)
- ; (read-line)
 )  
 
 (defun proc (word)
@@ -80,25 +65,7 @@
   )
 )
 
-;
-;(loop until (null (setf ii (read))) do(print ii))
-;
-
-;;; this is experimental code for string to list
-;;; now it was made by input-line
-;(defun separ (dat)
-; (prog (pb pa ate que)
-;  (setf pb 0)(setf pa 0)(setf ate (length dat))(setf que nil)
-;  (loop 
-;   (setf pa (search " " dat  :start2 pb :end2 ate))
-;   (push (subseq dat pb pa) que)
-;   (unless pa (return))
-;   (setf pb (+ pa 1))
-;  )
-;  (return (reverse que))
-; )
-;) 
-
+;;; test statement
 (defvar dd "I am a doctor .")
 (defvar dq "Am I a doctor ?")
 

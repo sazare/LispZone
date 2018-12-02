@@ -238,7 +238,7 @@
 ;% INP IS INPUTQUES   %
 
 (defun delcheck (INP)
-;;omura is this function's indentation in mlisp correct??
+;;omura: is this function's indentation in mlisp correct??
 ;; and the position of comments let me feel ambiguous.
   (prog (words)
 ;%   CHECK FOR STRONG DELUSION-NOUNS AND -VERBS
