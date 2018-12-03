@@ -12,12 +12,33 @@
 (setupsym2 synonym)
 ;; test (eq (get 'whenever 'synonym) 'when)
 
-(defun input-line ()  
+;;;; 
+(defun changemark (str)
+  (prog (p)
+    (setf str (remove cc str))
+    (setq p (position dc str))
+    (when p 
+      (setf (subseq str p) " ")
+      (setf str (format nil "~a~a" str dm))
+      (return str)
+    )
+    (setq p (position qc str))
+    (when p 
+      (setf (subseq str p) " ")
+      (setf str (format nil "~a~a" str qm))
+      (return str)
+    )
+    str
+  )
+)
+
+(defun input-line (aline)  
 "read a line into a list"
-  (with-input-from-string (ss (read-line))
+  (with-input-from-string (ss aline)
     (prog (buf se )
       (loop while (setq se (read ss nil)) 
 	do 
+;(format t "~a~%" se)
            (push se buf)
       )
       (return (reverse buf))
@@ -27,7 +48,7 @@
 
 (defun ask ()
 "I would like to prompt and read your input. But not prompt yet."
-  (input-line)
+  (input-line (read-line))
 )  
 
 (defun proc (word)
@@ -68,6 +89,12 @@
 ;;; test statement
 (defvar dd "I am a doctor .")
 (defvar dq "Am I a doctor ?")
+
+
+
+;(changemark xxx dc)
+;(changemark yyy qc)
+;(remove xxx cc)
 
 
 (format t "end of loading replpar.lisp~%")

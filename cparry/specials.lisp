@@ -209,5 +209,13 @@
 (defvar LF "")
 (defvar EOF "")
 
+(defvar DM  ".")
+(defvar QM  "?")
+(defvar CM  ",")
+
+(defvar DC  #\.)
+(defvar QC  #\?)
+(defvar CC  #\,)
+
 
 (format t "end of specials.lisp~%")
