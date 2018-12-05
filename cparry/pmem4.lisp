@@ -10,14 +10,14 @@
 
 ;% THIS IS ALL THE TOP-LEVEL GOODIES PLUS INFERENCE %
 
-(defun  init() (selectinputn '(PAR BLF) INPUTFILE))
+(defun  init() ()); (selectinputn '(PAR BLF) INPUTFILE))
 
 (defun  initfb() 
   (progn 
-    (EVAL '(DSKIN (quote RANDOM.LAP)))
+;    (EVAL '(DSKIN (quote RANDOM.LAP)))
     (setf LAMDA 8)
-    (initf)
-    (initb)
+;    (initf)
+;    (initb)
     )
   )
 
@@ -441,7 +441,7 @@
 ;% BINIT, READBEL, READINF %
 (defun binit()
   (progn
-    (BAKGAG T) (NOUUO T)(TEN)
+;    (BAKGAG T) (NOUUO T)(TEN)
     (setf INTLIST (setf INTENT (setf PROVEN (setf PROVEL NIL))))
     (setf PRINTALL NIL)
     (readbel) ;;(READBEL 'BEL)
@@ -537,7 +537,7 @@
 	    )
 	  )
       )
-    (format t "~%INF file read, last inf: ~a" b) (force-output t)
+    (format t "~%INF file read, last inf: ~a~%" b) (force-output t)
     )
   )
 

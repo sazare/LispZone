@@ -22,10 +22,10 @@
 ;                MUST BE DONE WHEN MAKING A NEW CORE IMAGE OF PARRY  %
 (defun oparinitialize ()
   (prog (x) 
-    (eval '(INC (INPUT (PAR BLF) RDATA) NIL)) ;;; this may be infix notation...
-    (loop while (NOT (ATOM (setf X (ERRSET (READ) T) )))do
-	  (eval (car x))
-	  (inc nil T))
+;    (eval '(INC (INPUT (PAR BLF) RDATA) NIL)) ;;; this may be infix notation...
+;    (loop while (NOT (ATOM (setf X (ERRSET (READ) T) )))do
+;	  (eval (car x))
+;	  (inc nil T))
     (setf FLARE 'INIT)                         ;%   FLARE=CURRENT FLARE TOPIC; 'INIT = NONE   %
     (setf LIVEFLARES (GET 'FLARELIST 'SETS))   ;%   FLARES NOT YET DISCUSSED   %
     (setf DEADFLARES  NIL)

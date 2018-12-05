@@ -99,6 +99,8 @@
   )
 
 (defun chseti (x y) (list x y))
+(defun swapp () (format t "swapp is stub~%"))
+(defun modifyvar () (format t "modifyvar is stub~%"))
 
 (format t "end of loading primitives.lisp~%")
 

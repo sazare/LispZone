@@ -85,7 +85,7 @@
 (defvar INPUTFILE nil)
 (defvar PMINPUT nil)
 (defvar PM2INPUT nil)
-(defvar BUG nil)
+(defvar BUG 0)
 (defvar REACTINPUT nil)
 (defvar INPUTNO 0)
 (defvar REPEATNO 0)
@@ -217,5 +217,9 @@
 (defvar QC  #\?)
 (defvar CC  #\,)
 
+(defvar DA 'DOT)
+
+
 
 (format t "end of specials.lisp~%")
+

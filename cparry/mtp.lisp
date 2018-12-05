@@ -13,22 +13,23 @@
 ;; test (eq (get 'whenever 'synonym) 'when)
 
 ;;;; 
-(defun changemark (str)
+(defun changem (cc ca str)
   (prog (p)
+    (setq p (position cc str))
+    (when p 
+      (setf (subseq str p) " ")
+      (setf str (format nil "~a~a" str ca))
+      (return str)
+    )
+    nil
+  )
+)
+(defun changemark (str)
+  (prog (ms)
     (setf str (remove cc str))
-    (setq p (position dc str))
-    (when p 
-      (setf (subseq str p) " ")
-      (setf str (format nil "~a~a" str dm))
-      (return str)
-    )
-    (setq p (position qc str))
-    (when p 
-      (setf (subseq str p) " ")
-      (setf str (format nil "~a~a" str qm))
-      (return str)
-    )
-    str
+    (when (setf ms (changem dc da str)) (return ms))
+    (when (setf ms (changem qc qm str)) (return ms))
+    (return str)
   )
 )
 
@@ -38,7 +39,6 @@
     (prog (buf se )
       (loop while (setq se (read ss nil)) 
 	do 
-;(format t "~a~%" se)
            (push se buf)
       )
       (return (reverse buf))
@@ -48,7 +48,7 @@
 
 (defun ask ()
 "I would like to prompt and read your input. But not prompt yet."
-  (input-line (read-line))
+  (input-line (changemark (read-line)))
 )  
 
 (defun proc (word)
@@ -59,8 +59,11 @@
 
 (defun symfy (word)
 "convert word list to (canonical . original) list as INPUTQUES"
-  (let ((sym (get word 'synonym)))
-    (if sym (cons sym word)(cons word word))
+  (let (sym)
+    (cond ((numberp word) (cons word word))
+          (T (setf sym (get word 'synonym))
+             (if sym (cons sym word)(cons word word)))
+             )
   )
 )
  
@@ -75,26 +78,60 @@
   (pop inputq)
 )
 
-(defun mtp ()
-"the top level function for MTP"
-  (prog (word)
-    (loop 
-      (setf word (getword))
-      (when (eq (car word) 'bye) (format t "bye~%")(return))
-      (proc word)
-    )
+(defun initall ()
+  (prog ()
+    (binit)
+    (initfb)
   )
 )
 
-;;; test statement
-(defvar dd "I am a doctor .")
-(defvar dq "Am I a doctor ?")
+(defun mtp-parry2 (ind)
+"from parry2"
+  (prog (a b)
+    (format t "mtp-parry2 = ~a~%" ind) ;; undefined ind
+;    (experiment)
+    (setf a (errset (testm) nil)) 
+    (if (atom a) 
+      (format t  "Pattern match error ~a" (list next_char ssent inputques))
+      (err nil)
+      )
+    (setf a (car a))
+    (setf PM2INPUT PMINPUT)
+    (setf PMINPUT a)
+    (if (= (length SSENT) 1) (setf a (choose 'silence)))
+    (analyze t)
+    (unless (lambdaname a) (setf a nil))
+    (when (and a (atom a) (setf b (get a 'meqv))) (setf a b))
+    (setf REACTINPUT a)
+    ;(readlambda a) (window 9 nil (get a 'bondvalue))
+    (unless (errset (react (list a (q ssent) ssent)))
+      (paerror ssent " error in react")
+      (err nil)
+      )
+    (when ende 
+	(setf tracev (not tracev))
+        (modifyvar)
+	(swapp)
+	(exit)
+	)
+    )
+  )
 
-
-
-;(changemark xxx dc)
-;(changemark yyy qc)
-;(remove xxx cc)
+(defun mtp ()
+"the top level function for MTP"
+  (prog (word)
+(setf bug 1)
+    (initall)
+(setf bug 2)
+    (loop 
+      (setf word (getword))
+(setf bug 3)
+      (when (eq (car word) 'bye) (format t "bye~%")(return))
+(setf bug 4)
+      (mtp-parry2 word)
+    )
+  )
+)
 
 
 (format t "end of loading replpar.lisp~%")
