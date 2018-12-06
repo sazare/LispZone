@@ -117,18 +117,21 @@
     )
   )
 
+(defun initmtp ()
+    (initall)
+)
+
 (defun mtp ()
 "the top level function for MTP"
   (prog (word)
 (setf bug 1)
-    (initall)
-(setf bug 2)
     (loop 
       (setf word (getword))
-(setf bug 3)
+(setf bug 2)
       (when (eq (car word) 'bye) (format t "bye~%")(return))
-(setf bug 4)
+(setf bug 3)
       (mtp-parry2 word)
+(setf bug 4)
     )
   )
 )

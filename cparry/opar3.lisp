@@ -21,7 +21,7 @@
 ;OPARINITIALIZE  READS IN RDATA, SETS ALL VARIABLES IN THIS FILE
 ;                MUST BE DONE WHEN MAKING A NEW CORE IMAGE OF PARRY  %
 (defun oparinitialize ()
-  (prog (x) 
+  (prog () ;(x) 
 ;    (eval '(INC (INPUT (PAR BLF) RDATA) NIL)) ;;; this may be infix notation...
 ;    (loop while (NOT (ATOM (setf X (ERRSET (READ) T) )))do
 ;	  (eval (car x))
