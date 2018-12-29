@@ -68,8 +68,20 @@
 )
  
 (defun getline ()
-  (let ()
-    (unless inputq (loop for wd in (ask) collect (symfy wd)))
+  (let (symq asked)
+    (unless inputq 
+       (setf SSENT nil)
+       (setf asked (ask))
+(format t "asked = ~a~%" asked)
+       (loop for wd in asked do 
+         (format t "wd=~a~%" wd)
+         (push wd SSENT) 
+         (push (symfy wd) symq))
+       )
+(format t "SSENT=~a~%" SSENT)
+(format t "symq=~a~%" symq)
+    (setf SSENT (reverse SSENT))
+    (reverse symq)
   )
 )
 
@@ -88,9 +100,11 @@
 (defun mtp-parry2 (ind)
 "from parry2"
   (prog (a b)
-    (format t "mtp-parry2 = ~a~%" ind) ;; undefined ind
+    (format t "mtp-parry2.ind = ~a~%" ind) ;; undefined ind
 ;    (experiment)
+(format t "ind=~a~%" ind)
     (setf a (errset (testm) nil)) 
+(format t "ind=~a~%" a)
     (if (atom a) 
       (format t  "Pattern match error ~a" (list next_char ssent inputques))
       (err nil)
@@ -100,10 +114,12 @@
     (setf PMINPUT a)
     (if (= (length SSENT) 1) (setf a (choose 'silence)))
     (analyze t)
+(format t "a=~a~%" a)
     (unless (lambdaname a) (setf a nil))
     (when (and a (atom a) (setf b (get a 'meqv))) (setf a b))
     (setf REACTINPUT a)
     ;(readlambda a) (window 9 nil (get a 'bondvalue))
+(format t "ssent=~a~%" ssent)
     (unless (errset (react (list a (q ssent) ssent)))
       (paerror ssent " error in react")
       (err nil)

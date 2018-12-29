@@ -2,13 +2,13 @@
 
 ;;;;; stub
 (defun find_words (ssent) ssent)
-(defun get_question () )
+(defun get_question () (getword))
 (defun synonm (x) (symfy x))
 
 ;;;; 
 (defun test_pattern ()
   ;; too long
-  (prog ()
+  (prog (ss)
     (get_question)
     (windowset 1)
     (window 1 t 'INPUT)
@@ -21,7 +21,7 @@
       (setf SSENT (cdr SSENT))
       (window 1 t 'RESPELLED)
       (window 3 t (find_words SSENT))
-      (when (synonm LEARNING) (return))
+      (when (setf ss (synonm LEARNING)) (return ss))
       )
     )
   )

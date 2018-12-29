@@ -209,7 +209,7 @@
   (prog (response)
 	(unless replies (return NIL))
 	(setf CHOSEN replies)
-	(when (null (setf response (get replies 'IND)))
+	(unless (setf response (get replies 'IND))
 	  (return 
 	    (if (eq replies 'EXHAUST)
 	      (progn (setf ENDE T) (choose 'BYEFEDUP))

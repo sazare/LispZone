@@ -2,7 +2,6 @@
 
 ;(defun choose (x) x)
 ;(defun test_pattern (&rest x) x)
-;(defun bl (x) x)
 
 ;(defun modifyvar ())
 ;(defun window (x y z) x y z)

@@ -211,7 +211,8 @@
 )
 
 (defun helper ()
-  (if (or (bl 'DHOSTILE) (bl '?*DHELPFUL) (bl 'DDHARM))
+;;  (when (or (bl 'DHOSTILE) (bl '?*DHELPFUL) (bl 'DDHARM))
+  (when (or (bl 'DHOSTILE) (bl '*DHELPFUL) (bl 'DDHARM))
     (choose 'CAUTION))
   )
 

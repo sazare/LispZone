@@ -322,19 +322,23 @@
 ;% ********** REACT ******* TOP LEVEL ROUTINE OF THE MEMORY ************ %
 (defun react (INPUT)
   (prog (A B SENT STRUC FOUND FOUND2)
+(format t "pmem4:input=~a~%" input)
 	(setf BUG 10)
 	(setf STRUC (CAR INPUT))(setf STYPE (CADR INPUT))(setf SENT (caddr INPUT))
+(format t "struc=~a, stype=~a, sent=~a~%" struc stype sent)
 	(setf INPUTSSENT (cons SSENT INPUTSSENT)) ;% SET ALL THE VARIABLES %
 	(setf TRACE_MEM NIL) (setf INPUTNO (+ INPUTNO 1))
 	(setf ?!ANAPHLISTNEW (setf ?!EXHAUST NIL))(setf ?!OUTPUT (setf WDFLAG NIL))(setf CHOSEN NIL)
 	(when DOC_NAME_FLAG (setf DOCNAME (getdocname)))
 	(setf BUG 11)
+(format t "inputno=~a, errname=~a~%" inputno errname)
 	(when (and (eq INPUTNO 2) (not ERRNAME))
 	  (setf ERRNAME T) ;   % SAVE A POINTER TO THE DIA FILE %
 	  (paerror (format nil (IF (PTYJOB) " PTYJOB~a" " ~a") 
 			 (IF (not SAVE_FILE) " NSAVED" " ")) NIL)
 	  )
 	(setf BUG 12)
+(format t "struc=~a~%" struc)
 	(when (and STRUC (not (readlambda STRUC)))
 	    (setf REACTTO (setf STRUC NIL))
 	    (setf TRACE_MEM 'NOT_IN_MEMORY))
@@ -344,6 +348,9 @@
 	(setf BUG 13)
 
 	(WINDOW 31 T 'PREPROCESS)
+
+(format t "struc=~a~%" struc)
+
 	(setf REACTTO (checkinput STRUC)) ;% PREPROCESS THE INPUT %
 	(when (and REACTTO (not (readlambda REACTTO))) (setf REACTTO (setf STRUC NIL)))
 	(setf BUG 14)
@@ -631,7 +638,7 @@
 	(T (EVAL I)) ) ;% ELSE A FUNCTION FOR LISP TO EVALUATE %
   )
 
-(defun BL (b) ; % RETURNS T IF BELIEF B IS TRUE, OR INTENTION B IS OVER ITS THRESHHOLD %
+(defun bl (b) ; % RETURNS T IF BELIEF B IS TRUE, OR INTENTION B IS OVER ITS THRESHHOLD %
   (if (not (atom b)) 
     (progn (paerror "BL not ATOM " b) NIL)
     (if (eq (get b 'class) 'INN) 
