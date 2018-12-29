@@ -1,0 +1,27 @@
+
+★ ?*
+pmem5
+helper
+?*dhelpfulの?はなになのか?
+*dhelpfulはあるが?*dhelpfulはplistがnil
+20181229 ?を消しておく
+
+しかしpmem5(mlisp)をみると、両方ある。
+かえたらだめみたい
+しかしpmem5のみ。
+
+★ ?!
+他にもたくさんあるが、そのうち定義されるのだろうか??
+たくさんあるので、?を消すのはためらわれる
+
+mlispのソースをみると、?!ANAPHLIST のもある
+grepしてみるとANAPHLISTはすべて?!がついている。
+specials.lispでは?!ANAPHLISTは定義してある
+!ANAPHLISTも定義している
+
+pmem,pmem2では両方使われている。
+pmem4,pmem5では?!ANAPHLISTのみ
+
+specialの定義で、?をつけたものが参照のみを意味するとか想像したが
+よくわからない。
+
