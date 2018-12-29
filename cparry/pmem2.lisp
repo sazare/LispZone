@@ -67,7 +67,6 @@
   )
 
 (defun numed (n) ;; % 0.00 <= N <= 99.99, RETURNS STRING "12.34" %
-;  (nedit (fix (+ (* n 100) 0.5)))
   (format nil "~2,2$" (/ (+ (* n 100) 0.5) 100))
   ) 
 ; % SKEYWD, KEYWD, SILENCER, EXHAUSTER, SWEARER, ENDROUTINE  %

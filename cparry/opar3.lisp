@@ -21,11 +21,11 @@
 ;OPARINITIALIZE  READS IN RDATA, SETS ALL VARIABLES IN THIS FILE
 ;                MUST BE DONE WHEN MAKING A NEW CORE IMAGE OF PARRY  %
 (defun oparinitialize ()
-  (prog (x) 
-    (eval '(INC (INPUT (PAR BLF) RDATA) NIL)) ;;; this may be infix notation...
-    (loop while (NOT (ATOM (setf X (ERRSET (READ) T) )))do
-	  (eval (car x))
-	  (inc nil T))
+  (prog () ;(x) 
+;    (eval '(INC (INPUT (PAR BLF) RDATA) NIL)) ;;; this may be infix notation...
+;    (loop while (NOT (ATOM (setf X (ERRSET (READ) T) )))do
+;	  (eval (car x))
+;	  (inc nil T))
     (setf FLARE 'INIT)                         ;%   FLARE=CURRENT FLARE TOPIC; 'INIT = NONE   %
     (setf LIVEFLARES (GET 'FLARELIST 'SETS))   ;%   FLARES NOT YET DISCUSSED   %
     (setf DEADFLARES  NIL)
@@ -209,7 +209,7 @@
   (prog (response)
 	(unless replies (return NIL))
 	(setf CHOSEN replies)
-	(when (null (setf response (get replies 'IND)))
+	(unless (setf response (get replies 'IND))
 	  (return 
 	    (if (eq replies 'EXHAUST)
 	      (progn (setf ENDE T) (choose 'BYEFEDUP))
@@ -238,7 +238,7 @@
 ;% INP IS INPUTQUES   %
 
 (defun delcheck (INP)
-;;omura is this function's indentation in mlisp correct??
+;;omura: is this function's indentation in mlisp correct??
 ;; and the position of comments let me feel ambiguous.
   (prog (words)
 ;%   CHECK FOR STRONG DELUSION-NOUNS AND -VERBS

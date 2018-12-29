@@ -95,10 +95,13 @@
 (defun canonize (x) x)
 
 (defun paerror (mess L) ;; I dont want to use this. error_file go out of bound
+  (format t "ERROR: ~a(~a)~%" mess L)
   (setf ?!ERROR (cons (error_file (list mess L PM2INPUT PMINPUT FILE1 BUG)) ?!ERROR))
   )
 
 (defun chseti (x y) (list x y))
+(defun swapp () (format t "swapp is stub~%"))
+(defun modifyvar () (format t "modifyvar is stub~%"))
 
 (format t "end of loading primitives.lisp~%")
 

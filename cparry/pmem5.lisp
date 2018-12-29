@@ -56,7 +56,7 @@
 	(runtim nil)
 	(setf va nil) ;% VA IS FOR STARTING A PARRY WITHOUT INITIAL QUESTIONS %
 	(unless va (initparams) (init))
-	(when va (INITPARAMS1) (INITPARAMS2) (INIT))
+	(when va (initparams1) (initparams2) (init))
 	(when SAVE_FILE 
 	  (INIT_FILE (format nil 
 			       "~a , TRACEV = ~a, WINDOWS = ~a, PARANOIA = ~a"
@@ -211,7 +211,8 @@
 )
 
 (defun helper ()
-  (if (or (bl 'DHOSTILE) (bl '?*DHELPFUL) (bl 'DDHARM))
+;;  (when (or (bl 'DHOSTILE) (bl '?*DHELPFUL) (bl 'DDHARM))
+  (when (or (bl 'DHOSTILE) (bl '*DHELPFUL) (bl 'DDHARM))
     (choose 'CAUTION))
   )
 
