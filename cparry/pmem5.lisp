@@ -218,10 +218,12 @@
 
 (defun knower ()
   (cond ((or (BL 'DDHARM)(BL 'DHOSTILE)(BL '?*DDHELP)) (choose 'HOSTILEREPLIES))
-        ((or (BL '?*DTRUSTWORTHY) (BL '?*DHONEST)) (CHOOSE '?*DHONEST))
+        ; ((or (BL '?*DTRUSTWORTHY) (BL '?*DHONEST)) (CHOOSE '?*DHONEST))
+        ((or (BL '*DTRUSTWORTHY) (BL '*DHONEST)) (CHOOSE '*DHONEST))
         ((BL 'DDHELP)(CHOOSE 'DDHELP))
         ((BL 'DEXCITED)(CHOOSE 'DEXCITED))
-        ((BL '?*DINITIATING)(CHOOSE 'DBAD))
+        ;((BL '?*DINITIATING)(CHOOSE 'DBAD))
+        ((BL '*DINITIATING)(CHOOSE 'DBAD))
 	(T nil))
 )
 

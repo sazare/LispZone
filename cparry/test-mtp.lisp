@@ -1,3 +1,5 @@
+(load "testmtp.lisp")
+(load "test.lisp")
 
 (test-set "changemark"
   (test "no specials" "this is that or it" (changemark "this is that or it"))
