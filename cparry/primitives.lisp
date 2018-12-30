@@ -19,6 +19,14 @@
     )
   )
 
+(defun findprop (prop) ;; there are other atom not in these
+  (loop for x in (append *aodefplist* *aoputplist*)
+    do (when (get x prop)
+             (format t "~a~%" x)
+       )
+  )
+)
+
 (defun printstr (x)
   (format t x)
   )
