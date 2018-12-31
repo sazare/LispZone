@@ -19,11 +19,18 @@
     )
   )
 
+(defun findprop (prop val) ;; there are other atom not in these
+;;; *intlist* is for BEL
+  (loop for x in (append *aodefplist* *aoputplist* *intlist*)
+    when (equal (get x prop) val)
+    collect (prog2 (format t "~a~%" x) x)
+  )
+)
 (defun findprop (prop) ;; there are other atom not in these
-  (loop for x in (append *aodefplist* *aoputplist*)
-    do (when (get x prop)
-             (format t "~a~%" x)
-       )
+;;; *intlist* is for BEL
+  (loop for x in (append *aodefplist* *aoputplist* *intlist*)
+    when (get x prop) 
+    collect (prog2 (format t "~a~%" x) x)
   )
 )
 

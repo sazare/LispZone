@@ -94,6 +94,7 @@
   (prog ()
     (binit)
     (initfb)
+    (initb)
   )
 )
 

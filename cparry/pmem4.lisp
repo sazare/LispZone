@@ -133,7 +133,7 @@
     (setf INPUTFILEAREA '(1 3))
     (setf DIAFILEAREA '(DIA KMC))
     (gcgag nil)
-    (changel 'CHANGE)
+;:    (changel 'CHANGE)
     (setf DELNO (setf bug 0))
     (setf OLDMISS 0)
     (setf OLDGIBB 0)
