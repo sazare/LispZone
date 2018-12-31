@@ -99,8 +99,6 @@
 ;; knower
 (test-set "test for knower"
 ;;
-
-
-
+  (format t "skip test~%")
 )
 
