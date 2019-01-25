@@ -34,7 +34,11 @@
 	)
   )
 
-(defun WINDOW (N FLAG L) N FLAG L)
+(defun WINDOW (N FLAG L) 
+"this is trial window"
+  (format t "stub window(~a ~a ~a)~%"
+            N FLAG L)
+)
 
 ;(defun WINDOW (N FLAG L)
 ;  (prog (M)
@@ -50,7 +54,9 @@
 
 (defun SPECWIN(N)(or  (= N 1) (= N 31)))
 
-(defun WININIT())
+(defun WININIT()
+  (format t "stub wininit()~%")
+
 ;(defun WININIT()
 ;  (progn 
 ;    (setf WINDOWS  T)
@@ -59,7 +65,7 @@
 ;    (setf TRACEV NIL)
 ;    )
 ;  )
-
+)
 
 (defun WINHELP()
  	(PRINTSTR

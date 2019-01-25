@@ -93,13 +93,13 @@
 
 (defun anddo (L M) M L)
 
-;(defun window (N F L)
-;  (prog ()
-;	(when (eq TRACEV 'ALL)
-;	  (twindow N F L) 
-;	  (return L))
-;	)
-;  )
+(defun window (N F L)
+  (prog ()
+	(when (eq TRACEV 'ALL)
+	  (twindow N F L) 
+	  (return L))
+	)
+  )
 ;(defun windowsset (n) n)
 ;(defun window_print (A B C D) (list a b c d))
 
@@ -328,14 +328,17 @@
           (when (eq B 'HJUMP) (setf PARBEL (cons BEL PARBEL)))
 	  (when (and (eq B 'HJUMP) WEAK ) (setf C (/ C 2))) ;% IF WEAK PARANOIA THEN DONT LET HJUMP BE STRONG %
           (when (NUMBERP VAL) (setf C (/ C 2))) ;% THIS CAME FROM ADDTO, NOT ASSERT -- WEAKEN THE EFFECT %
-          (setf D (ZERONIL (EVAL B)))
-          (when (>= C D) (PUTPROP B BEL 'INF))
+          (setf D (zeronil (EVAL B)))
+          (when (>= C D) (putprop B BEL 'INF))
 	  (set b (max d c))
 	)
      )
   )
 
-(defun zeronil (L) (if (not L) 0 L))
+(defun zeronil (L)
+  "make nil to 0"
+ (if (not L) 0 L)
+) 
 
 (defun intention () ;% CALCULATES THE CURRENT INTENTION %
   (prog (a)
@@ -476,16 +479,21 @@
 
 (defun paranoia ()
   (prog (a)
-	(paassert '?*DTRUSTWORTHY)
+	;(paassert '?*DTRUSTWORTHY)
+	(paassert '*DTRUSTWORTHY)
 	(loop for i in PARBEL do
 	      (when (memq I '(LYING LOSER CRAZY DUMB))
 		(addto i -1)
 		(setf a i)))
 	(when a
-	  (setf a (assoc a  '((LYING . ?*DHONEST)
-			      (LOSER . ?*DSOCIABLE)
+;	  (setf a (assoc a  '((LYING . ?*DHONEST)
+;			      (LOSER . ?*DSOCIABLE)
+;			      (CRAZY . DABNORMAL) 
+;			      (DUMB . ?*DCHELP) )))
+	  (setf a (assoc a  '((LYING . *DHONEST)
+			      (LOSER . *DSOCIABLE)
 			      (CRAZY . DABNORMAL) 
-			      (DUMB . ?*DCHELP) )))
+			      (DUMB . *DCHELP) )))
 	  (paassert (cdr A))
 	  )
 	(setf PARBEL nil)
