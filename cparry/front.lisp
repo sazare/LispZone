@@ -17,6 +17,7 @@
     ;(push p nil)
     ;(push p nil)
     (unless (equal nil LEARNING)
+(format t "in unless test_pattern")
       (setf RIGHT (car SSENT))
       (setf SSENT (cdr SSENT))
       (window 1 t 'RESPELLED)

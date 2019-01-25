@@ -99,6 +99,14 @@
 ;; knower
 (test-set "test for knower"
 ;;
-  (format t "skip test~%")
+  (format t "skip test because based only bl conditions~%")
 )
 
+;;;;
+;; paranoia
+(test-set "test for paranoia"
+;;
+  (defvar parbel '(I AM LYING))
+
+  (test "
+)

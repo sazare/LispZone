@@ -318,6 +318,7 @@ IF YOU ARE NOT AT STANFORD, YOUR BACKSPACE OR RUBOUT KEY
       )
     (unless ANALFLAG (RETURN nil))
     (setf a (time nil))
+(format t "analyze:a=~a~%" a)
     (setf b (car (divide (* 10 (- A OLDTIME)) 166 )))
     (princ b) (printstr " TICS") (setf  OLDTIME a)
     (setf a (speak))(setf b (- A OLDSPEAK))

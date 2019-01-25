@@ -206,9 +206,9 @@
 (defun wprintvars()
   (prog (A) 
 	(setf A (WINSUP T)) ;% SUPPRESS AND GET OLD SETTING %
-	(WINDOW 41 T (format nil "      FEAR = ~a" (NUMED FEAR)))
-        (WINDOW 41 T (format nil "     ANGER = ~a" (NUMED ANGER)))
-        (WINDOW 41 T (format nil "     SHAME = ~a" (NUMED HURT)))
+	(WINDOW 41 T (format T "      FEAR = ~a" (NUMED FEAR)))
+        (WINDOW 41 T (format T "     ANGER = ~a" (NUMED ANGER)))
+        (WINDOW 41 T (format T "     SHAME = ~a" (NUMED HURT)))
         (WINDOW 41 T "  " )
 	(unless A (WINDIS)(WINSUP A)) ;%IF OLD SETTING OFF, THEN DISPLAY AND RESET %
 	)
@@ -596,11 +596,13 @@
           (IF (>= VAL 10) (setf VAL 9) (IF (<= VAL 0) (setf VAL 0) )) 
 	  )
 	(PUTPROP B VAL 'NTRUTH)
+        ;; when B.class != 'INN, the val maybe >= 10
 	(when (>= VAL 10) (ASSERT2 B)) ; % ASSERT IF THRESHHOLD CROSSED %
 	)
   )
 
 (defun get0 (I V) ;% RETURNS A NUMBER FOR GET %
+"property I.V is a number, return itself. others return 0"
   (prog (A)
 	(setf A (GET I V))
 	(return (IF (NUMBERP A) A 0))
