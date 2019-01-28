@@ -12,4 +12,4 @@
 
 (initmtp)
 
-
+(format t "~%... end of loading mtp~%")
