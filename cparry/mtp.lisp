@@ -3,6 +3,7 @@
 ;;; here is the starting
 (defvar synonym (read-file "data/synonm.alf"))
 (defvar inputq nil)
+
 (defun setupsym2 (symlist)
   (loop for symp in symlist do
     (setf (get (car symp) 'synonym) (cadr symp))
@@ -82,12 +83,15 @@
     (setf symq (reverse symq))
 (format t "SSENT=~a~%" SSENT)
 (format t "symq=~a~%" symq)
+    symq
   )
 )
 
 (defun getword ()
   (unless inputq (setf inputq (getline)))
-  (pop inputq)
+  (setq wd (pop inputq))
+  (format t "in getword: wd=~a~%" wd)
+  wd
 )
 
 (defun initall ()
@@ -146,9 +150,11 @@
 (setf bug 1)
     (loop 
       (setf word (getword))
+(format t "word1=~a~%" word)
 (setf bug 2)
       (when (eq (car word) 'bye) (format t "bye~%")(return))
 (setf bug 3)
+(format t "word2=~a~%" word)
       (mtp-parry2 word)
 (setf bug 4)
     )
