@@ -368,6 +368,7 @@
 	(when (eq REACTTO 'QUIT)(setf REACTTO NIL) (setf TRACE_MEM 'NOSPECIALANAPH))
 	(unless (readlambda REACTTO) (setf REACTTO NIL))
 	(setf BUG 15)
+(format t "react:skeywd=~a~%" (skeywd stype inputques))
 	(when (and (not REACTTO)(not DELFLAG)(setf REACTTO (skeywd STYPE INPUTQUES)))
 	  (setf TRACE_MEM 'KEYWORD))
 
