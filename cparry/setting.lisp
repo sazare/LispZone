@@ -15,6 +15,7 @@
 
 (defvar DELFLAG nil)
 
+(defvar DOC_NAME_FLAG T) # i remember doctor's name
 
 
 

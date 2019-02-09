@@ -1,19 +1,20 @@
 ;; a script for the dump after initialization phase
 
-(load "loadall.lisp")
+;(load "loadall.lisp")
 (load "utils.lisp")
 
 ; show all list
  (showtree 'flarelist '(words sets set) ())
- (showtree 'sensitivelist '(words sets set) ())
  (showtree 'setlist '(words sets set) ())
+
+;; sensitivelist is not same structure, so this will fail
+ (showtree 'sensitivelist '(words sets set) ())
 
 ; show mafia delusion transition
  (showlist (get 'flarelist 'sets) '(next) Nil)
 
 ; show story
  (showlist (mapcar (lambda (x) (car x)) stl) '(story) () )
-
 
 (readbel)
 *intlist*

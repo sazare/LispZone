@@ -312,6 +312,25 @@ test_pattern.lapが何を返すのかがわからない。lapでいくぶん長�
 2. cparry/front.lispではlapをlispに書き換えている。
  
 
+20190209土
+0. 方針をかえて、モデルを操作する関数だけを使って、独自のエンジンを作ることにする。
+　　入力の部分を分けて動かしてみよう。
+1. utils.lispのshowlistでsensitivelistはエラーになる。理由はデータ構造が違うから。　
+3. pmem5.lispの下のほうからみてみた。reactでbreakする。
+  0) 引数のない関数について、動かしてみた。だいたい動く。
+　　CLASSがINNであるatomはPで始まるもののみ。data/bel0。
+　  関数(bl x)はxがatomでなければエラー。x.class=='innならntruth >=5ならT。
+　　そうでなければx.truthの値を返す。
+　　truthはいつ設定されるか? (setf (get x 'truth)..)の場所をgrepするとたくさんある。
+
+　1) reactのinputの1つめのパラメタstructが何か?
+  2) stypeはDかQ。ssentは入力された1文。
+　3) inputquesはわからない。getwordで作られる(sym . word)のリスト。
+　4) docnameなどでssentをさがしているのは、今inputした文からdoctorの名前をさがし
+　　　docnameに設定する。フラグdoc_name_flagをTにするとそうなる
+  5) INPUTNOはニュゥ力のぁった文の数。
+     inferenceでinputnoで割るので、ひとつも文を呼んでいない状態でinferenceを実行してはいけない。
+　6) setting.lispにdoc_name_flag =Tを追加した
 
 
 
