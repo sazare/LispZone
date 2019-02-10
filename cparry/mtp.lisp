@@ -99,6 +99,8 @@
     (binit)
     (initfb)
     (initb)
+    (setf INPUTQUES NIL)
+    (setf SSENT NIL)
   )
 )
 
@@ -150,6 +152,7 @@
 (setf bug 1)
     (loop 
       (setf word (getword))
+      (setf INPUTQUES inputq)
 (format t "word1=~a~%" word)
 (setf bug 2)
       (when (eq (car word) 'bye) (format t "bye~%")(return))

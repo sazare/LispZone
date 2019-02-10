@@ -187,8 +187,8 @@
 	  (progn
 	   (setf B (car B))
 	   (unless (LAMBDANAME B) 
-        (setf ?!OUTPUT B) 
-        (setf B NIL))
+             (setf ?!OUTPUT B) 
+             (setf B NIL))
 	   (return B))
 	  )
 	)
