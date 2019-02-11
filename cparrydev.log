@@ -354,6 +354,32 @@ test_pattern.lapが何を返すのかがわからない。lapでいくぶん長�
 
 3. struc が何か・・・
 
+20190211月
+1. struc.UNITを参照していたのでgrepしてみた。
+  (specfn sturc) だが、
+  struc.unitをnameにして、nameが go_on, elab, who, whatなら(eval (list name nil t))している。
+  pdatb.lispで、ラムダ名のいくつかにunitが定義されている。
+  
+  pdatb.lisp:(DEFPROP REASON @@0030 UNIT)
+pdatb.lisp:(DEFPROP MANNER @@0031 UNIT)
+pdatb.lisp:(DEFPROP @@0010 GO_ON UNIT)
+pdatb.lisp:(DEFPROP @@0020 HOW_KNOW UNIT)
+pdatb.lisp:(DEFPROP @@0021 ELAB UNIT)
+pdatb.lisp:(DEFPROP @@0030 WHY UNIT)
+pdatb.lisp:(DEFPROP @@0031 HOW UNIT)
+pdatb.lisp:(DEFPROP @@0032 WHERE UNIT)
+pdatb.lisp:(DEFPROP @@0033 WHEN UNIT)
+pdatb.lisp:(DEFPROP @@0034 HOW_LONG UNIT)
+pdatb.lisp:(DEFPROP @@0035 WHO UNIT)
+pdatb.lisp:(DEFPROP @@0036 WHAT UNIT)
+pdatb.lisp:(DEFPROP @@0037 YOU_DO UNIT)
+pdatb.lisp:(DEFPROP @@0038 THEY_DO UNIT)
+pdatb.lisp:(DEFPROP @@0040 HOW_MUCH UNIT)
+
+
+2. 定義されていないatomでエラーになると困るから、errsetで囲んでいるのかな。
+
+3. strucは文の先頭の文字のように見えるが、I kill a cat.でbreak.
 
 
 

@@ -129,7 +129,7 @@
     (setf REACTINPUT a)
     ;(readlambda a) (window 9 nil (get a 'bondvalue))
 (format t "ssent4=~a~%" ssent)
-    (unless (errset (react (list a (q ssent) ssent)))
+    (unless (errset (react (list (car ssent) (q ssent) ssent)))
       (paerror ssent " error in react")
       (err nil)
       )
