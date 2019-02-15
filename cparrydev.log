@@ -378,8 +378,75 @@ pdatb.lisp:(DEFPROP @@0040 HOW_MUCH UNIT)
 
 
 2. 定義されていないatomでエラーになると困るから、errsetで囲んでいるのかな。
-
+commonlisp でそういうことをする関数がわからない。breakパッケージみたいなのか??
 3. strucは文の先頭の文字のように見えるが、I kill a cat.でbreak.
+
+20190216土
+ここ数日、Parryの話す部分についてみていた。
+たぶん replyrがそれをしている。
+
+pmem.lispなどの先頭にあるglobalvariablesのリスト
+
+anaphoraは代名詞のような感じだが
+
+andthenが対話のデータを保存しているようだ
+!CLISTがconversation listの先頭で!clastが最後の要素ということだがconversation list自体は名前がないのか?
+まあ!ClLISTがそれだけど・・・
+
+ちなみに、コードでは ?!CLISTと書かれている。この先頭の?は何だろうか。?!だったり!だったりよくある。
+同じ変数なのか???
+
+ANDTHENというのがついている変数はやりとりのデータぽい
+要素は(IN|OUT . なにか)という形をしていて、INはParryが聞いた言葉、OUTはParryが言った言葉を示している。
+!LAST_ANDTHEN は最後に処理した(in/out . 文章?)になる。
+!OUTPUTにParryの発言がはいる
+!LAST_OUTPUTにはOUTPUTの最後の^H名がはいると書かれている。
+　発言にそれぞれ^H名(@@名, lambda名)がつけられるのか??
+
+inputquesは、(同義語 . 入力語)* というだけでなく(canonical 5-letter atom . input word)ということなので
+5文字になっている。
+
+semantic unitとは何を意味するか??
+
+!ERRORにエラーのリストがあるらしいのだが、このエラーとはどのエラーのことか??
+
+* (diskread)で(lookup)している中で、語のインデックスを求めて、そのインデックスでファイルアクセスに行くところがある。
+関連しそうなファイル。*.parはインデックス計算に使い、*.selにS-expが格納されているような気がする。
+
+*.par                 *.sel
+cpats.par	    cpats.sel
+spats.par	    spats.sel
+synonm.par    synonm.alf
+
+synonm.parをみると、synonm.alfのcarとまったく同じでなく、先頭5文字になっている。
+しかし、このparからalfのインデックスがわかるような気はしない。parに数字はないし・・・
+parのところどころに制御コードがはいっているので計算できるのだろうか
+
+spats.parを見ると、制御コードのところは元の文字と同じ数だけあるような気もする。
+parでは、selのcarの先頭5文字しか使っていないし、同じ名前がくることがある。たとえばADDとか。
+INも大量にある。(IN YOU ...)というリストだったりするので、1語ずつツリーにしているとか・・・
+木構造になっていて、たどっていくのかも・・・そのときselでのindexはどう計算すればよいか?
+
+selについては、car => cdrというhash-tableにしておけばよさそう。
+固定長のファイルを読み込む場合、メモリに余裕があるはずなので、ストレージを使う必要がないはず。
+とりあえずそのほうが単純になるから・・・
+
+*.alfは他に次のものがあるが、synonm以外はparはない。
+flags.alf
+idiom.alf
+irreg.alf
+startr.alf
+stoppr.alf
+suffix.alf
+synonm.alf
+
+データファイルとしては、*.patが以下のようなものがある。
+famly.pat
+filler.pat
+negate.pat
+same.pat
+
+
 
 
 
