@@ -3,6 +3,9 @@ pm,pm2,pm3
 !ANAPHLIST      is the current list of anaphora dotted-pairs.
 !ANAPHLISTOLD   is the previous list of anaphora dotted-pairs.
 !ALLANAPHS      is a list of lists - ((who they he)(he who)(they who)....)
+
+?!ANAPHLISTNEW (addanaph l)で設定している。
+
 !CLIST          is a pointer to the first element of the conversation list.
 !CLAST          is a pointer to the last element of the conversation list.
 !LAST_ANDTHEN   is either IN or OUT as the last ANDTHEN processed

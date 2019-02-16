@@ -282,21 +282,21 @@
 
 (defun react2 (B)
  (prog () ;(a) 
-	(setf ?!EXHAUST nil)
+    (setf ?!EXHAUST nil)
     (unless (lambdaname B) 
 	 (paerror "NONLAMBDA INTO REACT2" B)
 	 (return nil))
-	(when ?!OUTPUT ;  % ALREADY HAVE SENTENCE IN ?!OUTPUT %
-     (andthen (list 'IN B))
-	 (andthen (list 'OUT nil))
-     (return T))
-	(unless (diskread B) 
-	 (paerror "REACT2 ERROR BAD DISKREAD " B)
-	 (return nil))
-	(andthen (list 'IN B))
-	(return (replyr B))
-	)
+    (when ?!OUTPUT ;  % ALREADY HAVE SENTENCE IN ?!OUTPUT %
+      (andthen (list 'IN B))
+      (andthen (list 'OUT nil))
+      (return T))
+    (unless (diskread B) 
+      (paerror "REACT2 ERROR BAD DISKREAD " B)
+      (return nil))
+    (andthen (list 'IN B))
+    (return (replyr B))
  )
+)
 
 ;% REACT3 HANDLES CASES WHEN THE OUTPUT RESPONSES HAVE BEEN EXHAUSTED %
 (defun react3 (P STRUC SENT) ;% IF NO !OUTPUT FROM REACT2 THEN DO THIS %
