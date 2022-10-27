@@ -60,7 +60,7 @@
     do 
      (cond
       ((equal b #o040) (format s "  SP"))
-      ((equal b #o012) (format s "  LF"))
+      ((equal b #o012) (format s "  NL"))
       (t (format s "   ~a" (code-char b)))
      )
    finally (format s "~%")
