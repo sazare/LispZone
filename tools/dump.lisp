@@ -88,3 +88,34 @@
   (show-bytes t (get-bytes infile :width width))
 )
 
+(defun show-charsx (s blist)
+  (loop for b in blist
+    do 
+     (cond
+      ((equal b #o040) (format s " SP"))
+      ((equal b #o012) (format s " NL"))
+      (t (format s "  ~a" (code-char b)))
+     )
+   finally (format s "~%")
+  )
+)
+
+(defun show-hexs(s blist)
+  (loop for b in blist
+    do (format s "~03x" b)
+   finally (format s "~%")
+  )
+)
+
+
+(defun show-bytesx (s bss)
+  (loop for bs in bss do
+    (show-charsx s bs)
+    (show-hexs s bs)
+    (format t "~%")
+  )
+)
+
+(defun dump-filex (infile &key (width 20))
+  (show-bytesx t (get-bytes infile :width width))
+)
