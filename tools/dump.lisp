@@ -1,4 +1,4 @@
-;; dump file tool
+; dump file tool
 
 (defun dump-char (infile)
   (with-open-file (in infile :element-type '(signed-byte 8))
@@ -15,7 +15,6 @@
 ;  (format t "~b " (code-char b))
 )
   
-
 (defun dump-byte (infile &key (width 20))
   (with-open-file (in infile :element-type '(signed-byte 8))
     (loop with cn = 0 for byte = (read-byte in nil)
@@ -30,6 +29,7 @@
   )
 )
 
+;;; multi type
 (defun get-bytes (infile &key (width 0))
   (with-open-file (in infile :element-type '(signed-byte 8))
     (loop with bss = () 
@@ -55,67 +55,67 @@
   )
 )
 
-(defun show-chars (s blist)
+;; dump-file for options
+
+(defconstant fillo "  ")
+(defconstant fillx " ")
+(defconstant charfmto  "   ~a")
+(defconstant charfmtx  "  ~a")
+(defconstant datafmto  "~04o")
+(defconstant datafmtx  "~03x")
+
+(defclass dump-file-format ()
+  (
+    (fill 
+      :initarg :fillfmt
+      :accessor fillfmt
+      :initform "")
+    (charfmt 
+      :initarg :charfmt 
+      :accessor charfmt
+      :initform "")
+    (datafmt 
+      :initarg :datafmt
+      :accessor datafmt
+      :initform "")
+  )
+)
+
+(defconstant octalfmt (make-instance 'dump-file-format :fillfmt fillo :charfmt charfmto :datafmt datafmto))
+(defconstant hexfmt   (make-instance 'dump-file-format :fillfmt fillx :charfmt charfmtx :datafmt datafmtx))
+
+;; dumoer with octal/hex options
+
+(defun show-chars (s mf blist)
   (loop for b in blist
     do 
      (cond
-      ((equal b #o040) (format s "  SP"))
-      ((equal b #o012) (format s "  NL"))
-      (t (format s "   ~a" (code-char b)))
+      ((equal b #o040) (format s "~a~a" (fillfmt mf) "SP"))
+      ((equal b #o012) (format s "~a~a" (fillfmt mf) "NL"))
+      (t (format s (charfmt mf) (code-char b)))
      )
    finally (format s "~%")
   )
 )
 
-(defun show-octals (s blist)
+(defun show-data(s mf blist)
   (loop for b in blist
-    do (format s "~04o" b)
-   finally (format s "~%")
-  )
-)
-
-(defun show-bytes (s bss)
-  (loop for bs in bss do
-    (show-chars s bs)
-    (show-octals s bs)
-    (format t "~%")
-  )
-)
-
-;; width = 0 means ignore line, namely no limit of line(no width)
-;; or, a line is devided by max width     
-(defun dump-file (infile &key (width 20))
-  (show-bytes t (get-bytes infile :width width))
-)
-
-(defun show-charsx (s blist)
-  (loop for b in blist
-    do 
-     (cond
-      ((equal b #o040) (format s " SP"))
-      ((equal b #o012) (format s " NL"))
-      (t (format s "  ~a" (code-char b)))
-     )
-   finally (format s "~%")
-  )
-)
-
-(defun show-hexs(s blist)
-  (loop for b in blist
-    do (format s "~03x" b)
+    do (format s (datafmt mf) b)
    finally (format s "~%")
   )
 )
 
 
-(defun show-bytesx (s bss)
-  (loop for bs in bss do
-    (show-charsx s bs)
-    (show-hexs s bs)
-    (format t "~%")
+(defun show-bytes (s m bss)
+  (loop for bs in bss 
+    with mf = (cond ((eq m :octal) octalfmt)(t hexfmt)) 
+    do
+      (show-chars s mf bs)
+      (show-data s mf bs)
+      (format t "~%")
   )
 )
 
-(defun dump-filex (infile &key (width 20))
-  (show-bytesx t (get-bytes infile :width width))
+(defun dump-file (infile &key (pmode :hex) (width 20))
+  (show-bytes t pmode (get-bytes infile :width width))
 )
